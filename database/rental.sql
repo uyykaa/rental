@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 13 Jun 2024 pada 19.08
+-- Waktu pembuatan: 13 Jun 2024 pada 21.04
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.2.4
 
@@ -209,12 +209,13 @@ INSERT INTO `pengguna` (`id_pengguna`, `nama`, `jabatan`, `alamat`, `umur`, `kon
 --
 
 CREATE TABLE `sewa_kendaraan` (
-  `id_sewa` varchar(4) NOT NULL,
+  `id_sewa` int(11) NOT NULL,
   `tgl_sewa` date NOT NULL,
   `tgl_kembali` date NOT NULL,
   `id_mobil` varchar(4) NOT NULL,
   `no_pelanggan` varchar(4) NOT NULL,
   `lama_sewa` varchar(8) NOT NULL,
+  `harga` int(11) NOT NULL,
   `denda` int(11) NOT NULL,
   `total_harga` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -223,9 +224,11 @@ CREATE TABLE `sewa_kendaraan` (
 -- Dumping data untuk tabel `sewa_kendaraan`
 --
 
-INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `tgl_kembali`, `id_mobil`, `no_pelanggan`, `lama_sewa`, `denda`, `total_harga`) VALUES
-('1', '2024-05-27', '2024-05-28', '1', '1', '18 jam', 0, 450000),
-('2', '2024-06-05', '2024-06-06', '2', '2', '24 jam', 45000, 495000);
+INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `tgl_kembali`, `id_mobil`, `no_pelanggan`, `lama_sewa`, `harga`, `denda`, `total_harga`) VALUES
+(1, '2024-05-27', '2024-05-28', '1', '1', '18 jam', 0, 0, 450000),
+(2, '2024-06-05', '2024-06-06', '2', '2', '24 jam', 0, 45000, 495000),
+(3, '2024-06-13', '2024-06-19', '3', '1', '12', 0, 0, 0),
+(4, '2024-06-14', '2024-06-17', '1', '4', '72', 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -284,9 +287,7 @@ ALTER TABLE `pengguna`
 -- Indeks untuk tabel `sewa_kendaraan`
 --
 ALTER TABLE `sewa_kendaraan`
-  ADD PRIMARY KEY (`id_sewa`),
-  ADD UNIQUE KEY `mobil` (`id_mobil`),
-  ADD UNIQUE KEY `pemesan` (`no_pelanggan`);
+  ADD PRIMARY KEY (`id_sewa`);
 
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
@@ -321,6 +322,12 @@ ALTER TABLE `pelanggan`
 --
 ALTER TABLE `pendapatan_sewa`
   MODIFY `id_pendapatan` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT untuk tabel `sewa_kendaraan`
+--
+ALTER TABLE `sewa_kendaraan`
+  MODIFY `id_sewa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

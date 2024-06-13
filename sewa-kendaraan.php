@@ -2,20 +2,21 @@
 require 'cek-sesi.php';
 require 'koneksi.php';
 
-function calculateTotal($harga, $lama_sewa, $denda) {
+function calculateTotal($harga, $lama_sewa, $denda)
+{
   // Ensure the inputs are numeric
   $harga = is_numeric($harga) ? $harga : 0;
   $lama_sewa = is_numeric($lama_sewa) ? $lama_sewa : 0;
   $denda = is_numeric($denda) ? $denda : 0;
 
   if ($lama_sewa <= 24) {
-      // Lama sewa kurang dari atau sama dengan 24 jam
-      return $harga * 1 + $denda;
+    // Lama sewa kurang dari atau sama dengan 24 jam
+    return $harga * 1 + $denda;
   } else {
-      // Lama sewa lebih dari 24 jam, hitung berapa hari dan jam yang dibutuhkan
-      $hari = floor($lama_sewa / 24); // Menghitung jumlah hari
-      $jam = $lama_sewa % 24;  // Menghitung sisa jam
-      return ($harga * $hari) + ($harga * $jam) + $denda;
+    // Lama sewa lebih dari 24 jam, hitung berapa hari dan jam yang dibutuhkan
+    $hari = floor($lama_sewa / 24); // Menghitung jumlah hari
+    $jam = $lama_sewa % 24;  // Menghitung sisa jam
+    return ($harga * $hari) + ($harga * $jam) + $denda;
   }
 }
 
@@ -23,14 +24,14 @@ function calculateTotal($harga, $lama_sewa, $denda) {
 $brands_query = mysqli_query($koneksi, "SELECT * FROM merek");
 $brands = [];
 while ($brand = mysqli_fetch_assoc($brands_query)) {
-    $brands[] = $brand;
+  $brands[] = $brand;
 }
 
 // Fetch customers for the dropdown menu
 $customers_query = mysqli_query($koneksi, "SELECT * FROM pelanggan");
 $customers = [];
 while ($customer = mysqli_fetch_assoc($customers_query)) {
-    $customers[] = $customer;
+  $customers[] = $customer;
 }
 ?>
 <!DOCTYPE html>
@@ -95,7 +96,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                     <td><?= $data['denda'] ?></td>
                     <td><?= $jumlah_sewa ?></td>
                     <td>
-                      <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"></a>
+                      <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>">Edit</a>
                     </td>
                   </tr>
                   <div class="modal fade" id="myModal<?= $data['id_sewa']; ?>" role="dialog">
@@ -103,7 +104,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                       <div class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Ubah Data Sewa</h4>
-                          <button type="button" class="close" data-dismiss="modal">&times;"></button>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
                           <form role="form" action="proses-edit-sewa-kendaraan.php" method="POST">
@@ -114,12 +115,12 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                             ?>
                               <input type="hidden" name="id_sewa" value="<?= $row['id_sewa']; ?>">
                               <div class="form-group">
-                                 <label>Merek:</label>
-                                 <select name="merek" class="form-control" id="merek">
-                                    <?php foreach ($brands as $brand) { ?>
-                                        <option value="<?= $brand['merek']; ?>"><?= $brand['merek']; ?></option>
-                                    <?php } ?>
-                                 </select>
+                                <label>Merek:</label>
+                                <select name="merek" class="form-control" id="merek">
+                                  <?php foreach ($brands as $brand) { ?>
+                                    <option value="<?= $brand['merek']; ?>"><?= $brand['merek']; ?></option>
+                                  <?php } ?>
+                                </select>
                               </div>
                               <div class="form-group">
                                 <label>Tgl Sewa</label>
@@ -177,7 +178,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Tambah Sewa</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;"></button>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <form action="tambah-sewa-kendaraan.php" method="POST">
               <div class="modal-body">
@@ -190,10 +191,16 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                   </select>
                 </div>
                 <div class="form-group">
-                  <label>Merek:</label>
-                  <select name="merek" class="form-control" id="merek">
-                    <?php foreach ($brands as $brand) { ?>
-                      <option value="<?= $brand['merek']; ?>"><?= $brand['merek']; ?></option>
+                  <label>Mobil :</label>
+                  <select name="id_mobil" class="form-control" id="id_mobil">
+                    <option value="" disabled selected>pilih kendaraan...</option>
+                    <?php
+                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek");
+                    while ($brand = mysqli_fetch_array($query_mobil)) { ?>
+                      <option value="<?= $brand['id_mobil']; ?>"><?php echo $brand['nama'];
+                                                                  echo " | ";
+                                                                  echo $brand['no_polisi'];
+                                                                  ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -218,18 +225,6 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                     <option value="144">6 </option>
                     <option value="168">7 </option>
                   </select>
-                </div>
-                <div class="form-group">
-                  <label>Harga:</label>
-                  <input type="number" class="form-control" name="harga" id="harga" readonly>
-                </div>
-                <div class="form-group">
-                  <label>Denda</label>
-                  <input type="number" class="form-control" name="denda">
-                </div>
-                <div class="form-group">
-                    <label>Total Harga</label>
-                  <input type="number" name="total_harga" class="form-control" value="<?= $row['total_harga']; ?>">
                 </div>
               </div>
               <div class="modal-footer">
@@ -263,7 +258,9 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
         $.ajax({
           url: 'get_harga.php',
           method: 'POST',
-          data: {id_mobil: id_mobil},
+          data: {
+            id_mobil: id_mobil
+          },
           dataType: 'json',
           success: function(data) {
             $('#harga').val(data.harga);
@@ -273,5 +270,11 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
     });
   </script>
 </body>
+
+<script>
+  function myFunction(e) {
+    document.getElementById('harga').value = e.target.value;
+  }
+</script>
 
 </html>
