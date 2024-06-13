@@ -3,21 +3,19 @@
 include('koneksi.php');
 
 // Retrieve the variables from the POST request
-$id_sewa = $_POST['id_sewa'];
-$jenis_sewa = $_POST['jenis_sewa'];
-$harga = $_POST['harga'];
-$kuantitas = $_POST['kuantitas'];
-$tgl_sewa = $_POST['tgl_sewa'];
-$tgl_kembali = $_POST['tgl_kembali'];
+$id_pendapatan = $_POST['id_pendapatan'];
+$id_akun = $_POST['id_akun'];
+$no_pelanggan = $_POST['no_pelanggan'];
+$tgl_pendapatan = $_POST['tgl_pendapatan'];
+$jumlah_pendapatan = $_POST['jumlah_pendapatan'];
 
 // Query Update
 $query = mysqli_query($koneksi, "UPDATE pendapatan_sewa SET 
-        jenis_sewa = '$jenis_sewa', 
-        harga = '$harga', 
-        kuantitas = '$kuantitas', 
-        tgl_sewa = '$tgl_sewa', 
-        tgl_kembali = '$tgl_kembali'
-        WHERE id_sewa = '$id_sewa'");
+        id_akun = '$id_akun', 
+        no_pelanggan = '$no_pelanggan', 
+        tgl_pendapatan = '$tgl_pendapatan', 
+        jumlah_pendapatan = '$jumlah_pendapatan'
+        WHERE id_pendapatan = '$id_pendapatan'");
 
 if ($query) {
     // Redirect to the page pendapatan-sewa.php
@@ -29,4 +27,3 @@ if ($query) {
 
 // Close the database connection if needed
 // mysqli_close($koneksi);
-?>
