@@ -38,33 +38,6 @@
 
 <!-- Nav Item - Tables -->
 <li class="nav-Item">
-    <a class="nav-link" href="jurnal-penerimaan-kas.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Jurnal Penerimaan Kas</span>
-    </a>
-
-<li class="nav-Item">
-    <a class="nav-link" href="jurnal-pengeluaran-kas.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Jurnal Pengeluaran Kas</span>
-    </a>
-</li>
-
-<li class="nav-Item">
-    <a class="nav-link" href="neraca-saldo.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Neraca Saldo</span>
-    </a>
-</li>
-
-<li class="nav-Item">
-    <a class="nav-link" href="laporan-laba-rugi.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Laporan Laba Rugi</span>
-    </a>
-</li>
-
-<li class="nav-Item">
     <a class="nav-link" href="Laporan-penerimaan-kas.php">
         <i class="fas fa-fw fa-table"></i>
         <span>Laporan Penerimaan Kas</span>
@@ -79,9 +52,15 @@
 </li>
 
 <li class="nav-Item">
-    <a class="nav-link" href="Laporan-buku-besar.php">
+    <a class="nav-link" href="jurnal-penerimaan-kas.php">
         <i class="fas fa-fw fa-table"></i>
-        <span>Laporan Buku Besar</span>
+        <span>Jurnal Umum</span>
+    </a>
+
+<li class="nav-Item">
+    <a class="nav-link" href="laporan-laba-rugi.php">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Laporan Laba Rugi</span>
     </a>
 </li>
 
