@@ -35,6 +35,17 @@ require 'koneksi.php';
         .table {
             margin-top: 20px;
         }
+        .form-group {
+            display: flex;
+            align-items: center;
+        }
+        .form-group label {
+            margin-right: 10px;
+        }
+        .form-group input[type="month"] {
+            flex: 1;
+            min-width: 150px;
+        }
     </style>
 </head>
 <body id="page-top">
@@ -66,18 +77,33 @@ require 'koneksi.php';
                     // Example queries to fetch values from the database
                     // Adjust these queries according to your actual database structure
                     $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
-                    
-                    $query = "SELECT * FROM akun WHERE bulan = '$bulan'";
+
+                    // Fetch kas from penerimaan_kas
+                    $query_kas = "SELECT SUM(penerimaan) as total_kas FROM penerimaan_kas WHERE DATE_FORMAT(tanggal, '%Y-%m') = '$bulan'";
+                    $result_kas = mysqli_query($koneksi, $query_kas);
+                    if ($result_kas && $row_kas = mysqli_fetch_assoc($result_kas)) {
+                        $kas = $row_kas['total_kas'];
+                    }
+
+                    // Fetch utang from pengeluaran_kas
+                    $query_utang = "SELECT SUM(pengeluaran) as total_utang FROM pengeluaran_kas WHERE DATE_FORMAT(tanggal, '%Y-%m') = '$bulan'";
+                    $result_utang = mysqli_query($koneksi, $query_utang);
+                    if ($result_utang && $row_utang = mysqli_fetch_assoc($result_utang)) {
+                        $utang = $row_utang['total_utang'];
+                    }
+
+                    // Fetch other values
+                    $query = "SELECT * FROM akun WHERE DATE_FORMAT(bulan, '%Y-%m') = '$bulan'";
                     $result = mysqli_query($koneksi, $query);
 
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        $kas = $row['kas'];
-                        $piutang_usaha = $row['piutang_usaha'];
-                        $perlengkapan = $row['perlengkapan'];
-                        $peralatan = $row['peralatan'];
-                        $akm_peny_peralatan = $row['akm_peny_peralatan'];
-                        $utang = $row['utang'];
-                        $modal_gc_persada = $row['modal_gc_persada'];
+                    if ($result && mysqli_num_rows($result) > 0) {
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $piutang_usaha = $row['piutang_usaha'];
+                            $perlengkapan = $row['perlengkapan'];
+                            $peralatan = $row['peralatan'];
+                            $akm_peny_peralatan = $row['akm_peny_peralatan'];
+                            $modal_gc_persada = $row['modal_gc_persada'];
+                        }
                     }
 
                     $jumlah_aktiva = $kas + $piutang_usaha + $perlengkapan + $peralatan - $akm_peny_peralatan;
@@ -112,7 +138,7 @@ require 'koneksi.php';
                                         </tr>
                                         <tr>
                                             <td>Akm. Peny. Peralatan</td>
-                                            <td><?php echo number_format($akm_peny_peralatan, 2); ?></td>
+                                            <td>(<?php echo number_format($akm_peny_peralatan, 2); ?>)</td>
                                         </tr>
                                         <tr>
                                             <th>Jumlah Aktiva</th>
