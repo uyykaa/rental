@@ -62,14 +62,14 @@
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        Pengguna
+        Modal
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="karyawan.php">
+        <a class="nav-link collapsed" href="modal.php">
           <i class="fas fa-fw fa-users"></i>
-          <span>Pengguna</span>
+          <span>Modal</span>
         </a>
       </li>
 
@@ -90,13 +90,10 @@
         <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Laporan </h6>
-            <a class="collapse-item" href="modal.php">Modal</a>
-            <a class="collapse-item" href="jurnal-umum.php">Jurnal Umum</a>
-            <a class="collapse-item" href="neraca-saldo.php">Neraca Saldo</a>
-            <a class="collapse-item" href="laporan-labarugi.php">Laporan Laba Rugi</a>
             <a class="collapse-item" href="laporan-penerimaan-kas.php">Laporan Penerimaan Kas</a>
             <a class="collapse-item" href="laporan-pengeluaran-kas.php">Laporan Pengeluaran Kas</a>
-            <a class="collapse-item" href="buku-besar.php">Laporan Buku Besar</a>
+            <a class="collapse-item" href="jurnal-umum.php">Jurnal Umum</a>
+            <a class="collapse-item" href="laporan-labarugi.php">Laporan Laba Rugi</a> 
             <a class="collapse-item" href="neraca.php">Neraca</a>
           </div>
         </div>
