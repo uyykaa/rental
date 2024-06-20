@@ -44,7 +44,7 @@
 
 <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-     <a class="nav-link collapsed" href="pendapatan_sewa.php">
+     <a class="nav-link collapsed" href="pendapatan-sewa.php">
        <i class="fas fa-fw fa-users"></i>
         <span>Pendapatan Sewa</span>
      </a>
@@ -52,7 +52,7 @@
 
 <!-- Nav Item - Utilities Collapse Menu -->
 <li class="nav-Item">
-    <a class="nav-link collapsed" href="biaya_operasional.php">
+    <a class="nav-link collapsed" href="operasional.php">
         <i class="fas fa-fw fa-arrow-down"></i>
         <span>Biaya operasional</span>
     </a>
@@ -68,58 +68,16 @@
 
 <!-- Nav Item - Tables -->
 <li class="nav-Item">
-    <a class="nav-link" href="daftar-pelanggan.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Daftar Pelanggan</span>
-    </a>
-
-<li class="nav-Item">
-    <a class="nav-link" href="daftar-mobil.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Daftar Mobil</span>
-    </a>
-</li>
-
-<li class="nav-Item">
-    <a class="nav-link" href="daftar-pendapatan-sewa.php">
+    <a class="nav-link" href="pendapatan-sewa.php">
         <i class="fas fa-fw fa-table"></i>
         <span>Daftar Pendapatan Sewa</span>
     </a>
 </li>
 
 <li class="nav-Item">
-    <a class="nav-link" href="biaya-operasional.php">
+    <a class="nav-link" href="operasional.php">
         <i class="fas fa-fw fa-table"></i>
         <span>Dafatr Biaya Operasional</span>
-    </a>
-</li>
-
-</li>
-<li class="nav-Item">
-    <a class="nav-link" href="Jurnal-penerimaan-kas.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Jurnal Penerimaan Kas</span>
-    </a>
-</li>
-
-<li class="nav-Item">
-    <a class="nav-link" href="Jurnal-penerimaan-kas.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Jurnal Penerimaan Kas</span>
-    </a>
-</li>
-
-<li class="nav-Item">
-    <a class="nav-link" href="Neraca-saldo.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Neraca Saldo</span>
-    </a>
-</li>
-
-<li class="nav-Item">
-    <a class="nav-link" href="aporan-laba-rugi.php">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Laporan Rugi Laba</span>
     </a>
 </li>
 
@@ -131,14 +89,29 @@
 </li>
 
 <li class="nav-Item">
-    <a class="nav-link" href="Laporan-pengeluaran-kas.php">
+    <a class="nav-link" href="laporan-pengeluaran-kas.php">
         <i class="fas fa-fw fa-table"></i>
         <span>Laporan Pengeluaran Kas</span>
     </a>
 </li>
+          
+</li>
+<li class="nav-Item">
+    <a class="nav-link" href="jurnal-umum.php">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Jurnal Umum</span>
+    </a>
+</li>
 
 <li class="nav-Item">
-    <a class="nav-link" href="Laporan-buku-besar.php">
+    <a class="nav-link" href="laporan-laba-rugi.php">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Laporan Rugi Laba</span>
+    </a>
+</li>
+
+<li class="nav-Item">
+    <a class="nav-link" href="laporan-buku-besar.php">
         <i class="fas fa-fw fa-table"></i>
         <span>Laporan Buku Besar</span>
     </a>
