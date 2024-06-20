@@ -10,17 +10,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $id_mobil = $_POST['id_mobil'];
   $harga = 0;
 
-
   // Calculate the total cost
-  $total = calculateTotal($harga, $lama_sewa);
 
   $qHarga = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT harga FROM mobil WHERE id_mobil = $id_mobil"));
 
-  $harga = $qHarga;
+  $harga = implode('', $qHarga);
+  $total = calculateTotal($harga, $lama_sewa);
+
 
   // Insert the new rental into the database
-  $query = "INSERT INTO sewa_kendaraan (tgl_sewa, tgl_kembali, id_mobil,no_pelanggan, lama_sewa, harga, denda, total_harga)
-            VALUES ('$tgl_sewa', '$tgl_kembali','$id_mobil','$no_pelanggan', '$lama_sewa', '$harga', '$denda', '$total')";
+  $query = "INSERT INTO sewa_kendaraan (tgl_sewa, tgl_kembali, id_mobil,no_pelanggan, lama_sewa, harga,  total_harga)
+            VALUES ('$tgl_sewa', '$tgl_kembali','$id_mobil','$no_pelanggan', '$lama_sewa', '$harga', '$total')";
+
   if (mysqli_query($koneksi, $query)) {
     header('Location: sewa-kendaraan.php');
   } else {

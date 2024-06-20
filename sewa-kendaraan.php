@@ -79,11 +79,10 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
               </thead>
               <tbody>
                 <?php
-                $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil, mobil.harga FROM sewa_kendaraan 
+                $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil FROM sewa_kendaraan 
                   JOIN pelanggan ON sewa_kendaraan.no_pelanggan = pelanggan.no_pelanggan 
                   JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil");
                 while ($data = mysqli_fetch_assoc($query)) {
-                  $jumlah_sewa = calculateTotal($data['harga'], $data['lama_sewa'], $data['denda']);
                 ?>
                   <tr>
                     <td><?= $data['id_sewa'] ?></td>
@@ -94,7 +93,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                     <td><?= $data['lama_sewa'] ?></td>
                     <td><?= $data['harga'] ?></td>
                     <td><?= $data['denda'] ?></td>
-                    <td><?= $jumlah_sewa ?></td>
+                    <td><?= $data['total_harga'] ?></td>
                     <td>
                       <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>">Edit</a>
                     </td>
@@ -116,9 +115,22 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                               <input type="hidden" name="id_sewa" value="<?= $row['id_sewa']; ?>">
                               <div class="form-group">
                                 <label>Merek:</label>
-                                <select name="merek" class="form-control" id="merek">
-                                  <?php foreach ($brands as $brand) { ?>
-                                    <option value="<?= $brand['merek']; ?>"><?= $brand['merek']; ?></option>
+                                <select name="id_mobil" class="form-control" id="id_mobil">
+                                  <?php
+                                  $idMobil = $row['id_mobil'];
+                                  $query_mobil = mysqli_query($koneksi, "SELECT * FROM mobil");
+                                  while ($brand = mysqli_fetch_array($query_mobil)) {
+                                    if ($row['id_mobil'] == $brand['id_mobil']) { ?>
+                                      <option value="<?= $brand['id_mobil']; ?>" selected><?php echo $brand['nama'];
+                                                                                          echo " | ";
+                                                                                          echo $brand['no_polisi'];
+                                                                                          ?></option>
+                                    <?php } else { ?>
+                                      <option value="<?= $brand['id_mobil']; ?>"><?php echo $brand['nama'];
+                                                                                  echo " | ";
+                                                                                  echo $brand['no_polisi'];
+                                                                                  ?></option>
+                                    <?php } ?>
                                   <?php } ?>
                                 </select>
                               </div>
@@ -133,6 +145,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                               <div class="form-group">
                                 <label>Lama Sewa</label>
                                 <select name="lama_sewa" class="form-control">
+                                  <option value="<?= $row['lama_sewa']; ?>" selected><?= $row['lama_sewa'] ?></option>
                                   <option value="12">12 Jam</option>
                                   <option value="18">18 Jam</option>
                                   <option value="24">24 Jam</option>
@@ -146,7 +159,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                               </div>
                               <div class="form-group">
                                 <label>Harga:</label>
-                                <input type="number" class="form-control" name="harga" id="merek" readonly>
+                                <input type="number" class="form-control" name="harga" id="harga" value="<?= $row['harga']; ?>">
                               </div>
                               <div class="form-group">
                                 <label>Denda</label>
