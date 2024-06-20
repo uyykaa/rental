@@ -72,41 +72,38 @@ require 'koneksi.php';
                 <div class="table-responsive">
                     <?php
                     // Default values
-                    $kas = $piutang_usaha = $perlengkapan = $peralatan = $akm_peny_peralatan = $utang = $modal_gc_persada = 0;
+                    $kas = $utang = 0;
 
-                    // Example queries to fetch values from the database
-                    // Adjust these queries according to your actual database structure
+                    // Get the month value
                     $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
 
-                    // Fetch kas from penerimaan_kas
-                    $query_kas = "SELECT SUM(penerimaan) as total_kas FROM penerimaan_kas WHERE DATE_FORMAT(tanggal, '%Y-%m') = '$bulan'";
+                    // Fetch kas from pendapatan_sewa
+                    $query_kas = "SELECT SUM(jumlah) as total_kas FROM pendapatan_sewa WHERE DATE_FORMAT(tgl_pendapatan, '%Y-%m') = '$bulan'";
                     $result_kas = mysqli_query($koneksi, $query_kas);
                     if ($result_kas && $row_kas = mysqli_fetch_assoc($result_kas)) {
                         $kas = $row_kas['total_kas'];
                     }
 
-                    // Fetch utang from pengeluaran_kas
-                    $query_utang = "SELECT SUM(pengeluaran) as total_utang FROM pengeluaran_kas WHERE DATE_FORMAT(tanggal, '%Y-%m') = '$bulan'";
+                    // Fetch utang from operasional
+                    $query_utang = "SELECT SUM(jumlah) as total_utang FROM operasional WHERE DATE_FORMAT(tanggal_operasional, '%Y-%m') = '$bulan'";
                     $result_utang = mysqli_query($koneksi, $query_utang);
                     if ($result_utang && $row_utang = mysqli_fetch_assoc($result_utang)) {
                         $utang = $row_utang['total_utang'];
                     }
 
                     // Fetch other values
+                    $akm_peny_peralatan = $modal_gc_persada = 0;
                     $query = "SELECT * FROM akun WHERE DATE_FORMAT(bulan, '%Y-%m') = '$bulan'";
                     $result = mysqli_query($koneksi, $query);
-
                     if ($result && mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
-                            $piutang_usaha = $row['piutang_usaha'];
-                            $perlengkapan = $row['perlengkapan'];
-                            $peralatan = $row['peralatan'];
                             $akm_peny_peralatan = $row['akm_peny_peralatan'];
                             $modal_gc_persada = $row['modal_gc_persada'];
                         }
                     }
 
-                    $jumlah_aktiva = $kas + $piutang_usaha + $perlengkapan + $peralatan - $akm_peny_peralatan;
+                    // Calculate total aktiva and passiva
+                    $jumlah_aktiva = $kas - $akm_peny_peralatan;
                     $jumlah_passiva = $utang + $modal_gc_persada;
                     ?>
                     <table class="table table-bordered" width="100%" cellspacing="0">
@@ -123,18 +120,6 @@ require 'koneksi.php';
                                         <tr>
                                             <td>Kas</td>
                                             <td><?php echo number_format($kas, 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Piutang Usaha</td>
-                                            <td><?php echo number_format($piutang_usaha, 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Perlengkapan</td>
-                                            <td><?php echo number_format($perlengkapan, 2); ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Peralatan</td>
-                                            <td><?php echo number_format($peralatan, 2); ?></td>
                                         </tr>
                                         <tr>
                                             <td>Akm. Peny. Peralatan</td>
