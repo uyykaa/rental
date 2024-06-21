@@ -36,7 +36,7 @@ require 'cek-sesi.php';
     }
     $pengeluaran_hari_ini = mysqli_fetch_assoc($pengeluaranResult)['total_operasional'];
 
-    $pendapatan_sewa = mysqli_query($koneksi, "SELECT SUM(jumlah) AS total_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE()");
+    $pendapatan_sewa = mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS total_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE()");
     if (!$pendapatan_sewa) {
       throw new Exception("Query Error: " . mysqli_error($koneksi));
     }
@@ -59,10 +59,10 @@ require 'cek-sesi.php';
     $uang = $pendapatan_sewa - $jumlahkeluar;
 
     // Data for chart
-    $sekarang = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM jumlah_pendapatan WHERE tgl_pendapatan = CURDATE()"))['jumlah_pendapatan'];
-    $satuhari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM jumlah_pendapatan WHERE tgl_pendapatan = CURDATE() - INTERVAL 1 DAY"))['jumlah_pendapatan'];
-    $duahari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM jumlah_pendapatan WHERE tgl_pendapatan = CURDATE() - INTERVAL 2 DAY"))['jumljumlah_pendapatanah'];
-    $tigahari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM jumlah_pendapatan WHERE tgl_pendapatan = CURDATE() - INTERVAL 3 DAY"))['jumlah_pendapatan'];
+    $sekarang = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE()"))['jumlah_pendapatan'];
+    $satuhari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE() - INTERVAL 1 DAY"))['jumlah_pendapatan'];
+    $duahari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE() - INTERVAL 2 DAY"))['jumlah_pendapatan'];
+    $tigahari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE() - INTERVAL 3 DAY"))['jumlah_pendapatan'];
     $empathari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE() - INTERVAL 4 DAY"))['jumlah_pendapatan'];
     $limahari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE() - INTERVAL 5 DAY"))['jumlah_pendapatan'];
     $enamhari = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE() - INTERVAL 6 DAY"))['jumlah_pendapatan'];
@@ -168,5 +168,12 @@ require 'cek-sesi.php';
   </div>
 
 </body>
+
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="js/sb-admin-2.min.js"></script>
+<script src="vendor/chart.js/Chart.min.js"></script>
 
 </html>

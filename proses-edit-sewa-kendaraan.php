@@ -1,63 +1,42 @@
-<div class="modal fade" id="myModal<?php echo htmlspecialchars($data['id_sewa']); ?>" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Ubah Data Sewa</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form role="form" action="proses-edit-sewa-kendaraan.php" method="post">
-          <?php
-          // Fetch brands data once to use in the modal
-          $brands = [];
-          $brand_query = mysqli_query($koneksi, "SELECT * FROM merek");
-          while ($brand = mysqli_fetch_assoc($brand_query)) {
-            $brands[] = $brand;
-          }
+<?php
+require 'cek-sesi.php';
+require 'koneksi.php';
 
-          // Fetch the specific sewa_kendaraan data
-          $id = htmlspecialchars($data['id_sewa']);
-          $query_edit = mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan WHERE id_sewa='$id'");
-          while ($row = mysqli_fetch_array($query_edit)) {
-          ?>
-            <input type="hidden" name="id_sewa" value="<?php echo htmlspecialchars($row['id_sewa']); ?>">
-            <div class="form-group">
-              <label>Tgl Sewa</label>
-              <input type="date" name="tgl_sewa" class="form-control" value="<?php echo htmlspecialchars($row['tgl_sewa']); ?>">
-            </div>
-            <div class="form-group">
-              <label>Tgl Kembali</label>
-              <input type="date" name="tgl_kembali" class="form-control" value="<?php echo htmlspecialchars($row['tgl_kembali']); ?>">
-            </div>
-            <div class="form-group">
-              <label>Lama Sewa</label>
-              <input type="number" name="lama_sewa" class="form-control" value="<?php echo htmlspecialchars($row['lama_sewa']); ?>">
-            </div>
-            <div class="form-group">
-              <label>Harga</label>
-              <input type="number" name="harga" class="form-control" value="<?php echo htmlspecialchars($row['harga']); ?>">
-            </div>
-            <div class="form-group">
-              <label>Denda</label>
-              <input type="number" name="denda" class="form-control" value="<?php echo htmlspecialchars($row['denda']); ?>">
-            </div>
-            <div class="form-group">
-              <label>Merek</label>
-              <select name="id_merek" class="form-control">
-                <?php foreach ($brands as $brand) { ?>
-                  <option value="<?= htmlspecialchars($brand['id_merek']); ?>" <?= ($row['id_merek'] == $brand['id_merek']) ? 'selected' : ''; ?>><?= htmlspecialchars($brand['merek']); ?></option>
-                <?php } ?>
-              </select>
-            </div>
-          <?php
-          }
-          ?>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Simpan</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $id_sewa = $_POST['id_sewa'];
+  $id_mobil = $_POST['id_mobil'];
+  $tgl_sewa = $_POST['tgl_sewa'];
+  $tgl_kembali = $_POST['tgl_kembali'];
+  $lama_sewa = $_POST['lama_sewa'];
+  $harga = $_POST['harga'];
+  $denda = $_POST['denda'];
+
+
+  // Calculate the total cost
+  $total = calculateTotal(intval($harga), intval($lama_sewa)) + intval($denda);
+
+
+  // Insert the new rental into the database
+  $query = "UPDATE sewa_kendaraan SET tgl_sewa='$tgl_sewa', tgl_kembali='$tgl_kembali', id_mobil='$id_mobil', lama_sewa='$lama_sewa', harga='$harga', denda='$denda', total_harga='$total' WHERE id_sewa='$id_sewa'";
+
+  // var_dump($query);
+  // die;
+
+  if (mysqli_query($koneksi, $query)) {
+    header('Location: sewa-kendaraan.php');
+  } else {
+    echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
+  }
+}
+
+// Function to calculate the total cost
+$total = calculateTotal(intval($harga), intval($lama_sewa)) + intval($denda);
+{
+  if ($lama_sewa <= 24) {
+    // Lama sewa kurang dari atau sama dengan 24 jam
+    return $harga;
+  } else {
+    // Lama sewa lebih dari 24 jam
+    return $harga * $lama_sewa;
+  }
+}

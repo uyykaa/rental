@@ -49,13 +49,17 @@ $totalOperasional = 0;
 
 // Hitung total pendapatan
 while ($data = mysqli_fetch_assoc($queryPendapatan_sewa)) {
-    $jumlah = $data['jumlah_sewa'] + $data['jumlah_denda'];
+    $harga = isset($data['harga']) ? $data['harga'] : 0;
+    $denda = isset($data['denda']) ? $data['denda'] : 0;
+    $jumlah = $harga + $denda;
     $totalPendapatan += $jumlah;
 }
 
 // Hitung total operasional
 while ($data = mysqli_fetch_assoc($queryOperasional)) {
-    $jumlah = $data['harga'] * $data['kuantitas'];
+    $harga = isset($data['harga']) ? $data['harga'] : 0;
+    $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+    $jumlah = $harga * $kuantitas;
     $totalOperasional += $jumlah;
 }
 

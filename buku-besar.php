@@ -89,6 +89,7 @@ session_start();
                                         <th>Keterangan</th>
                                         <th>Debet</th>
                                         <th>Kredit</th>
+                                        <th>Saldo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -96,13 +97,14 @@ session_start();
                                     $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d');
                                     $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
-                                    // Query untuk mengambil data pendapatan dan operasional berdasarkan periode tanggal yang dipilih
-                                    $queryPendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    // Query untuk mengambil data pendapatan-sewa berdasarkan periode tanggal yang dipilih
+                                    $queryPendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    
+                                    // Query untuk mengambil data operasional berdasarkan periode tanggal yang dipilih
                                     $queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
 
                                     $totalPendapatan = 0;
                                     $totalOperasional = 0;
-                                    $no = 1;
                                     $var_saldo = 0;
 
                                     // Menampilkan data pendapatan
@@ -118,32 +120,34 @@ session_start();
                                             <td>
                                                 Rp. <?= number_format($data['jumlah'], 2, ',', '.'); ?>
                                             </td>
+                                            <td></td>
                                             <td>
+                                                Rp. <?= number_format($var_saldo += $data['jumlah'], 2, ',', '.'); ?>
                                             </td>
                                         </tr>
-                                        <?php
-                                        $var_saldo += $data['jumlah'];
+                                    <?php
                                         $totalPendapatan += $data['jumlah'];
                                     endwhile;
 
                                     // Menampilkan data operasional
                                     while ($data = $queryOperasional->fetch_assoc()) : ?>
                                         <tr>
-                                            <td align="center"><?= date('Y-m-d', strtotime($data['tanggal_operasional`'])); ?></td>
+                                            <td align="center"><?= date('Y-m-d', strtotime($data['tanggal_operasional'])); ?></td>
                                             <td align="center"><?= $data['id_operasional']; ?></td>
                                             <td>
                                                 <?= $data['nama_akun']; ?><br>
                                                 &nbsp;&nbsp; Kas<br>
                                                 <?= $data['keterangan']; ?>
                                             </td>
-                                            <td>
-                                            </td>
+                                            <td></td>
                                             <td>
                                                 Rp. <?= number_format($data['jumlah'], 2, ',', '.'); ?>
                                             </td>
+                                            <td>
+                                                Rp. <?= number_format($var_saldo -= $data['jumlah'], 2, ',', '.'); ?>
+                                            </td>
                                         </tr>
-                                        <?php
-                                        $var_saldo -= $data['jumlah'];
+                                    <?php
                                         $totalOperasional += $data['jumlah'];
                                     endwhile;
                                     ?>
@@ -153,10 +157,11 @@ session_start();
                                         <th colspan="3"><center>Total</center></th>
                                         <td>Rp. <?= number_format($totalPendapatan, 2, ',', '.'); ?></td>
                                         <td>Rp. <?= number_format($totalOperasional, 2, ',', '.'); ?></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
-                                        <th colspan="3"><center>Saldo Akhir</center></th>
-                                        <td colspan="2">Rp. <?= number_format($var_saldo, 2, ',', '.'); ?></td>
+                                        <th colspan="5"><center>Saldo Akhir</center></th>
+                                        <td>Rp. <?= number_format($var_saldo, 2, ',', '.'); ?></td>
                                     </tr>
                                 </tfoot>
                             </table>

@@ -11,7 +11,8 @@ require 'koneksi.php';
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>SIA  GC PERSADA</title>
+  <link rel="shortcut icon" href="img/logo.jpg">
+  <title>SIA GC PERSADA</title>
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
@@ -20,8 +21,8 @@ require 'koneksi.php';
 
 <body id="page-top">
   <?php require 'sidebar.php'; ?>
+  <?php require 'navbar.php'; ?>
   <div id="content">
-    <?php require 'navbar.php'; ?>
 
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -47,17 +48,14 @@ require 'koneksi.php';
               </thead>
               <tbody>
                 <?php
+                $no = 0;
                 $total_pendapatan = 0;
-                $query = mysqli_query($koneksi, "SELECT 
-                    id_pendapatan, nama_akun, nama, tgl_pendapatan, jumlah_pendapatan 
-                  FROM pendapatan_sewa 
-                  JOIN kategori_akun ON nama_akun = nama_akun
-                  JOIN pelanggan  ON nama = nama");
+                $query = mysqli_query($koneksi, "SELECT pendapatan_sewa.*, kategori_akun.nama_akun, pelanggan.nama FROM pendapatan_sewa JOIN kategori_akun ON pendapatan_sewa.id_akun=kategori_akun.id_akun JOIN pelanggan ON pelanggan.no_pelanggan = pendapatan_sewa.no_pelanggan");
                 while ($data = mysqli_fetch_assoc($query)) {
                   $total_pendapatan += $data['jumlah_pendapatan'];
                 ?>
                   <tr>
-                    <td><?= $data['id_pendapatan'] ?></td>
+                    <td><?= $no += 1; ?></td>
                     <td><?= $data['nama_akun'] ?></td>
                     <td><?= $data['nama'] ?></td>
                     <td><?= $data['tgl_pendapatan'] ?></td>
@@ -73,10 +71,10 @@ require 'koneksi.php';
                       <div class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Ubah Data Pendapatan </h4>
-                          <button type="button" class="close" data-dismiss="modal">&times;"></button>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
-                          <form role="form" action="proses-edit-pendapatan.php" method="post">
+                          <form role="form" action="proses-edit-pendapatan-sewa.php" method="post">
                             <?php
                             $id = $data['id_pendapatan'];
                             $query_edit = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE id_pendapatan='$id'");
@@ -85,12 +83,12 @@ require 'koneksi.php';
                               <input type="hidden" name="id_pendapatan" value="<?= $row['id_pendapatan']; ?>">
                               <div class="form-group">
                                 <label>Akun</label>
-                                <select name="nama_akun" class="form-control">
+                                <select name="id_akun" class="form-control">
                                   <?php
-                                  $akun_query = mysqli_query($koneksi, "SELECT * FROM kaegori_akun");
+                                  $akun_query = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
                                   while ($akun = mysqli_fetch_assoc($akun_query)) {
                                   ?>
-                                    <option value="<?= $akun['nama_akun']; ?>" <?= ($row['nama_akun'] == $akun['nama_akun']) ? 'selected' : ''; ?>><?= $akun['nama_akun']; ?></option>
+                                    <option value="<?= $akun['id_akun']; ?>" <?= $row['id_akun'] == $akun['id_akun'] ? 'selected' : '' ?>><?= $akun['nama_akun']; ?></option>
                                   <?php
                                   }
                                   ?>
@@ -98,12 +96,12 @@ require 'koneksi.php';
                               </div>
                               <div class="form-group">
                                 <label>Nama Pelanggan</label>
-                                <select name="nama" class="form-control">
+                                <select name="no_pelanggan" class="form-control">
                                   <?php
                                   $pelanggan_query = mysqli_query($koneksi, "SELECT * FROM pelanggan");
                                   while ($pelanggan = mysqli_fetch_assoc($pelanggan_query)) {
                                   ?>
-                                    <option value="<?= $pelanggan['nama']; ?>" <?= ($row['nama'] == $pelanggan['id_pelanggan']) ? 'selected' : ''; ?>><?= $pelanggan['nama']; ?></option>
+                                    <option value="<?= $pelanggan['no_pelanggan']; ?>" <?= ($row['no_pelanggan'] == $pelanggan['no_pelanggan']) ? 'selected' : ''; ?>><?= $pelanggan['nama']; ?></option>
                                   <?php
                                   }
                                   ?>
@@ -130,9 +128,7 @@ require 'koneksi.php';
                       </div>
                     </div>
                   </div>
-                <?php
-                }
-                ?>
+                <?php } ?>
                 <!-- Baris Total -->
                 <tr>
                   <td colspan="4"><strong>Total Pendapatan</strong></td>
@@ -153,15 +149,64 @@ require 'koneksi.php';
             <!-- heading modal -->
             <div class="modal-header">
               <h4 class="modal-title">Tambah Pendapatan</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;"></button>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <!-- body modal -->
-            <form action="tambah-pendapatan.php" method="POST">
-              <div class="modal-body">
-                Id pendapatan:
-                <input type="text" class="form-control" name="id_pendapatan" required>
+            <form action="tambah-pendapatan-sewa.php" method="POST">
+              <div class="modal-body ">
+                Nama Akun :
+                <select name="id_akun" class="form-control mb-4">
+                  <?php
+                  $akun_query = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
+                  while ($akun = mysqli_fetch_assoc($akun_query)) {
+                  ?>
+                    <option value="<?= $akun['id_akun']; ?>" selected><?= $akun['nama_akun']; ?></option>
+                  <?php
+                  }
+                  ?>
+                </select>
+
+                Nama Pelanggan :
+                <select name="no_pelanggan" class="form-control mb-4">
+                  <option value="-">pilih nama pelanggan...</option>
+                  <?php
+                  $pelanggan_query = mysqli_query($koneksi, "SELECT * FROM pelanggan");
+                  while ($pelanggan = mysqli_fetch_assoc($pelanggan_query)) {
+                  ?>
+                    <option value="<?= $pelanggan['no_pelanggan']; ?>"><?= $pelanggan['nama']; ?></option>
+                  <?php
+                  }
+                  ?>
+                </select>
+
+                Tanggal Sewa :
+                <select name="id_sewa" class="form-control mb-4">
+                  <option value="-">pilih tanggal sewa...</option>
+                  <?php
+                  $jumlah_sewa = 0;
+                  $sewa_query = mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan");
+                  while ($sewa = mysqli_fetch_assoc($sewa_query)) {
+                  ?>
+                    <option value="<?= $sewa['id_sewa']; ?>"><?php $queryNama = mysqli_query($koneksi, 'SELECT * FROM pelanggan');
+                                                              while ($namaPelanggan = mysqli_fetch_assoc($queryNama)) {
+                                                                if ($sewa['no_pelanggan'] === $namaPelanggan['no_pelanggan']) {
+
+                                                                  echo $sewa['tgl_sewa'];
+                                                                  echo "  ";
+                                                                  echo $namaPelanggan['nama'];
+                                                                  $jumlah_sewa = $sewa['total_harga'];
+                                                                }
+                                                              }
+                                                              ?></option>
+                  <?php
+                  }
+                  ?>
+                </select>
+
                 Tgl Pendapatan:
-                <input type="date" class="form-control" name="tgl_pendapatan" required>
+                <input type="date" class="form-control mb-4" name="tgl_pendapatan" required>
+                Jumlah Pendapatan :
+                <input type="number" class="form-control mb-4" name="jumlah_pendapatan" required>
               </div>
               <!-- footer modal -->
               <div class="modal-footer">
@@ -176,80 +221,31 @@ require 'koneksi.php';
     </div>
     <!-- /.container-fluid -->
 
+    <?php require 'footer.php'; ?>
   </div>
   <!-- End of Main Content -->
 
-  <?php require 'footer.php'; ?>
 
-  </div>
+  <!-- </div> -->
   <!-- End of Content Wrapper -->
 
-  </div>
+  <!-- </div> -->
   <!-- End of Page Wrapper -->
 
-  <!-- Scroll to Top Button-->
+
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrabundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
-
-  <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-  <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
 
 </body>
+<!-- Scroll to Top Button-->
 
 </html>
-TAmbah 
-<?php
-require 'koneksi.php';
-
-// Retrieve the variables from the POST request
-$id_pendapatan = $_POST['id_pendapatan'];
-$nama_akun = $_POST['nama_akun'];
-$nama = $_POST['nama'];
-$tgl_pendapatan = $_POST['tgl_pendapatan'];
-$no_pendapatan = $_POST['no_pendapatan'];  // Assuming this is also sent via POST
-
-// Initialize the total amount
-$total_jumlah = 0;
-
-// Query to calculate total denda and sewa
-$query = "SELECT SUM(denda.jumlah) AS total_denda, SUM(sewa.jumlah) AS total_sewa
-          FROM denda
-          JOIN sewa_kendaraan AS sewa ON denda.id_sewa = sewa.id_sewa
-          WHERE sewa.no_pendapatan = '$no_pendapatan' AND sewa.tgl_pendapatan = '$tgl_pendapatan'";
-$result = mysqli_query($koneksi, $query);
-
-if ($result && mysqli_num_rows($result) > 0) {
-    $row = mysqli_fetch_assoc($result);
-    $total_jumlah = $row['total_denda'] + $row['total_sewa'];
-} else {
-    echo "ERROR, gagal menghitung total jumlah: " . mysqli_error($koneksi);
-    exit;
-}
-
-// Insert the data into pendapatan_sewa table
-$query = "INSERT INTO pendapatan_sewa (id_pendapatan, nama_akun, nama, tgl_pendapatan, jumlah_pendapatan)
-          VALUES ('$id_pendapatan', '$nama_akun', '$nama', '$tgl_pendapatan', '$total_jumlah')";
-
-if (mysqli_query($koneksi, $query)) {
-    // Redirect to pendapatan-sewa.php
-    header("Location: pendapatan-sewa.php");
-} else {
-    // Show an error message if the query failed
-    echo "ERROR, data gagal ditambahkan: " . mysqli_error($koneksi);
-}
-?> tolong benarkan agar dapat digunakan kode nya dan saling terhunung

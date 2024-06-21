@@ -1,6 +1,26 @@
 <?php
 session_start();
+require 'koneksi.php';
+
+// Mengambil nilai tanggal dari parameter GET atau menggunakan nilai default (tanggal hari ini)
+$tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d');
+$tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
+
+// Query untuk mengambil data pendapatan sewa
+$queryPendapatanSewa = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+
+// Query untuk mengambil data operasional
+$queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+
+// Variabel total untuk pendapatan dan operasional
+$totalPendapatan = 0;
+$totalOperasional = 0;
+
+// Variabel total debit dan kredit
+$totalDebit = 0;
+$totalKredit = 0;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,12 +59,14 @@ session_start();
         .btn-print {
             margin-top: 10px;
         }
+        .alert {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body id="page-top">
-<?php require 'koneksi.php'; ?>
+<?php require 'navbar.php'; ?>
 <div id="content">
-    <?php require 'navbar.php'; ?>
     <div class="container">
         <div class="card shadow mb-4">
             <div class="card-header py-3 text-center">
@@ -93,17 +115,11 @@ session_start();
                             </thead>
                             <tbody>
                             <?php
-                            $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d');
-                            $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
-
-                            $queryPendapatanSewa = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-                            $queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-
-                            $totalPendapatan = 0;
-                            $totalOperasional = 0;
+                            // Loop untuk data pendapatan sewa
                             while ($data = mysqli_fetch_assoc($queryPendapatanSewa)) {
-                                $jumlah = isset($data['jumlah']) ? $data['jumlah'] : 0;
+                                $jumlah = isset($data['jumlah_pendapatan']) ? $data['jumlah_pendapatan'] : 0;
                                 $totalPendapatan += $jumlah;
+                                $totalDebit += $jumlah;
                                 ?>
                                 <tr>
                                     <td><?= date('Y-m-d', strtotime($data['tgl_pendapatan'])); ?></td>
@@ -117,9 +133,11 @@ session_start();
                                 <?php
                             }
                             
+                            // Loop untuk data operasional
                             while ($data = mysqli_fetch_assoc($queryOperasional)) {
-                                $jumlah = isset($data['jumlah']) ? $data['jumlah'] : 0;
+                                $jumlah = isset($data['total_operasional']) ? $data['total_operasional'] : 0;
                                 $totalOperasional += $jumlah;
+                                $totalKredit += $jumlah;
                                 ?>
                                 <tr>
                                     <td><?= date('Y-m-d', strtotime($data['tanggal_operasional'])); ?></td>
@@ -143,6 +161,12 @@ session_start();
                             </tfoot>
                         </table>
                     </div>
+                    <?php
+                    // Peringatan jika total debit dan kredit tidak sama
+                    if ($totalDebit !== $totalKredit) {
+                        echo '<div class="alert alert-warning">Total debit dan kredit tidak sama!</div>';
+                    }
+                    ?>
                 </div>
             </div>
         </div>
