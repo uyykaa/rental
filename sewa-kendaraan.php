@@ -5,9 +5,9 @@ require 'koneksi.php';
 function calculateTotal($harga, $lama_sewa, $denda)
 {
   // Ensure the inputs are numeric
-  $harga = is_numeric($harga) ? $harga : 0;
-  $lama_sewa = is_numeric($lama_sewa) ? $lama_sewa : 0;
-  $denda = is_numeric($denda) ? $denda : 0;
+  $harga = intval($harga) ? $harga : 0;
+  $lama_sewa = intval($lama_sewa) ? $lama_sewa : 0;
+  $denda = intval($denda) ? $denda : 0;
 
   if ($lama_sewa <= 24) {
     // Lama sewa kurang dari atau sama dengan 24 jam

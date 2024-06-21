@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $tgl_kembali = $_POST['tgl_kembali'];
   $lama_sewa = $_POST['lama_sewa'];
   $harga = $_POST['harga'];
-  $denda = $_POST['denda'];
+  $denda = $_POST['denda']; 
 
 
   // Calculate the total cost
