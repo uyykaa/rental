@@ -62,7 +62,7 @@ require 'koneksi.php';
                             <div class="form-group">
                                 <label for="tanggal_awal">Tanggal Awal :</label>
                                 <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : ''; ?>">
-                            </div>
+                            </div> 
                             <div class="form-group">
                                 <label for="tanggal_akhir">Tanggal Akhir :</label>
                                 <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : ''; ?>">
