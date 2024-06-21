@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Function to calculate the total cost
-$total = calculateTotal(intval($harga), intval($lama_sewa)) + intval($denda);
+function calculateTotal($harga, $lama_sewa)
 {
   if ($lama_sewa <= 24) {
     // Lama sewa kurang dari atau sama dengan 24 jam
