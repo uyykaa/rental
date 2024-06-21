@@ -86,9 +86,9 @@ require 'koneksi.php';
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Id Pendapatan</th>
-                                <th>Nama Akun</th>
                                 <th>Tanggal Pendapatan</th>
+                                <th>Kode Pendapatan</th>
+                                <th>Nama Akun</th>
                                 <th>Jumlah Penerimaan</th>
                             </tr>
                         </thead>
@@ -104,9 +104,9 @@ require 'koneksi.php';
                                 $totalPendapatan += $jumlah_penerimaan;
                             ?>
                                 <tr>
+                                    <td><?= $data['tgl_pendapatan'] ?></td>
                                     <td><?= $data['id_pendapatan'] ?></td>
                                     <td><?= $data['nama_pendapatan'] ?></td>
-                                    <td><?= $data['tgl_pendapatan'] ?></td>
                                     <td><?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?></td>
                                 </tr>
                             <?php endwhile; ?>
