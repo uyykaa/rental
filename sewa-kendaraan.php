@@ -5,18 +5,24 @@ require 'koneksi.php';
 function calculateTotal($harga, $lama_sewa, $denda)
 {
   // Ensure the inputs are numeric
-  $harga = is_numeric($harga) ? $harga : 0;
-  $lama_sewa = is_numeric($lama_sewa) ? $lama_sewa : 0;
-  $denda = is_numeric($denda) ? $denda : 0;
+  $harga = intval($harga) ? $harga : 0;
+  $lama_sewa = intval($lama_sewa) ? $lama_sewa : 0;
+  $denda = intval($denda) ? $denda : 0;
 
   if ($lama_sewa <= 24) {
     // Lama sewa kurang dari atau sama dengan 24 jam
     return $harga * 1 + $denda;
   } else {
     // Lama sewa lebih dari 24 jam, hitung berapa hari dan jam yang dibutuhkan
-    $hari = floor($lama_sewa / 24); // Menghitung jumlah hari
-    $jam = $lama_sewa % 24;  // Menghitung sisa jam
-    return ($harga * $hari) + ($harga * $jam) + $denda;
+    $hari = floor($lama_sewa / 24);
+    $jam = $lama_sewa % 24;
+
+    // Jika ada sisa jam, tambahkan harga untuk satu hari tambahan
+    if ($jam > 0) {
+      return ($harga * $hari) + $harga + $denda;
+    } else {
+      return ($harga * $hari) + $denda;
+    }
   }
 }
 
@@ -149,12 +155,12 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                                   <option value="12">12 Jam</option>
                                   <option value="18">18 Jam</option>
                                   <option value="24">24 Jam</option>
-                                  <option value="48">2 </option>
-                                  <option value="72">3 </option>
-                                  <option value="96">4 </option>
-                                  <option value="120">5 </option>
-                                  <option value="144">6 </option>
-                                  <option value="168">7 </option>
+                                  <option value="48">2 Hari</option>
+                                  <option value="72">3 Hari</option>
+                                  <option value="96">4 Hari</option>
+                                  <option value="120">5 Hari</option>
+                                  <option value="144">6 Hari</option>
+                                  <option value="168">7 Hari</option>
                                 </select>
                               </div>
                               <div class="form-group">
@@ -231,12 +237,12 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                     <option value="12">12 Jam</option>
                     <option value="18">18 Jam</option>
                     <option value="24">24 Jam</option>
-                    <option value="48">2 </option>
-                    <option value="72">3 </option>
-                    <option value="96">4 </option>
-                    <option value="120">5 </option>
-                    <option value="144">6 </option>
-                    <option value="168">7 </option>
+                    <option value="48">2 Hari</option>
+                    <option value="72">3 Hari</option>
+                    <option value="96">4 Hari</option>
+                    <option value="120">5 Hari</option>
+                    <option value="144">6 Hari</option>
+                    <option value="168">7 Hari</option>
                   </select>
                 </div>
               </div>
