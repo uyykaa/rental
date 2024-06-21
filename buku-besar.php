@@ -85,8 +85,8 @@ session_start();
                                 <thead>
                                     <tr>
                                         <th>Tanggal</th>
-                                        <th>Id Transaksi</th>
-                                        <th>Keterangan</th>
+                                        <th>Kode Transaksi</th>
+                                        <th>Nama Akun</th>
                                         <th>Debet</th>
                                         <th>Kredit</th>
                                         <th>Saldo</th>
@@ -113,9 +113,7 @@ session_start();
                                             <td align="center"><?= date('Y-m-d', strtotime($data['tgl_pendapatan'])); ?></td>
                                             <td align="center"><?= $data['id_pendapatan']; ?></td>
                                             <td>
-                                                Kas<br>
-                                                &nbsp;&nbsp; <?= $data['nama_pendapatan']; ?><br>
-                                                <?= $data['nama_pendapatan']; ?>
+                                                <?= $data['nama_pendapatan']; ?><br>
                                             </td>
                                             <td>
                                                 Rp. <?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?>
@@ -136,8 +134,6 @@ session_start();
                                             <td align="center"><?= $data['id_operasional']; ?></td>
                                             <td>
                                                 <?= $data['nama_operasional']; ?><br>
-                                                &nbsp;&nbsp; Kas<br>
-                                                <?= $data['nama_operasional']; ?>
                                             </td>
                                             <td></td>
                                             <td>
