@@ -81,7 +81,7 @@ require 'koneksi.php';
                     <div class="table-responsive">
                         <?php
                         // Default values
-                        $kas = $utang = 0;
+                        $kas = $utang = $akm_peny_peralatan = $modal_gc_persada = 0;
 
                         // Get the month value
                         $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
@@ -101,15 +101,12 @@ require 'koneksi.php';
                         }
 
                         // Fetch other values
-                        // $akm_peny_peralatan = $modal_gc_persada = 0;
-                        // $query = "SELECT * FROM kategori_akun WHERE DATE_FORMAT(bulan, '%Y-%m') = '$bulan'";
-                        // $result = mysqli_query($koneksi, $query);
-                        // if ($result && mysqli_num_rows($result) > 0) {
-                        //     while ($row = mysqli_fetch_assoc($result)) {
-                        //         $akm_peny_peralatan = $row['akm_peny_peralatan'];
-                        //         $modal_gc_persada = $row['modal_gc_persada'];
-                        //     }
-                        // }
+                        $query = "SELECT akm_peny_peralatan, modal_gc_persada FROM kategori_akun LIMIT 1";
+                        $result = mysqli_query($koneksi, $query);
+                        if ($result && $row = mysqli_fetch_assoc($result)) {
+                            $akm_peny_peralatan = $row['akm_peny_peralatan'];
+                            $modal_gc_persada = $row['modal_gc_persada'];
+                        }
 
                         // Calculate total aktiva and passiva
                         $jumlah_aktiva = $kas - $akm_peny_peralatan;

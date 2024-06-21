@@ -93,9 +93,9 @@ session_start();
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Id Operasional</th>
-                                        <th>Nama Operasional</th>
                                         <th>Tanggal Operasional</th>
+                                        <th>Kode Operasional</th>
+                                        <th>Nama Operasional</th>
                                         <th>Harga</th>
                                         <th>Kuantitas</th>
                                         <th>Total Operasional</th>
@@ -111,9 +111,9 @@ session_start();
                                     $queryPengeluaran = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
                                     while ($data = $queryPengeluaran->fetch_assoc()) : ?>
                                         <tr>
+                                            <td><?= $data['tanggal_operasional'] ?></td>
                                             <td><?= $data['id_operasional'] ?></td>
                                             <td><?= $data['nama_operasional'] ?></td>
-                                            <td><?= $data['tanggal_operasional'] ?></td>
                                             <td>Rp. <?= number_format($data['harga'], 2, ',', '.'); ?></td>
                                             <td><?= $data['kuantitas'] ?></td>
                                             <?php $jumlah = $data['harga'] * $data['kuantitas']; ?>

@@ -85,8 +85,8 @@ session_start();
                                 <thead>
                                     <tr>
                                         <th>Tanggal</th>
-                                        <th>Id Transaksi</th>
-                                        <th>Keterangan</th>
+                                        <th>Kode Transaksi</th>
+                                        <th>Nama Akun</th>
                                         <th>Debet</th>
                                         <th>Kredit</th>
                                         <th>Saldo</th>
@@ -113,20 +113,18 @@ session_start();
                                             <td align="center"><?= date('Y-m-d', strtotime($data['tgl_pendapatan'])); ?></td>
                                             <td align="center"><?= $data['id_pendapatan']; ?></td>
                                             <td>
-                                                Kas<br>
-                                                &nbsp;&nbsp; <?= $data['nama_akun']; ?><br>
-                                                <?= $data['keterangan']; ?>
+                                                <?= $data['nama_pendapatan']; ?><br>
                                             </td>
                                             <td>
-                                                Rp. <?= number_format($data['jumlah'], 2, ',', '.'); ?>
+                                                Rp. <?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?>
                                             </td>
                                             <td></td>
                                             <td>
-                                                Rp. <?= number_format($var_saldo += $data['jumlah'], 2, ',', '.'); ?>
+                                                Rp. <?= number_format($var_saldo += $data['jumlah_pendapatan'], 2, ',', '.'); ?>
                                             </td>
                                         </tr>
                                     <?php
-                                        $totalPendapatan += $data['jumlah'];
+                                        $totalPendapatan += $data['jumlah_pendapatan'];
                                     endwhile;
 
                                     // Menampilkan data operasional
@@ -135,20 +133,18 @@ session_start();
                                             <td align="center"><?= date('Y-m-d', strtotime($data['tanggal_operasional'])); ?></td>
                                             <td align="center"><?= $data['id_operasional']; ?></td>
                                             <td>
-                                                <?= $data['nama_akun']; ?><br>
-                                                &nbsp;&nbsp; Kas<br>
-                                                <?= $data['keterangan']; ?>
+                                                <?= $data['nama_operasional']; ?><br>
                                             </td>
                                             <td></td>
                                             <td>
-                                                Rp. <?= number_format($data['jumlah'], 2, ',', '.'); ?>
+                                                Rp. <?= number_format($data['total_operasional'], 2, ',', '.'); ?>
                                             </td>
                                             <td>
-                                                Rp. <?= number_format($var_saldo -= $data['jumlah'], 2, ',', '.'); ?>
+                                                Rp. <?= number_format($var_saldo -= $data['total_operasional'], 2, ',', '.'); ?>
                                             </td>
                                         </tr>
                                     <?php
-                                        $totalOperasional += $data['jumlah'];
+                                        $totalOperasional += $data['total_operasional'];
                                     endwhile;
                                     ?>
                                 </tbody>
