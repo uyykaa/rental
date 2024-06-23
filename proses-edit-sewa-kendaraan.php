@@ -40,3 +40,10 @@ function calculateTotal($harga, $lama_sewa)
     return $harga * $lama_sewa;
   }
 }
+
+
+function konfirmasi($id)
+{
+  var_dump('masuk');
+  die;
+}
