@@ -99,7 +99,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                     <td><?= $data['lama_sewa'] ?></td>
                     <td><?= $data['harga'] ?></td>
                     <td><?= $data['denda'] ?></td>
-                    <td><?= calculateTotal($data['harga'], $data['lama_sewa'], $data['denda']); ?></td>
+                    <td><?= $data['total_harga'] ?></td>
                     <td>
                       <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>">Edit</a>
                     </td>
@@ -109,6 +109,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                       <div class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Ubah Data Sewa</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
@@ -155,12 +156,12 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                                   <option value="12">12 Jam</option>
                                   <option value="18">18 Jam</option>
                                   <option value="24">24 Jam</option>
-                                  <option value="48">2 Hari</option>
-                                  <option value="72">3 Hari</option>
-                                  <option value="96">4 Hari</option>
-                                  <option value="120">5 Hari</option>
-                                  <option value="144">6 Hari</option>
-                                  <option value="168">7 Hari</option>
+                                  <option value="48">2 </option>
+                                  <option value="72">3 </option>
+                                  <option value="96">4 </option>
+                                  <option value="120">5 </option>
+                                  <option value="144">6 </option>
+                                  <option value="168">7 </option>
                                 </select>
                               </div>
                               <div class="form-group">
@@ -191,75 +192,73 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
           </div>
         </div>
       </div>
-    </div>
 
-    <div id="myModalTambah" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">Tambah Sewa</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <div id="myModalTambah" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Tambah Sewa</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form action="tambah-sewa-kendaraan.php" method="POST">
+              <div class="modal-body">
+                <div class="form-group">
+                  <label>Nama Pelanggan:</label>
+                  <select name="no_pelanggan" class="form-control">
+                    <?php foreach ($customers as $customer) { ?>
+                      <option value="<?= $customer['no_pelanggan']; ?>"><?= $customer['nama']; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Mobil :</label>
+                  <select name="id_mobil" class="form-control" id="id_mobil">
+                    <option value="" disabled selected>pilih kendaraan...</option>
+                    <?php
+                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek");
+                    while ($brand = mysqli_fetch_array($query_mobil)) { ?>
+                      <option value="<?= $brand['id_mobil']; ?>"><?php echo $brand['nama'];
+                                                                  echo " | ";
+                                                                  echo $brand['no_polisi'];
+                                                                  ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Tanggal Sewa:</label>
+                  <input type="date" class="form-control" name="tgl_sewa">
+                </div>
+                <div class="form-group">
+                  <label>Tanggal Kembali:</label>
+                  <input type="date" class="form-control" name="tgl_kembali">
+                </div>
+                <div class="form-group">
+                  <label>Lama Sewa:</label>
+                  <select name="lama_sewa" class="form-control">
+                    <option value="12">12 Jam</option>
+                    <option value="18">18 Jam</option>
+                    <option value="24">24 Jam</option>
+                    <option value="48">2 Hari</option>
+                    <option value="72">3 Hari</option>
+                    <option value="96">4 Hari</option>
+                    <option value="120">5 Hari</option>
+                    <option value="144">6 Hari</option>
+                    <option value="168">7 Hari</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Tambah</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+              </div>
+            </form>
           </div>
-          <form action="tambah-sewa-kendaraan.php" method="POST">
-            <div class="modal-body">
-              <div class="form-group">
-                <label>Nama Pelanggan:</label>
-                <select name="no_pelanggan" class="form-control">
-                  <?php foreach ($customers as $customer) { ?>
-                    <option value="<?= $customer['no_pelanggan']; ?>"><?= $customer['nama']; ?></option>
-                  <?php } ?>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Mobil :</label>
-                <select name="id_mobil" class="form-control" id="id_mobil">
-                  <option value="" disabled selected>pilih kendaraan...</option>
-                  <?php
-                  $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek");
-                  while ($brand = mysqli_fetch_array($query_mobil)) { ?>
-                    <option value="<?= $brand['id_mobil']; ?>"><?php echo $brand['nama'];
-                                                                echo " | ";
-                                                                echo $brand['no_polisi'];
-                                                                ?></option>
-                  <?php } ?>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Tanggal Sewa:</label>
-                <input type="date" class="form-control" name="tgl_sewa">
-              </div>
-              <div class="form-group">
-                <label>Tanggal Kembali:</label>
-                <input type="date" class="form-control" name="tgl_kembali">
-              </div>
-              <div class="form-group">
-                <label>Lama Sewa:</label>
-                <select name="lama_sewa" class="form-control">
-                  <option value="12">12 Jam</option>
-                  <option value="18">18 Jam</option>
-                  <option value="24">24 Jam</option>
-                  <option value="48">2 Hari</option>
-                  <option value="72">3 Hari</option>
-                  <option value="96">4 Hari</option>
-                  <option value="120">5 Hari</option>
-                  <option value="144">6 Hari</option>
-                  <option value="168">7 Hari</option>
-                </select>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-success">Tambah</button>
-              <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-            </div>
-          </form>
         </div>
       </div>
     </div>
-  </div>
 
-  <?php require 'footer.php'; ?>
+    <?php require 'footer.php'; ?>
   </div>
-
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
@@ -271,6 +270,25 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
   <script src="js/demo/datatables-demo.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $('#id_mobil').change(function() {
+        var id_mobil = $(this).val();
+        $.ajax({
+          url: 'get_harga.php',
+          method: 'POST',
+          data: {
+            id_mobil: id_mobil
+          },
+          dataType: 'json',
+          success: function(data) {
+            $('#harga').val(data.harga);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
