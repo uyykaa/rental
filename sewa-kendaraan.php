@@ -26,6 +26,16 @@ function calculateTotal($harga, $lama_sewa, $denda)
   }
 }
 
+function convert_time($time)
+{
+  if ($time <= 24) {
+    echo "$time Jam";
+  } else {
+    $hari = $time / 24;
+    echo "$hari Hari";
+  }
+}
+
 // Fetch brands for the dropdown menu
 $brands_query = mysqli_query($koneksi, "SELECT * FROM merek");
 $brands = [];
@@ -96,7 +106,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                     <td><?= $data['nama_mobil'] ?></td>
                     <td><?= $data['tgl_sewa'] ?></td>
                     <td><?= $data['tgl_kembali'] ?></td>
-                    <td><?= $data['lama_sewa'] ?></td>
+                    <td><?= convert_time($data['lama_sewa']) ?></td>
                     <td><?= $data['harga'] ?></td>
                     <td><?= $data['denda'] ?></td>
                     <td><?= $data['total_harga'] ?></td>
