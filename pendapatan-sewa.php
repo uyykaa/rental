@@ -42,7 +42,7 @@ require 'koneksi.php';
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>No Pendapatan</th>
+                  <th>No</th>
                   <th>Nama Akun</th>
                   <th>Nama Pelanggan</th>
                   <th>Tanggal Pendapatan</th>
@@ -50,6 +50,7 @@ require 'koneksi.php';
                   <th>Aksi</th>
                 </tr>
               </thead>
+
               <tbody>
                 <?php
                 $no = 0;
@@ -134,11 +135,13 @@ require 'koneksi.php';
                   </div>
                 <?php } ?>
                 <!-- Baris Total -->
+              <tfoot>
                 <tr>
-                  <td colspan="4"><strong>Total Pendapatan</strong></td>
-                  <td><strong><?= number_format($total_pendapatan, 2) ?></strong></td>
+                  <td colspan="4" align="right"><strong>Total Pendapatan</strong></td>
+                  <td><strong><?= number_format($total_pendapatan, 2); ?></strong></td>
                   <td></td>
                 </tr>
+              </tfoot>
               </tbody>
             </table>
           </div>
@@ -248,12 +251,21 @@ require 'koneksi.php';
     <i class="fas fa-angle-up"></i>
   </a>
 
+  <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
 
 </body>

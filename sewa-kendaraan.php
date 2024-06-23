@@ -2,29 +2,6 @@
 require 'cek-sesi.php';
 require 'koneksi.php';
 
-function calculateTotal($harga, $lama_sewa, $denda)
-{
-  // Ensure the inputs are numeric
-  $harga = intval($harga) ? $harga : 0;
-  $lama_sewa = intval($lama_sewa) ? $lama_sewa : 0;
-  $denda = intval($denda) ? $denda : 0;
-
-  if ($lama_sewa <= 24) {
-    // Lama sewa kurang dari atau sama dengan 24 jam
-    return $harga * 1 + $denda;
-  } else {
-    // Lama sewa lebih dari 24 jam, hitung berapa hari dan jam yang dibutuhkan
-    $hari = floor($lama_sewa / 24);
-    $jam = $lama_sewa % 24;
-
-    // Jika ada sisa jam, tambahkan harga untuk satu hari tambahan
-    if ($jam > 0) {
-      return ($harga * $hari) + $harga + $denda;
-    } else {
-      return ($harga * $hari) + $denda;
-    }
-  }
-}
 
 $currDate = date('Y-m-d');
 
@@ -106,15 +83,18 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <th>Aksi</th>
                 </tr>
               </thead>
+              <tfoot>
+              </tfoot>
               <tbody>
                 <?php
+                $no = 0;
                 $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil FROM sewa_kendaraan 
                   JOIN pelanggan ON sewa_kendaraan.no_pelanggan = pelanggan.no_pelanggan 
                   JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil");
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
-                    <td><?= $data['id_sewa'] ?></td>
+                    <td><?= $no += 1; ?></td>
                     <td><?= $data['nama'] ?></td>
                     <td><?= $data['nama_mobil'] ?></td>
                     <td><?= $data['tgl_sewa'] ?></td>
@@ -147,7 +127,6 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                         <a href=" #" type="button" class="fa fa-edit btn btn-secondary btn-md" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>">Batalkan</a>
                       <?php } ?>
                     </td>
-                    <td><?php  ?></td>
                   </tr>
                   <div class=" modal fade" id="myModal<?= $data['id_sewa']; ?>" role="dialog">
                     <div class="modal-dialog">
@@ -363,35 +342,28 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
     <i class="fas fa-angle-up"></i>
   </a>
 
+  <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
-
-  <script>
-    $(document).ready(function() {
-      $('#id_mobil').change(function() {
-        var id_mobil = $(this).val();
-        $.ajax({
-          url: 'get_harga.php',
-          method: 'POST',
-          data: {
-            id_mobil: id_mobil
-          },
-          dataType: 'json',
-          success: function(data) {
-            $('#harga').val(data.harga);
-          }
-        });
-      });
-    });
-  </script>
-
 
 
 </body>
+
+<script>
+
+</script>
 
 </html>
