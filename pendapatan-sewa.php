@@ -1,6 +1,10 @@
 <?php
 require 'cek-sesi.php';
 require 'koneksi.php';
+// $sewa_query = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan GROUP BY no_pelanggan "));
+// var_dump($sewa_query);
+// die;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +42,7 @@ require 'koneksi.php';
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>No Pendapatan</th>
+                  <th>No</th>
                   <th>Nama Akun</th>
                   <th>Nama Pelanggan</th>
                   <th>Tanggal Pendapatan</th>
@@ -46,6 +50,7 @@ require 'koneksi.php';
                   <th>Aksi</th>
                 </tr>
               </thead>
+
               <tbody>
                 <?php
                 $no = 0;
@@ -130,11 +135,13 @@ require 'koneksi.php';
                   </div>
                 <?php } ?>
                 <!-- Baris Total -->
+              <tfoot>
                 <tr>
-                  <td colspan="4"><strong>Total Pendapatan</strong></td>
-                  <td><strong><?= number_format($total_pendapatan, 2) ?></strong></td>
+                  <td colspan="4" align="right"><strong>Total Pendapatan</strong></td>
+                  <td><strong><?= number_format($total_pendapatan, 2); ?></strong></td>
                   <td></td>
                 </tr>
+              </tfoot>
               </tbody>
             </table>
           </div>
@@ -155,12 +162,13 @@ require 'koneksi.php';
             <form action="tambah-pendapatan-sewa.php" method="POST">
               <div class="modal-body ">
                 Nama Akun :
-                <select name="id_akun" class="form-control mb-4">
+                <select name="id_akun" class="form-control mb-4" required onchange="showDiv('hidden_jumlah', this)">
+                  <option value="" selected>Pilih Kategori pendapatan...</option>
                   <?php
                   $akun_query = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
                   while ($akun = mysqli_fetch_assoc($akun_query)) {
                   ?>
-                    <option value="<?= $akun['id_akun']; ?>" selected><?= $akun['nama_akun']; ?></option>
+                    <option value="<?= $akun['id_akun']; ?>"><?= $akun['nama_akun']; ?></option>
                   <?php
                   }
                   ?>
@@ -170,7 +178,9 @@ require 'koneksi.php';
                 <select name="no_pelanggan" class="form-control mb-4">
                   <option value="-">pilih nama pelanggan...</option>
                   <?php
-                  $pelanggan_query = mysqli_query($koneksi, "SELECT * FROM pelanggan");
+
+                  $pelanggan_query = mysqli_query($koneksi, "SELECT * FROM pelanggan ");
+
                   while ($pelanggan = mysqli_fetch_assoc($pelanggan_query)) {
                   ?>
                     <option value="<?= $pelanggan['no_pelanggan']; ?>"><?= $pelanggan['nama']; ?></option>
@@ -181,9 +191,10 @@ require 'koneksi.php';
 
                 Tanggal Sewa :
                 <select name="id_sewa" class="form-control mb-4">
-                  <option value="-">pilih tanggal sewa...</option>
+                  <option value="0">pilih tanggal sewa...</option>
                   <?php
                   $jumlah_sewa = 0;
+                  $id_sewa = 0;
                   $sewa_query = mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan");
                   while ($sewa = mysqli_fetch_assoc($sewa_query)) {
                   ?>
@@ -195,6 +206,7 @@ require 'koneksi.php';
                                                                   echo "  ";
                                                                   echo $namaPelanggan['nama'];
                                                                   $jumlah_sewa = $sewa['total_harga'];
+                                                                  break;
                                                                 }
                                                               }
                                                               ?></option>
@@ -204,9 +216,11 @@ require 'koneksi.php';
                 </select>
 
                 Tgl Pendapatan:
-                <input type="date" class="form-control mb-4" name="tgl_pendapatan" required>
-                Jumlah Pendapatan :
-                <input type="number" class="form-control mb-4" name="jumlah_pendapatan" required>
+                <input type="date" class="form-control mb-4" name="tgl_pendapatan" value="">
+                <div id="hidden_jumlah" style="display:block">
+                  Jumlah Pendapatan :
+                  <input type="number" class="form-control mb-4" name="jumlah_pendapatan">
+                </div>
               </div>
               <!-- footer modal -->
               <div class="modal-footer">
@@ -237,15 +251,30 @@ require 'koneksi.php';
     <i class="fas fa-angle-up"></i>
   </a>
 
+  <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
 
 </body>
 <!-- Scroll to Top Button-->
+
+<script>
+  function showDiv(divId, element) {
+    document.getElementById(divId).style.display = element.value == '4-01' ? 'none' : 'block';
+  }
+</script>
 
 </html>

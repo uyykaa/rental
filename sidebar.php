@@ -77,8 +77,8 @@
             <a class="collapse-item" href="laporan-penerimaan-kas.php">Laporan Penerimaan Kas</a>
             <a class="collapse-item" href="laporan-pengeluaran-kas.php">Laporan Pengeluaran Kas</a>
             <a class="collapse-item" href="jurnal-umum.php">Jurnal Umum</a>
-            <a class="collapse-item" href="buku-besar.php">Laporan Buku Besar</a>
-            <a class="collapse-item" href="laporan-labarugi.php">Laporan Laba Rugi</a> 
+            <a class="collapse-item" href="buku-besar.php">Laporan Buku Besar Kas</a>
+            <a class="collapse-item" href="laporan-labarugi.php">Laporan Laba Rugi</a>
             <a class="collapse-item" href="neraca.php">Neraca</a>
           </div>
         </div>

@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $tgl_kembali = $_POST['tgl_kembali'];
   $lama_sewa = $_POST['lama_sewa'];
   $harga = $_POST['harga'];
-  $denda = $_POST['denda']; 
+  $denda = $_POST['denda'];
 
 
   // Calculate the total cost
@@ -39,4 +39,11 @@ function calculateTotal($harga, $lama_sewa)
     // Lama sewa lebih dari 24 jam
     return $harga * $lama_sewa;
   }
+}
+
+
+function konfirmasi($id)
+{
+  var_dump('masuk');
+  die;
 }

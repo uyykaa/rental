@@ -52,9 +52,15 @@
 </li>
 
 <li class="nav-Item">
-    <a class="nav-link" href="jurnal-penerimaan-kas.php">
+    <a class="nav-link" href="jurnal-umum.php">
         <i class="fas fa-fw fa-table"></i>
         <span>Jurnal Umum</span>
+    </a>
+
+<li class="nav-Item">
+    <a class="nav-link" href="buku-besar.php">
+        <i class="fas fa-fw fa-table"></i>
+        <span>Laporan Buku Besar</span>
     </a>
 
 <li class="nav-Item">

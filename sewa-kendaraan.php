@@ -2,21 +2,16 @@
 require 'cek-sesi.php';
 require 'koneksi.php';
 
-function calculateTotal($harga, $lama_sewa, $denda)
-{
-  // Ensure the inputs are numeric
-  $harga = intval($harga) ? $harga : 0;
-  $lama_sewa = intval($lama_sewa) ? $lama_sewa : 0;
-  $denda = intval($denda) ? $denda : 0;
 
-  if ($lama_sewa <= 24) {
-    // Lama sewa kurang dari atau sama dengan 24 jam
-    return $harga * 1 + $denda;
+$currDate = date('Y-m-d');
+
+function convert_time($time)
+{
+  if ($time <= 24) {
+    echo "$time Jam";
   } else {
-    // Lama sewa lebih dari 24 jam, hitung berapa hari dan jam yang dibutuhkan
-    $hari = floor($lama_sewa / 24); // Menghitung jumlah hari
-    $jam = $lama_sewa % 24;  // Menghitung sisa jam
-    return ($harga * $hari) + ($harga * $jam) + $denda;
+    $hari = $time / 24;
+    echo "$hari Hari";
   }
 }
 
@@ -33,6 +28,16 @@ $customers = [];
 while ($customer = mysqli_fetch_assoc($customers_query)) {
   $customers[] = $customer;
 }
+
+
+if (array_key_exists('btnKonfirmasi', $_POST)) {
+  $id = $_POST['id'];
+  $query = mysqli_query($koneksi, "UPDATE sewa_kendaraan SET status = '1' WHERE id_sewa = $id");
+} else if (array_key_exists('btnBatalkan', $_POST)) {
+  $id = $_POST['id'];
+  $query = mysqli_query($koneksi, "UPDATE sewa_kendaraan SET status = '0' WHERE id_sewa = $id");
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,31 +79,56 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                   <th>Harga</th>
                   <th>Denda</th>
                   <th>Total Harga </th>
+                  <th>Status</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
+              <tfoot>
+              </tfoot>
               <tbody>
                 <?php
+                $no = 0;
                 $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil FROM sewa_kendaraan 
                   JOIN pelanggan ON sewa_kendaraan.no_pelanggan = pelanggan.no_pelanggan 
                   JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil");
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
-                    <td><?= $data['id_sewa'] ?></td>
+                    <td><?= $no += 1; ?></td>
                     <td><?= $data['nama'] ?></td>
                     <td><?= $data['nama_mobil'] ?></td>
                     <td><?= $data['tgl_sewa'] ?></td>
                     <td><?= $data['tgl_kembali'] ?></td>
-                    <td><?= $data['lama_sewa'] ?></td>
+                    <td><?= convert_time($data['lama_sewa']) ?></td>
                     <td><?= $data['harga'] ?></td>
                     <td><?= $data['denda'] ?></td>
                     <td><?= $data['total_harga'] ?></td>
                     <td>
+                      <?php
+                      if ($data['status'] === '1') {
+                      ?>
+                        <span class="badge badge-pill badge-success">Sewa selesai</span>
+                      <?php } elseif ($currDate > $data['tgl_kembali']) { ?>
+                        <span class="badge badge-pill badge-danger">Terlambat</span>
+                      <?php } elseif ($currDate < $data['tgl_kembali']) { ?>
+                        <span class="badge badge-pill badge-primary">Sewa berlangsung</span>
+                      <?php } elseif ($currDate == $data['tgl_kembali']) { ?>
+                        <span class="badge badge-pill badge-warning">Sewa berakhir hari ini</span>
+
+                      <?php } ?>
+                    </td>
+                    <td>
                       <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>">Edit</a>
+                      <?php
+                      if ($data['status'] === '0') {
+                      ?>
+                        <a href="#" type="button" class="fa fa-edit btn btn-success btn-md" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>">Konfirmasi</a>
+                      <?php } else { ?>
+                        <a href=" #" type="button" class="fa fa-edit btn btn-secondary btn-md" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>">Batalkan</a>
+                      <?php } ?>
                     </td>
                   </tr>
-                  <div class="modal fade" id="myModal<?= $data['id_sewa']; ?>" role="dialog">
+                  <div class=" modal fade" id="myModal<?= $data['id_sewa']; ?>" role="dialog">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
@@ -177,6 +207,60 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                       </div>
                     </div>
                   </div>
+
+
+                  <!-- MODAL KONFIRMASI DAN BATALKAN -->
+                  <div class="modal fade" tabindex="-1" role="dialog" id="myModalKonfirmasi<?= $data['id_sewa']; ?>">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Konfirmasi</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Konfirmasi sewa kendaraan?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <form action="" method="POST">
+
+                            <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
+                            <button type="submit" class="btn btn-success" name="btnKonfirmasi">Konfirmasi</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="modal fade" tabindex="-1" role="dialog" id="myModalBatalkan<?= $data['id_sewa']; ?>">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Konfirmasi</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Batalkan status terkonfirmasi?</p>
+                        </div>
+                        <div class="modal-footer">
+                          <form action="" method="POST">
+
+                            <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
+                            <button type="submit" class="btn btn-warning" name="btnBatalkan">Batalkan</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
                 <?php
                 }
                 ?>
@@ -231,12 +315,12 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
                     <option value="12">12 Jam</option>
                     <option value="18">18 Jam</option>
                     <option value="24">24 Jam</option>
-                    <option value="48">2 </option>
-                    <option value="72">3 </option>
-                    <option value="96">4 </option>
-                    <option value="120">5 </option>
-                    <option value="144">6 </option>
-                    <option value="168">7 </option>
+                    <option value="48">2 Hari</option>
+                    <option value="72">3 Hari</option>
+                    <option value="96">4 Hari</option>
+                    <option value="120">5 Hari</option>
+                    <option value="144">6 Hari</option>
+                    <option value="168">7 Hari</option>
                   </select>
                 </div>
               </div>
@@ -249,45 +333,37 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
         </div>
       </div>
     </div>
-  </div>
-  <?php require 'footer.php'; ?>
+
+
+
+    <?php require 'footer.php'; ?>
   </div>
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
 
+  <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
+
+  <!-- Page level plugins -->
   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+  <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
 
-  <script>
-    $(document).ready(function() {
-      $('#id_mobil').change(function() {
-        var id_mobil = $(this).val();
-        $.ajax({
-          url: 'get_harga.php',
-          method: 'POST',
-          data: {
-            id_mobil: id_mobil
-          },
-          dataType: 'json',
-          success: function(data) {
-            $('#harga').val(data.harga);
-          }
-        });
-      });
-    });
-  </script>
+
 </body>
 
 <script>
-  function myFunction(e) {
-    document.getElementById('harga').value = e.target.value;
-  }
+
 </script>
 
 </html>

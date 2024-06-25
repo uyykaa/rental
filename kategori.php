@@ -1,5 +1,5 @@
 <?php
-    require 'cek-sesi.php';
+require 'cek-sesi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,9 +72,9 @@
 
             <!-- Modal Edit Kategori -->
             <?php
-                // Query untuk mengambil data kategori akun
-                $query_kategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
-                while ($data = mysqli_fetch_assoc($query_kategori)) {
+            // Query untuk mengambil data kategori akun
+            $query_kategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
+            while ($data = mysqli_fetch_assoc($query_kategori)) {
             ?>
                 <div class="modal fade" id="myModal<?= $data['id_akun']; ?>" role="dialog">
                     <div class="modal-dialog">
@@ -105,7 +105,7 @@
                     </div>
                 </div>
             <?php
-                }
+            }
             ?>
 
             <!-- DataTales Example -->
@@ -125,9 +125,9 @@
                             </thead>
                             <tbody>
                                 <?php
-                                    // Query untuk mengambil data kategori akun
-                                    $query_kategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
-                                    while ($data = mysqli_fetch_assoc($query_kategori)) {
+                                // Query untuk mengambil data kategori akun
+                                $query_kategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
+                                while ($data = mysqli_fetch_assoc($query_kategori)) {
                                 ?>
                                     <tr>
                                         <td><?= $data['id_akun'] ?></td>
@@ -146,58 +146,58 @@
                                                             <h4 class="modal-title">Hapus Data Akun</h4>
                                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                         </div>
-                                                    <div class="modal-body">
-                                                      <p>Apakah Anda yakin ingin menghapus akun ini?</p>
-                                                  </div>
-                                                <div class="modal-footer">
-                                                <a href="hapus-kategori.php?id_akun=<?php echo $data['id_akun']; ?>" class="btn btn-danger">Ya</a>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
-                                           </div>
-                                        </div>
-                                     </div>
-                                  </div>
-                              <?php
-                             }
-                             ?>
-                        </tbody>
-                      </table>
+                                                        <div class="modal-body">
+                                                            <p>Apakah Anda yakin ingin menghapus akun ini?</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a href="hapus-kategori.php?id_akun=<?php echo $data['id_akun']; ?>" class="btn btn-danger">Ya</a>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php
+                                    }
+                                        ?>
+                            </tbody>
+                        </table>
                     </div>
-                  </div>
                 </div>
-              </div>
-  <!-- /.container-fluid -->
-  </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
 
-  <!-- End of Main Content -->
-  <?php require 'footer.php' ?>
-  </div>
+    <!-- End of Main Content -->
+    <?php require 'footer.php' ?>
+    </div>
 
-  <!-- End of Content Wrapper -->
-  </div>
+    <!-- End of Content Wrapper -->
+    </div>
 
-  <!-- End of Page Wrapper -->
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-  <!-- Logout Modal-->
-  <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Logout Modal-->
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin-2.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
 
-  <!-- Page level plugins -->
-  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="js/demo/datatables-demo.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="js/demo/datatables-demo.js"></script>
 
 </body>
 

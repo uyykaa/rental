@@ -4,6 +4,7 @@ require 'koneksi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Meta, title, dan CSS -->
     <meta charset="utf-8">
@@ -25,10 +26,13 @@ require 'koneksi.php';
         body * {
             visibility: hidden;
         }
+
         /* Tampilkan elemen yang ingin dicetak */
-        #content, #content * {
+        #content,
+        #content * {
             visibility: visible;
         }
+
         /* Atur tampilan untuk mencetak */
         #content {
             position: absolute;
@@ -37,24 +41,25 @@ require 'koneksi.php';
         }
     </style>
 </head>
+
 <body id="page-top">
-<!-- Main Content -->
-<div id="content">
-    <?php require 'navbar.php'; ?>
-    
-    <!-- Tombol Cetak -->
-    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-        <i class="fa fa-plus"> Cetak</i>
-    </button><br>
-    
-    <div class="container">
-        <div class="card shadow mb-3">
-            <div class="card-header py-3 text-center">
-                <h4 class="m-0 font-weight-bold text-primary">GC PERSADA TRANSPORT</h4>
-                <h5>Laporan Penerimaan Kas</h5>
-            </div>
-            
-            
+    <!-- Main Content -->
+    <div id="content">
+        <?php require 'navbar.php'; ?>
+
+        <!-- Tombol Cetak -->
+        <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
+            <i class="fa fa-plus"> Cetak</i>
+        </button><br>
+
+        <div class="container">
+            <div class="card shadow mb-3">
+                <div class="card-header py-3 text-center">
+                    <h4 class="m-0 font-weight-bold text-primary"><img src="img/logo.jpg" height="50px auto"> GC PERSADA TRANSPORT</h4>
+                    <h5>Laporan Penerimaan Kas</h5>
+                </div>
+
+
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <div class="row">
@@ -62,7 +67,7 @@ require 'koneksi.php';
                             <div class="form-group">
                                 <label for="tanggal_awal">Tanggal Awal :</label>
                                 <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : ''; ?>">
-                            </div> 
+                            </div>
                             <div class="form-group">
                                 <label for="tanggal_akhir">Tanggal Akhir :</label>
                                 <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : ''; ?>">
@@ -71,67 +76,68 @@ require 'koneksi.php';
                     </div>
                     <button type="button" class="btn btn-primary" style="margin:5px" onclick="applyFilter()">Filter</button>
                     <script>
-                    function applyFilter() {
-                        var tanggal_awal = document.getElementById('tanggal_awal').value;
-                        var tanggal_akhir = document.getElementById('tanggal_akhir').value;
-                        var url = 'laporan-penerimaan-kas.php';
-                        url += '?tanggal_awal=' + tanggal_awal + '&tanggal_akhir=' + tanggal_akhir;
-                        window.location.href = url;
-                }
-            </script>
+                        function applyFilter() {
+                            var tanggal_awal = document.getElementById('tanggal_awal').value;
+                            var tanggal_akhir = document.getElementById('tanggal_akhir').value;
+                            var url = 'laporan-penerimaan-kas.php';
+                            url += '?tanggal_awal=' + tanggal_awal + '&tanggal_akhir=' + tanggal_akhir;
+                            window.location.href = url;
+                        }
+                    </script>
 
-            <!-- Tabel Penerimaan Kas -->
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>Tanggal Pendapatan</th>
-                                <th>Kode Pendapatan</th>
-                                <th>Nama Akun</th>
-                                <th>Jumlah Penerimaan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $totalPendapatan = 0;
-                            $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d');
-                            $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
+                    <!-- Tabel Penerimaan Kas -->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Id Pendapatan</th>
+                                        <th>Nama Akun</th>
+                                        <th>Tanggal Pendapatan</th>
+                                        <th>Jumlah Penerimaan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    $totalPendapatan = 0;
+                                    $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d');
+                                    $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
-                            $queryPendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-                            while ($data = mysqli_fetch_assoc($queryPendapatan)) : 
-                                $jumlah_penerimaan = $data['jumlah_pendapatan'];
-                                $totalPendapatan += $jumlah_penerimaan;
-                            ?>
-                                <tr>
-                                    <td><?= $data['tgl_pendapatan'] ?></td>
-                                    <td><?= $data['id_pendapatan'] ?></td>
-                                    <td><?= $data['nama_pendapatan'] ?></td>
-                                    <td><?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?></td>
-                                </tr>
-                            <?php endwhile; ?>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3" style="text-align: right;">Total</th>
-                                <th>Rp. <?= number_format($totalPendapatan, 2, ',', '.'); ?></th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                                    $queryPendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    while ($data = mysqli_fetch_assoc($queryPendapatan)) :
+                                        $jumlah_penerimaan = $data['jumlah_pendapatan'];
+                                        $totalPendapatan += $jumlah_penerimaan;
+                                    ?>
+                                        <tr>
+                                            <td><?= $data['id_pendapatan'] ?></td>
+                                            <td><?= $data['nama_pendapatan'] ?></td>
+                                            <td><?= $data['tgl_pendapatan'] ?></td>
+                                            <td><?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?></td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="3" style="text-align: right;">Total</th>
+                                        <th>Rp. <?= number_format($totalPendapatan, 2, ',', '.'); ?></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<!-- Bootstrap core JavaScript -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Core Plugin JavaScript -->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-<!-- Custom scripts for all pages -->
-<script src="js/sb-admin-2.min.js"></script>
-<!-- Page level custom scripts -->
-<script src="js/demo/datatables-demo.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- Core Plugin JavaScript -->
+        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Custom scripts for all pages -->
+        <script src="js/sb-admin-2.min.js"></script>
+        <!-- Page level custom scripts -->
+        <script src="js/demo/datatables-demo.js"></script>
 </body>
+
 </html>
