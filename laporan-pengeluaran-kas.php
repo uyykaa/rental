@@ -60,7 +60,7 @@ session_start();
         <div class="container">
             <div class="card shadow mb-3">
                 <div class="card-header py-3 text-center">
-                    <h4 class="m-0 font-weight-bold text-primary">GC PERSADA TRANSPORT</h4>
+                    <h4 class="m-0 font-weight-bold text-primary"><img src="img/logo.jpg" height="50px auto"> GC PERSADA TRANSPORT</h4>
                     <h5>Laporan Pengeluaran Kas</h5>
                 </div>
 

@@ -1,11 +1,11 @@
 <?php
 session_start();
+require 'koneksi.php';
 ?>
-<!-- laporan-buku-besar.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Masukkan meta, title dan CSS yang diperlukan -->
+    <!-- Meta, title, and CSS -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,21 +14,21 @@ session_start();
 
     <title>Buku Besar Kas</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts and CSS for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style type="text/css" media="print">
-        /* Sembunyikan elemen yang tidak ingin dicetak */
+        /* Hide elements not to be printed */
         body * {
             visibility: hidden;
         }
-        /* Kecuali elemen yang ingin dicetak */   
+        /* Show print area */
         #content, #content * {
             visibility: visible;
         }
-        /* Atur tampilan untuk mencetak */
+        /* Set position for print area */
         #content {
             position: absolute; 
             left: 0; 
@@ -37,25 +37,23 @@ session_start();
     </style>
 </head>
 <body id="page-top">
-    <?php
-    require 'koneksi.php';
-    ?>
+    <!-- Include navbar -->
+    <?php require 'navbar.php'; ?>
 
     <!-- Main Content -->
     <div id="content">
-        <?php require 'navbar.php'; ?>
-
-        <!-- Tombol Cetak -->
-        <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-        <i class="fa fa-print"> Cetak</i></button></br>
+        <!-- Print Button -->
         <div class="container">
+            <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
+                <i class="fa fa-print"> Cetak</i>
+            </button>
             <div class="card shadow mb-4">
                 <div class="card-header py-3 text-center">
                     <h4 class="m-0 font-weight-bold text-primary"> GC PERSADA TRANSPORT</h4>
                     <h5> Laporan Buku Besar Kas </h5>
                 </div>
 
-                <!-- Begin Page Content -->
+                <!-- Page Content -->
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-3">
@@ -97,7 +95,7 @@ session_start();
                                     $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d');
                                     $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
-                                    // Query untuk mengambil data pendapatan-sewa berdasarkan periode tanggal yang dipilih
+                                    // Query untuk mengambil data pendapatan_sewa berdasarkan periode tanggal yang dipilih
                                     $queryPendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
                                     
                                     // Query untuk mengambil data operasional berdasarkan periode tanggal yang dipilih
@@ -112,16 +110,10 @@ session_start();
                                         <tr>
                                             <td align="center"><?= date('Y-m-d', strtotime($data['tgl_pendapatan'])); ?></td>
                                             <td align="center"><?= $data['id_pendapatan']; ?></td>
-                                            <td>
-                                                <?= $data['nama_pendapatan']; ?><br>
-                                            </td>
-                                            <td>
-                                                Rp. <?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?>
-                                            </td>
+                                            <td><?= $data['nama_pendapatan']; ?></td>
+                                            <td>Rp. <?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?></td>
                                             <td></td>
-                                            <td>
-                                                Rp. <?= number_format($var_saldo += $data['jumlah_pendapatan'], 2, ',', '.'); ?>
-                                            </td>
+                                            <td>Rp. <?= number_format($var_saldo += $data['jumlah_pendapatan'], 2, ',', '.'); ?></td>
                                         </tr>
                                     <?php
                                         $totalPendapatan += $data['jumlah_pendapatan'];
@@ -132,16 +124,10 @@ session_start();
                                         <tr>
                                             <td align="center"><?= date('Y-m-d', strtotime($data['tanggal_operasional'])); ?></td>
                                             <td align="center"><?= $data['id_operasional']; ?></td>
-                                            <td>
-                                                <?= $data['nama_operasional']; ?><br>
-                                            </td>
+                                            <td><?= $data['nama_operasional']; ?></td>
                                             <td></td>
-                                            <td>
-                                                Rp. <?= number_format($data['total_operasional'], 2, ',', '.'); ?>
-                                            </td>
-                                            <td>
-                                                Rp. <?= number_format($var_saldo -= $data['total_operasional'], 2, ',', '.'); ?>
-                                            </td>
+                                            <td>Rp. <?= number_format($data['total_operasional'], 2, ',', '.'); ?></td>
+                                            <td>Rp. <?= number_format($var_saldo -= $data['total_operasional'], 2, ',', '.'); ?></td>
                                         </tr>
                                     <?php
                                         $totalOperasional += $data['total_operasional'];
@@ -164,6 +150,7 @@ session_start();
                         </div>
                     </div>
                 </div>
+                <!-- End of Page Content -->
             </div>
         </div>
     </div>

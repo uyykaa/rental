@@ -53,6 +53,7 @@ if ($_SESSION['jabatan'] == " ") {
   <div id="content">
 
     <!-- Topbar -->
+    <!-- Topbar -->
     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
       <!-- Sidebar Toggle (Topbar) -->
@@ -66,6 +67,8 @@ if ($_SESSION['jabatan'] == " ") {
       <?php require 'user.php'; ?>
     </nav>
 
+    <!-- End of Topbar -->
+    <!-- Begin Page Content -->
     <!-- End of Topbar -->
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -166,6 +169,8 @@ if ($_SESSION['jabatan'] == " ") {
           <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
           <!-- Custom Scripts for all pages-->
           <script src="js/sb-admin-2.min.js"></script>
+
+</body>
 
 </body>
 
