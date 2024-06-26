@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 23 Jun 2024 pada 20.41
+-- Waktu pembuatan: 26 Jun 2024 pada 07.21
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.2.4
 
@@ -172,15 +172,6 @@ CREATE TABLE `pendapatan_sewa` (
   `jumlah_pendapatan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data untuk tabel `pendapatan_sewa`
---
-
-INSERT INTO `pendapatan_sewa` (`id_pendapatan`, `id_akun`, `no_pelanggan`, `id_sewa`, `nama_pendapatan`, `tgl_pendapatan`, `jumlah_pendapatan`) VALUES
-(21, '4-01', '2', 2, 'Pendapatan Sewa', '2024-06-13', 400000),
-(22, '4-01', '1', 1, 'Pendapatan Sewa', '2024-06-05', 600000),
-(23, '4-01', '1', 15, 'Pendapatan Sewa', '2024-06-23', 21600000);
-
 -- --------------------------------------------------------
 
 --
@@ -228,7 +219,7 @@ CREATE TABLE `sewa_kendaraan` (
 --
 
 INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `tgl_kembali`, `id_mobil`, `no_pelanggan`, `lama_sewa`, `harga`, `denda`, `total_harga`, `status`) VALUES
-(12, '2024-06-20', '2024-06-25', '3', '1', '72', 10000, 7000, 727000, 1),
+(12, '2024-06-20', '2024-06-25', '3', '1', '72', 10000, 7000, 727000, 0),
 (13, '2024-06-20', '2024-06-24', '1', '1', '24', 750000, 50000, 800000, 0),
 (14, '2024-06-20', '2024-06-20', '2', '2', '48', 450000, 0, 21500000, 0),
 (15, '2024-06-20', '2024-06-21', '3', '2', '12', 300000, 0, 21600000, 0),
@@ -254,8 +245,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role_id`, `status`) VALUES
-(2, '', 'admin123@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '1', 1),
-(3, '', 'pemilik@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '2', 1);
+(2, 'Admin', 'admin123@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '1', 1),
+(3, 'Pemilik', 'pemilik@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '2', 1),
+(4, 'karyawan', 'karyawan@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '3', 1);
 
 --
 -- Indexes for dumped tables
@@ -354,7 +346,7 @@ ALTER TABLE `pelanggan`
 -- AUTO_INCREMENT untuk tabel `pendapatan_sewa`
 --
 ALTER TABLE `pendapatan_sewa`
-  MODIFY `id_pendapatan` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_pendapatan` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT untuk tabel `sewa_kendaraan`
@@ -366,7 +358,7 @@ ALTER TABLE `sewa_kendaraan`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
