@@ -56,26 +56,7 @@
           <span>Biaya Operasional</span>
         </a>
       </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Modal
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="modal.php">
-          <i class="fas fa-fw fa-users"></i>
-          <span>Modal</span>
-        </a>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
+      
       <!-- Heading -->
       <div class="sidebar-heading">
         Laporan

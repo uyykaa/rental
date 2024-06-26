@@ -44,12 +44,16 @@ require 'koneksi.php';
     <div id="content">
         <!-- Print Button -->
         <div class="container">
-            <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-                <i class="fa fa-print"> Cetak</i>
-            </button>
+            <div class="row">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
+                        <i class="fa fa-print"> Cetak</i>
+                    </button>
+                </div>
+            </div>
             <div class="card shadow mb-4">
                 <div class="card-header py-3 text-center">
-                    <h4 class="m-0 font-weight-bold text-primary"> GC PERSADA TRANSPORT</h4>
+                    <h4 class="m-0 font-weight-bold text-primary"><img src="img/logo.jpg" height="50px auto"> GC PERSADA TRANSPORT</h4>
                     <h5> Laporan Buku Besar Kas </h5>
                 </div>
 
