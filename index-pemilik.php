@@ -34,7 +34,7 @@ if ($_SESSION['role_id'] !== '2') {
   $pendapatan_sewa = mysqli_query($koneksi, "SELECT jumlah_pendapatan FROM pendapatan_sewa where tgl_pendapatan = CURDATE()");
   $pendapatan_sewa = mysqli_fetch_array($pendapatan_sewa);
 
-
+  $arraymasuk = [];
   $pendapatan_sewa = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa");
   while ($masuk = mysqli_fetch_array($pendapatan_sewa)) {
     $arraymasuk[] = $masuk['jumlah_pendapatan'];
