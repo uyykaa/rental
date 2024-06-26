@@ -34,13 +34,14 @@ if ($_SESSION['role_id'] !== '2') {
   $pendapatan_sewa = mysqli_query($koneksi, "SELECT jumlah_pendapatan FROM pendapatan_sewa where tgl_pendapatan = CURDATE()");
   $pendapatan_sewa = mysqli_fetch_array($pendapatan_sewa);
 
-
+  $arraymasuk = [];
   $pendapatan_sewa = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa");
   while ($masuk = mysqli_fetch_array($pendapatan_sewa)) {
     $arraymasuk[] = $masuk['jumlah_pendapatan'];
   }
   $jumlahmasuk = array_sum($arraymasuk);
 
+  $arraykeluar = [];
   $operasional = mysqli_query($koneksi, "SELECT * FROM operasional");
   while ($keluar = mysqli_fetch_array($operasional)) {
     $arraykeluar[] = $keluar['total_operasional'];
@@ -52,7 +53,6 @@ if ($_SESSION['role_id'] !== '2') {
   <!-- Main Content -->
   <div id="content">
 
-    <!-- Topbar -->
     <!-- Topbar -->
     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
@@ -67,8 +67,6 @@ if ($_SESSION['role_id'] !== '2') {
       <?php require 'user.php'; ?>
     </nav>
 
-    <!-- End of Topbar -->
-    <!-- Begin Page Content -->
     <!-- End of Topbar -->
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -100,7 +98,7 @@ if ($_SESSION['role_id'] !== '2') {
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                  <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">operasional</div>
+                  <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Operasional</div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">Rp.<?= number_format($jumlahkeluar, 2, ',', '.'); ?></div>
                 </div>
                 <div class="col-auto">
@@ -120,7 +118,7 @@ if ($_SESSION['role_id'] !== '2') {
                   <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Sisa Uang</div>
                   <div class="row no-gutters align-items-center">
                     <div class="col-auto">
-                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">Rp.<?= number_format(500000, 2, ',', '.'); ?></div>
+                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">Rp.<?= number_format($tampilKas, 2, ',', '.'); ?></div>
                     </div>
                   </div>
                 </div>
@@ -143,7 +141,6 @@ if ($_SESSION['role_id'] !== '2') {
                   $warna = 'info';
                   $value = $tampilKas / 10000;
                 };
-
                 ?>
 
                 <div class="progress-bar bg-<?= $warna ?>" role="progressbar" style="width: 100%" aria-valuenow="<?= $value ?>" aria-valuemin="0" aria-valuemax="100"><span><?= $value ?> % </span></div>
@@ -160,7 +157,7 @@ if ($_SESSION['role_id'] !== '2') {
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Bootstrap core JabaScript-->
+  <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <!-- Core Plugin JavaScript-->

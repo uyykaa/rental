@@ -27,7 +27,7 @@
       <hr class="sidebar-divider">
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="profil.php">
+        <a class="nav-link collapsed" href="pengguna.php">
           <i class="fas fa-fw fa-users"></i>
           <span>User</span>
         </a>
@@ -40,14 +40,14 @@
 
       <!-- Nav Item - Tables -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="Laporan-penerimaan-kas.php">
+        <a class="nav-link collapsed" href="laporan-penerimaan-kas.php">
           <i class="fas fa-fw fa-table"></i>
           <span>Laporan Penerimaan Kas</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="Laporan-pengeluaran-kas.php">
+        <a class="nav-link" href="laporan-pengeluaran-kas.php">
           <i class="fas fa-fw fa-table"></i>
           <span>Laporan Pengeluaran Kas</span>
         </a>
@@ -68,7 +68,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="laporan-laba-rugi.php">
+        <a class="nav-link" href="laporan-labarugi.php">
           <i class="fas fa-fw fa-table"></i>
           <span>Laporan Laba Rugi</span>
         </a>
@@ -79,57 +79,6 @@
           <i class="fas fa-fw fa-table"></i>
           <span>Neraca</span>
         </a>
-      </li>
-
-      <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="operasional.php">
-          <i class="fas fa-fw fa-arrow-down"></i>
-          <span>Biaya Operasional</span>
-        </a>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Modal
-      </div>
-
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="modal.php">
-          <i class="fas fa-fw fa-users"></i>
-          <span>Modal</span>
-        </a>
-      </li>
-
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Laporan
-      </div>
-
-      <!-- Nav Item - Tables -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLaporan" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-arrow-up"></i>
-          <span>Laporan</span>
-        </a>
-        <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Laporan </h6>
-            <a class="collapse-item" href="laporan-penerimaan-kas.php">Laporan Penerimaan Kas</a>
-            <a class="collapse-item" href="laporan-pengeluaran-kas.php">Laporan Pengeluaran Kas</a>
-            <a class="collapse-item" href="jurnal-umum.php">Jurnal Umum</a>
-            <a class="collapse-item" href="buku-besar.php">Laporan Buku Besar Kas</a>
-            <a class="collapse-item" href="laporan-labarugi.php">Laporan Laba Rugi</a>
-            <a class="collapse-item" href="neraca.php">Neraca</a>
-          </div>
-        </div>
       </li>
 
 
