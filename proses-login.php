@@ -29,6 +29,8 @@ if (!isset($_POST['email']) || !isset($_POST['pass'])) {
 			header("location:index.php");
 		} elseif ($sesi['role_id'] == '2') {
 			header("location:index-pemilik.php");
+		} elseif ($sesi['role_id'] == '3') {
+			header("location:index-karyawan.php");
 		}
 	} else {
 		//jika $rowCheck = 0, berarti email atau password salah, atau tidak terdaftar di database

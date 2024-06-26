@@ -1,5 +1,13 @@
 <?php
 require 'cek-sesi.php';
+
+if ($_SESSION['role_id'] === '2') {
+  header("location:index-pemilik.php");
+} elseif ($_SESSION['role_id'] === '3') {
+  header("location: index-karyawan.php");
+} elseif ($_SESSION['role_id'] === '4') {
+  header("location:index-bagiankeuangan.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

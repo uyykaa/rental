@@ -32,10 +32,24 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
 
 if (array_key_exists('btnKonfirmasi', $_POST)) {
   $id = $_POST['id'];
-  $query = mysqli_query($koneksi, "UPDATE sewa_kendaraan SET status = '1' WHERE id_sewa = $id");
+  mysqli_query($koneksi, "UPDATE sewa_kendaraan SET status = '1' WHERE id_sewa = $id");
+
+  $query = mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan WHERE id_sewa=$id");
+  while ($data = mysqli_fetch_assoc($query)) {
+    $id_akun  = '4-01';
+    $no_pelanggan = $data['no_pelanggan'];
+    $id_sewa = $data['id_sewa'];
+    $nama_pendapatan = 'Pendapatan Sewa';
+    $tgl_pendapatan = date("Y-m-d");
+    $jumlah_pendapatan = $data['total_harga'];
+
+    $updatPendapatan = mysqli_query($koneksi, "INSERT INTO pendapatan_sewa(id_akun, no_pelanggan, id_sewa,nama_pendapatan, tgl_pendapatan, jumlah_pendapatan ) values('$id_akun', '$no_pelanggan', '$id_sewa','$nama_pendapatan','$tgl_pendapatan', '$jumlah_pendapatan')");
+  }
 } else if (array_key_exists('btnBatalkan', $_POST)) {
   $id = $_POST['id'];
-  $query = mysqli_query($koneksi, "UPDATE sewa_kendaraan SET status = '0' WHERE id_sewa = $id");
+  mysqli_query($koneksi, "UPDATE sewa_kendaraan SET status = '0' WHERE id_sewa = $id");
+
+  $query = mysqli_query($koneksi, "DELETE FROM pendapatan_sewa WHERE id_sewa=$id");
 }
 
 ?>
