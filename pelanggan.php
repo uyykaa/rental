@@ -28,7 +28,8 @@ session_start();
 
   <?php
   require 'koneksi.php';
-  require('sidebar.php');
+  $role = $_SESSION['role_id'];
+  echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php');
   ?>
 
   <!-- Main Content -->

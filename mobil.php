@@ -33,10 +33,13 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
 </head>
 
 <body id="page-top">
-  <?php require 'sidebar.php'; ?>
+  <?php $role = $_SESSION['role_id'];
+  echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php'); ?>
   <!-- Main Content -->
   <div id="content">
-    <?php require 'navbar.php'; ?>
+    <?php require 'navbar.php';
+
+    ?>
 
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -224,33 +227,33 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
 
   <?php require 'footer.php' ?>
 
-</div>
-<!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Content Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-  <i class="fas fa-angle-up"></i>
-</a>
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
-<!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
 
-<!-- Page level plugins -->
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <!-- Page level plugins -->
+  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-<!-- Page level custom scripts -->
-<script src="js/demo/datatables-demo.js"></script>
+  <!-- Page level custom scripts -->
+  <script src="js/demo/datatables-demo.js"></script>
 
 </body>
 

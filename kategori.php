@@ -26,8 +26,11 @@ require 'cek-sesi.php';
 </head>
 
 <body id="page-top">
-    <?php require 'koneksi.php'; ?>
-    <?php require 'sidebar.php'; ?>
+    <?php
+    require 'koneksi.php';
+    $role = $_SESSION['role_id'];
+    echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php');
+    ?>
     <!-- Main Content -->
     <div id="content">
 

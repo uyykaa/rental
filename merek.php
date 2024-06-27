@@ -26,11 +26,14 @@ require 'koneksi.php';
 </head>
 
 <body id="page-top">
-    <?php require 'sidebar.php'; ?>
+    <?php $role = $_SESSION['role_id'];
+    echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php'); ?>
 
     <!-- Main Content -->
     <div id="content">
-        <?php require 'navbar.php'; ?>
+        <?php require 'navbar.php';
+
+        ?>
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
