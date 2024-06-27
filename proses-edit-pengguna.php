@@ -8,9 +8,10 @@ $jabatan = $_GET['jabatan'];
 $email = $_GET['email'];
 $password = $_GET['password'];
 $role_id = $_GET['role_id'];
+$status = $_GET['status'];
 
 //query update
-$query = mysqli_query($koneksi, "UPDATE users SET nama='$nama' , email='$email', password='$password' WHERE id='$id' ");
+$query = mysqli_query($koneksi, "UPDATE users SET nama='$nama', jabatan='$jabatan', email='$email', password='$password' WHERE id='$id' ");
 
 if ($query) {
     # credirect ke page index

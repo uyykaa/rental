@@ -52,11 +52,13 @@ if ($_SESSION['role_id'] != '2') {
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Id Pengguna</th>
+                  <th>No</th>
                   <th>Nama</th>
                   <th>Jabatan</th>
                   <th>Alamat</th>
                   <th>password</th>
+                  <th>Role</th>
+                  <th>Status</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -75,6 +77,8 @@ if ($_SESSION['role_id'] != '2') {
                     <td><?= $data['jabatan'] ?></td>
                     <td><?= $data['email'] ?></td>
                     <td><?= $data['password'] ?></td>
+                    <td><?= $data['role_id'] ?></td>
+                    <td><?= $data['status'] ?></td>
                     <td>
 
                       <!-- Button untuk modal -->
@@ -92,7 +96,7 @@ if ($_SESSION['role_id'] != '2') {
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
-                          <form role="form" action="proses-edit-user.php" method="get">
+                          <form role="form" action="proses-edit-pengguna.php" method="get">
 
                             <?php
                             $id = $data['id'];
@@ -126,6 +130,16 @@ if ($_SESSION['role_id'] != '2') {
                               <div class="form-group">
                                 <label>Password</label>
                                 <input type="text" name="password" class="form-control" value="<?php echo $row['password']; ?>">
+                              </div>
+
+                              <div class="form-group">
+                                <label>Role_id</label>
+                                <input type="text" name="role_id" class="form-control" value="<?php echo $row['role_id']; ?>">
+                              </div>
+
+                              <div class="form-group">
+                                <label>Status</label>
+                                <input type="text" name="status" class="form-control" value="<?php echo $row['status']; ?>">
                               </div>
 
                               <div class="modal-footer">
@@ -170,6 +184,8 @@ if ($_SESSION['role_id'] != '2') {
                             <input type="text" class="form-control" name="password">
                             Role_id :
                             <input type="text" class="form-control" name="role_id">
+                            Status :
+                            <input type="text" class="form-control" name="status">
                           </div>
                           <!-- footer modal -->
                           <div class="modal-footer">
