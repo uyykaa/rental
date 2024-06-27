@@ -1,5 +1,8 @@
 <?php
 session_start();
+if ($_SESSION['role_id'] != '2') {
+  header("location:logout.php?pesan=gagal");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,177 +29,180 @@ session_start();
 </head>
 
 <body id="page-top">
-<?php require 'koneksi.php'; 
-?>
+  <?php require 'koneksi.php';
+  require 'sidebar-pemilik.php';
+  ?>
 
-<!-- Main Content -->
-     <div id="content">
-<?php require 'navbar.php'; ?>
+  <!-- Main Content -->
+  <div id="content">
+    <?php require 'navbar.php';
+    ?>
 
-<!-- Begin Page Content -->
+    <!-- Begin Page Content -->
     <div class="container-fluid">
-<button type="button" class="btn btn-success" style="margin:5px; visibility:<?=$lihat?>" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> User</i></button><br>
+      <button type="button" class="btn btn-success" style="margin:5px; visibility:<?= $lihat ?>" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> User</i></button><br>
 
-<!-- DataTales Example -->
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Kelola Pengguna</h6>
-  </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-             <thead>
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Kelola Pengguna</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
                 <tr>
                   <th>Id Pengguna</th>
                   <th>Nama</th>
                   <th>Jabatan</th>
-                  <th>Email</th>
-                  <th>Password</th>
-					        <th>Aksi</th>
+                  <th>Alamat</th>
+                  <th>password</th>
+                  <th>Aksi</th>
                 </tr>
-          </thead>
-       <tfoot>
-     </tfoot>
-   <tbody>
-<?php 
-			
-$query = mysqli_query($koneksi,"SELECT * FROM pengguna");
- $no = 1;
- while ($data = mysqli_fetch_assoc($query)) 
-{
-?>
-<tr>
-  <td><?=$data['id_pengguna']?></td>
-  <td><?=$data['nama']?></td>
-  <td><?=$data['jabatan']?></td>
-  <td><?=$data['email']?></td>
-  <td><?=$data['pass']?></td>
-<td>
+              </thead>
+              <tfoot>
+              </tfoot>
+              <tbody>
+                <?php
 
-<!-- Button untuk modal -->
-<a href="#" type="button" class=" fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?php echo $data['id_pengguna']; ?>"></a>
-</td>
-</tr>
+                $query = mysqli_query($koneksi, "SELECT * FROM users");
+                $no = 1;
+                while ($data = mysqli_fetch_assoc($query)) {
+                ?>
+                  <tr>
+                    <td><?= $data['id'] ?></td>
+                    <td><?= $data['nama'] ?></td>
+                    <td><?= $data['jabatan'] ?></td>
+                    <td><?= $data['email'] ?></td>
+                    <td><?= $data['password'] ?></td>
+                    <td>
 
-<div class="modal fade" id="myModal<?php echo $data['id_pengguna']; ?>" role="dialog">
-<div class="modal-dialog">
+                      <!-- Button untuk modal -->
+                      <a href="#" type="button" class=" fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?php echo $data['id']; ?>"></a>
+                    </td>
+                  </tr>
 
-<!-- Modal content-->
-<div class="modal-content"> 
-<div class="modal-header">
-<h4 class="modal-title">Ubah Data Pengguna</h4>
-<button type="button" class="close" data-dismiss="modal">&times;</button>
-</div>
-<div class="modal-body">
-<form role="form" action="proses-edit-pengguna.php" method="get">
+                  <div class="modal fade" id="myModal<?php echo $data['id']; ?>" role="dialog">
+                    <div class="modal-dialog">
 
-<?php
-$id = $data['id_pengguna']; 
-$query_edit = mysqli_query($koneksi,"SELECT * FROM pengguna WHERE id_pengguna='$id'");
-//$result = mysqli_query($conn, $query);
-while ($row = mysqli_fetch_array($query_edit)) {  
-?>
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Ubah Data Pengguna</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                          <form role="form" action="proses-edit-user.php" method="get">
 
-<input type="hidden" name="id_pengguna" value="<?php echo $row['id_pengguna']; ?>">
+                            <?php
+                            $id = $data['id'];
+                            $query_edit = mysqli_query($koneksi, "SELECT * FROM users WHERE id='$id'");
+                            //$result = mysqli_query($conn, $query);
+                            while ($row = mysqli_fetch_array($query_edit)) {
+                            ?>
 
-<div class="form-group">
-<label>ID</label>
-<input type="text" name="id" class="form-control" value="<?php echo $row['id_pengguna']; ?>" disabled>      
-</div>
+                              <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
 
-<div class="form-group">
-<label>Nama</label>
-<input type="text" name="nama" class="form-control" value="<?php echo $row['nama']; ?>">      
-</div>
+                              <div class="form-group">
+                                <label>ID</label>
+                                <input type="text" name="id" class="form-control" value="<?php echo $row['id']; ?>" disabled>
+                              </div>
 
-<div class="form-group">
-<label>Jabatan</label>
-<input type="text" name="jabatan" class="form-control" value="<?php echo $row['jabatan']; ?>">      
-</div>
+                              <div class="form-group">
+                                <label>Nama</label>
+                                <input type="text" name="nama" class="form-control" value="<?php echo $row['nama']; ?>">
+                              </div>
 
-<div class="form-group">
-<label>Email</label>
-<input type="text" name="email" class="form-control" value="<?php echo $row['email']; ?>">      
-</div>
+                              <div class="form-group">
+                                <label>Jabatan</label>
+                                <input type="text" name="jabatan" class="form-control" value="<?php echo $row['jabatan']; ?>">
+                              </div>
 
-<div class="form-group">
-<label>Password</label>
-<input type="text" name="pass" class="form-control" value="<?php echo $row['pass']; ?>">      
-</div>
+                              <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" name="email" class="form-control" value="<?php echo $row['email']; ?>">
+                              </div>
 
-<div class="modal-footer">  
-<button type="submit" class="btn btn-success">Ubah</button>
-<button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-</div>
-<?php 
-}
-//mysql_close($host);
-?>  
-       
-</form>
-</div>
-</div>
+                              <div class="form-group">
+                                <label>Password</label>
+                                <input type="text" name="password" class="form-control" value="<?php echo $row['password']; ?>">
+                              </div>
 
-</div>
-</div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Ubah</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                              </div>
+                            <?php
+                            }
+                            //mysql_close($host);
+                            ?>
 
-<!-- Modal -->
-  <div id="myModalTambah" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+                          </form>
+                        </div>
+                      </div>
 
-      <!-- konten modal-->
-      <div class="modal-content">
-        <!-- heading modal -->
-        <div class="modal-header">
-          <h4 class="modal-title">Tambah Pengguna</h4>
-		    <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-<!-- body modal -->
-<form action="tambah-pengguna.php" method="get">
-  <div class="modal-body">
-		Id pelanggan : 
-         <input type="text" class="form-control" name="id_pengguna">
-		Nama :  
-         <input type="text" class="form-control" name="nama">
-		Jabatan : 
-         <input type="text" class="form-control" name="jabatan">
-    Email : 
-         <input type="text" class="form-control" name="email">
-    Password : 
-         <input type="text" class="form-control" name="pass">
-  </div>
-<!-- footer modal -->
- <div class="modal-footer">
-		<button type="submit" class="btn btn-success" >Tambah</button>
-		</form>
-       <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                    </div>
+                  </div>
+
+                  <!-- Modal -->
+                  <div id="myModalTambah" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- konten modal-->
+                      <div class="modal-content">
+                        <!-- heading modal -->
+                        <div class="modal-header">
+                          <h4 class="modal-title">Tambah Pengguna</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <!-- body modal -->
+                        <form action="tambah-pengguna.php" method="get">
+                          <div class="modal-body">
+                            Id pelanggan :
+                            <input type="text" class="form-control" name="id">
+                            Nama :
+                            <input type="text" class="form-control" name="nama">
+                            Jabatan :
+                            <input type="text" class="form-control" name="jabatan">
+                            Email :
+                            <input type="text" class="form-control" name="email">
+                            Password :
+                            <input type="text" class="form-control" name="password">
+                            Role_id :
+                            <input type="text" class="form-control" name="role_id">
+                          </div>
+                          <!-- footer modal -->
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Tambah</button>
+                        </form>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                      </div>
+                    </div>
+                  </div>
+          </div>
+        <?php
+                }
+        ?>
+        </tbody>
+        </table>
         </div>
       </div>
     </div>
- </div>
-<?php               
-} 
-?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>  
-        </div>
-<!-- /.container-fluid -->
-      </div>
-<!-- End of Main Content -->
-    </div>
-<!-- End of Content Wrapper -->
   </div>
-<!-- End of Page Wrapper -->
-<!-- Scroll to Top Button-->
+  <!-- /.container-fluid -->
+  </div>
+  <!-- End of Main Content -->
+  </div>
+  <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+  <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
 
-<!-- Logout Modal-->
-<?php require 'logout.php';?>
+  <!-- Logout Modal-->
+  <?php require 'logout.php'; ?>
 
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>

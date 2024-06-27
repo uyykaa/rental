@@ -37,7 +37,7 @@ function calculateTotal($harga, $lama_sewa)
     return $harga;
   } else {
     // Lama sewa lebih dari 24 jam
-    return $harga * $lama_sewa;
+    return $harga * ($lama_sewa / 24);
   }
 }
 

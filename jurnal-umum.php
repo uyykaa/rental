@@ -95,8 +95,7 @@ $totalKredit = 0;
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary" onclick="applyFilter()">Filter</button>
-                            <button type="button" class="btn btn-success btn-print" onclick="window.print()">
-                                <i class="fa fa-print"> Cetak</i>
+                            <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()"><i class="fa fa-print"> Cetak</i>
                             </button>
                         </div>
                     </div>
@@ -171,12 +170,6 @@ $totalKredit = 0;
                                 </tfoot>
                             </table>
                         </div>
-                        <?php
-                        // Peringatan jika total debit dan kredit tidak sama
-                        if ($totalDebit !== $totalKredit) {
-                            echo '<div class="alert alert-warning">Total debit dan kredit tidak sama!</div>';
-                        }
-                        ?>
                     </div>
                 </div>
             </div>

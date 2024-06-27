@@ -122,7 +122,6 @@ require 'koneksi.php';
                               </div>
                               <div class="modal-footer">
                                 <button type="submit" class="btn btn-success">Ubah</button>
-                                <a href="hapus-pendapatan.php?id_pendapatan=<?= $row['id_pendapatan']; ?>" onclick="return confirm('Anda Yakin Ingin Menghapus?')" class="btn btn-danger">Hapus</a>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
                               </div>
                             <?php

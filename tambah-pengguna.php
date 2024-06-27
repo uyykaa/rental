@@ -2,18 +2,19 @@
 //include('dbconnected.php');
 include('koneksi.php');
 
-$id_pengguna = $_GET['id_pengguna'];
+$id = $_GET['id'];
 $nama = $_GET['nama'];
 $jabatan = $_GET['jabatan'];
 $email = $_GET['email'];
-$pass = $_GET['pass'];
+$password = $_GET['password'];
+$role_id = $_GET['role_id'];
 
 //query update
-$query = mysqli_query($koneksi,"INSERT INTO `pengguna` (`id_pengguna`, `nama`, `jabatan`, `email`, `pas`) VALUES (null, '$id_pengguna', '$nama', '$jabatan', '$email', '$pass')");
+$query = mysqli_query($koneksi,"INSERT INTO `users` (`id`, `nama`, `jabatan`, `email`, `password`, `role_id`) VALUES (null, '$id', '$nama', '$jabatan', '$email', '$password', '$role_id')");
 
 if ($query) {
  # credirect ke page index
- header("location:profile.php"); 
+ header("location:pengguna.php"); 
 }
 else{
  echo "ERROR, data gagal diupdate". mysqli_error($koneksi);

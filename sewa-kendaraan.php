@@ -193,12 +193,12 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                                   <option value="12">12 Jam</option>
                                   <option value="18">18 Jam</option>
                                   <option value="24">24 Jam</option>
-                                  <option value="48">2 </option>
-                                  <option value="72">3 </option>
-                                  <option value="96">4 </option>
-                                  <option value="120">5 </option>
-                                  <option value="144">6 </option>
-                                  <option value="168">7 </option>
+                                  <option value="48">2 Hari</option>
+                                  <option value="72">3 Hari</option>
+                                  <option value="96">4 Hari</option>
+                                  <option value="120">5 Hari</option>
+                                  <option value="144">6 Hari</option>
+                                  <option value="168">7 Hari</option>
                                 </select>
                               </div>
                               <div class="form-group">

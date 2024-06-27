@@ -8,11 +8,11 @@ $pass = $_GET['pass'];
 
 
 //query update
-$query = mysqli_query($koneksi,"INSERT INTO `admin` (`nama`, `email`, `pass`) VALUES ('$nama', '$email', '$pass')");
+$query = mysqli_query($koneksi,"INSERT INTO `users` (`nama`, `email`, `pass`) VALUES ('$nama', '$email', '$pass')");
 
 if ($query) {
  # credirect ke page index
- header("location:profile.php"); 
+ header("location:users.php"); 
 }
 else{
  echo "ERROR, data gagal diupdate". mysqli_error($koneksi);

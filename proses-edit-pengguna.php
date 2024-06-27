@@ -2,18 +2,19 @@
 //include('dbconnected.php');
 include('koneksi.php');
 
-$id_pengguna = $_GET['id_pengguna'];
+$id = $_GET['id'];
 $nama = $_GET['nama'];
 $jabatan = $_GET['jabatan'];
 $email = $_GET['email'];
-$pass = $_GET['pass'];
+$password = $_GET['password'];
+$role_id = $_GET['role_id'];
 
 //query update
-$query = mysqli_query($koneksi, "UPDATE user SET nama='$nama' , email='$email', pass='$pass' WHERE id_pengguna='$id_pengguna' ");
+$query = mysqli_query($koneksi, "UPDATE users SET nama='$nama' , email='$email', password='$password' WHERE id='$id' ");
 
 if ($query) {
     # credirect ke page index
-    header("location:profile.php");
+    header("location:pengguna.php");
 } else {
     echo "ERROR, data gagal diupdate" . mysqli_error($koneksi);
 }

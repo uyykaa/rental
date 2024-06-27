@@ -1,8 +1,8 @@
 <?php
 session_start();
-if ($_SESSION['role_id'] !== '2') {
-  header("location:logout.php?pesan=gagal");
-}
+// if ($_SESSION['role_id'] != '2') {
+//   header("location:logout.php?pesan=gagal");
+// }
 ?>
 
 <!DOCTYPE html>

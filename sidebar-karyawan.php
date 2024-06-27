@@ -8,7 +8,7 @@
       <div class="sidebar-brand-icon rotate-n-15">
         <i class="fas fa-chart-pie"></i>
       </div>
-      <div class="sidebar-brand-text mx-3">GC Persada Transport</div>
+      <div class="sidebar-brand-text mx-3"> <img src="img/logo.jpg" height="30dvh" alt=""> GC PERSADA</div>
     </a>
 
     <!-- Divider -->
