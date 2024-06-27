@@ -27,13 +27,6 @@ session_start();
 
 <body id="page-top">
 <?php require 'koneksi.php'; 
-if ($_SESSION['jabatan'] == "pemilik") {
-  require 'sidebar-pemilik.php';
-} else if ($_SESSION['jabatan'] == "karyawan") {
-  require 'sidebar-karyawan.php';
-} else {
-  require 'sidebar-bagiankeuangan.php';
-}
 ?>
 
 <!-- Main Content -->
@@ -203,7 +196,7 @@ while ($row = mysqli_fetch_array($query_edit)) {
   </a>
 
 <!-- Logout Modal-->
-<?php require 'logout-modal.php';?>
+<?php require 'logout.php';?>
 
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>

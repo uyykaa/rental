@@ -65,10 +65,8 @@ $LabaRugi = $totalPendapatan - $totalOperasional;
     <div class="container">
         <div class="card shadow mb-4">
             <div class="card-header py-3 text-center">
-                <h3 class="m-0 font-weight-bold text-primary">
-                    <img src="img/logo.jpg" height="50px"> GC PERSADA TRANSPORT
-                </h3>
-                <h4>Laporan Laba Rugi</h4>
+                <h4 class="m-0 font-weight-bold text-primary"><img src="img/logo.jpg" height="50px auto"> GC PERSADA TRANSPORT</h4>
+                <h5>Laporan Laba Rugi</h5>
             </div>
 
             <!-- Begin Page Content -->
