@@ -57,8 +57,6 @@ if ($_SESSION['role_id'] != '2') {
                   <th>Jabatan</th>
                   <th>Alamat</th>
                   <th>password</th>
-                  <th>Role</th>
-                  <th>Status</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -77,8 +75,6 @@ if ($_SESSION['role_id'] != '2') {
                     <td><?= $data['jabatan'] ?></td>
                     <td><?= $data['email'] ?></td>
                     <td><?= $data['password'] ?></td>
-                    <td><?= $data['role_id'] ?></td>
-                    <td><?= $data['status'] ?></td>
                     <td>
 
                       <!-- Button untuk modal -->
