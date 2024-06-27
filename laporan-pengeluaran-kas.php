@@ -53,9 +53,7 @@ session_start();
         <?php require 'navbar.php'; ?>
 
         <!-- Tombol Cetak -->
-        <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-            <i class="fa fa-print"> Cetak</i>
-        </button><br>
+
 
         <div class="container">
             <div class="card shadow mb-3">
@@ -79,6 +77,9 @@ session_start();
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary" style="margin:5px" onclick="applyFilter()">Filter</button>
+                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
+                        <i class="fa fa-print"> Cetak</i>
+                    </button><br>
                     <script>
                         function applyFilter() {
                             var tanggal_awal = document.getElementById('tanggal_awal').value;

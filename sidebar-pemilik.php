@@ -29,7 +29,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="pengguna.php">
           <i class="fas fa-fw fa-users"></i>
-          <span>User</span>
+          <span>Managemen user</span>
         </a>
       </li>
 

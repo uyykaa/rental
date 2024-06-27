@@ -4,6 +4,7 @@ require 'koneksi.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Meta, title, and CSS -->
     <meta charset="utf-8">
@@ -24,18 +25,22 @@ require 'koneksi.php';
         body * {
             visibility: hidden;
         }
+
         /* Show print area */
-        #content, #content * {
+        #content,
+        #content * {
             visibility: visible;
         }
+
         /* Set position for print area */
         #content {
-            position: absolute; 
-            left: 0; 
+            position: absolute;
+            left: 0;
             top: 0;
         }
     </style>
 </head>
+
 <body id="page-top">
     <!-- Include navbar -->
     <?php require 'navbar.php'; ?>
@@ -44,13 +49,6 @@ require 'koneksi.php';
     <div id="content">
         <!-- Print Button -->
         <div class="container">
-            <div class="row">
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-                        <i class="fa fa-print"> Cetak</i>
-                    </button>
-                </div>
-            </div>
             <div class="card shadow mb-4">
                 <div class="card-header py-3 text-center">
                     <h4 class="m-0 font-weight-bold text-primary"><img src="img/logo.jpg" height="50px auto"> GC PERSADA TRANSPORT</h4>
@@ -72,11 +70,14 @@ require 'koneksi.php';
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary" onclick="applyFilter()">Filter</button>
+                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
+                        <i class="fa fa-print"> Cetak</i>
+                    </button>
                     <script>
                         function applyFilter() {
                             var tanggal_awal = document.getElementById('tanggal_awal').value;
                             var tanggal_akhir = document.getElementById('tanggal_akhir').value;
-                            var url = 'laporan-buku-besar.php';
+                            var url = 'buku-besar.php';
                             url += '?tanggal_awal=' + tanggal_awal + '&tanggal_akhir=' + tanggal_akhir;
                             window.location.href = url;
                         }
@@ -101,7 +102,7 @@ require 'koneksi.php';
 
                                     // Query untuk mengambil data pendapatan_sewa berdasarkan periode tanggal yang dipilih
                                     $queryPendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-                                    
+
                                     // Query untuk mengambil data operasional berdasarkan periode tanggal yang dipilih
                                     $queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
 
@@ -140,13 +141,17 @@ require 'koneksi.php';
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="3"><center>Total</center></th>
+                                        <th colspan="3">
+                                            <center>Total</center>
+                                        </th>
                                         <td>Rp. <?= number_format($totalPendapatan, 2, ',', '.'); ?></td>
                                         <td>Rp. <?= number_format($totalOperasional, 2, ',', '.'); ?></td>
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <th colspan="5"><center>Saldo Akhir</center></th>
+                                        <th colspan="5">
+                                            <center>Saldo Akhir</center>
+                                        </th>
                                         <td>Rp. <?= number_format($var_saldo, 2, ',', '.'); ?></td>
                                     </tr>
                                 </tfoot>
@@ -169,4 +174,5 @@ require 'koneksi.php';
     <!-- Page level custom scripts -->
     <script src="js/demo/datatables-demo.js"></script>
 </body>
+
 </html>
