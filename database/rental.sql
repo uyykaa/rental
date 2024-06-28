@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 26 Jun 2024 pada 07.21
+-- Waktu pembuatan: 28 Jun 2024 pada 12.55
 -- Versi server: 10.4.28-MariaDB
 -- Versi PHP: 8.2.4
 
@@ -20,26 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `rental`
 --
-
--- --------------------------------------------------------
-
---
--- Struktur dari tabel `admin`
---
-
-CREATE TABLE `admin` (
-  `id_admin` int(11) NOT NULL,
-  `nama` varchar(40) NOT NULL,
-  `email` varchar(40) NOT NULL,
-  `pass` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data untuk tabel `admin`
---
-
-INSERT INTO `admin` (`id_admin`, `nama`, `email`, `pass`) VALUES
-(1, 'Andrean', 'admin123@gmail.com', 'admin');
 
 -- --------------------------------------------------------
 
@@ -172,28 +152,16 @@ CREATE TABLE `pendapatan_sewa` (
   `jumlah_pendapatan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Struktur dari tabel `pengguna`
+-- Dumping data untuk tabel `pendapatan_sewa`
 --
 
-CREATE TABLE `pengguna` (
-  `id_pengguna` varchar(4) NOT NULL,
-  `nama` varchar(15) NOT NULL,
-  `jabatan` varchar(10) NOT NULL,
-  `alamat` varchar(20) NOT NULL,
-  `umur` int(2) NOT NULL,
-  `kontak` int(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data untuk tabel `pengguna`
---
-
-INSERT INTO `pengguna` (`id_pengguna`, `nama`, `jabatan`, `alamat`, `umur`, `kontak`) VALUES
-('101', 'Reza widya A', 'Pemilik', 'Jl. Bawuran, Pleret', 22, 2147483647),
-('201', 'Andreasn', 'B Keuangan', 'Jl. Paris, Bantul', 30, 856782341);
+INSERT INTO `pendapatan_sewa` (`id_pendapatan`, `id_akun`, `no_pelanggan`, `id_sewa`, `nama_pendapatan`, `tgl_pendapatan`, `jumlah_pendapatan`) VALUES
+(27, '4-01', '2', 14, 'Pendapatan Sewa', '2024-06-21', 21500000),
+(28, '4-01', '2', 15, 'Pendapatan Sewa', '2024-06-06', 21600000),
+(29, '4-01', '1', 16, 'Pendapatan Sewa', '2024-06-24', 14400000),
+(35, '4-01', '1', 12, 'Pendapatan Sewa', '2024-06-28', 727000),
+(36, '4-01', '1', 13, 'Pendapatan Sewa', '2024-06-28', 800000);
 
 -- --------------------------------------------------------
 
@@ -219,11 +187,11 @@ CREATE TABLE `sewa_kendaraan` (
 --
 
 INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `tgl_kembali`, `id_mobil`, `no_pelanggan`, `lama_sewa`, `harga`, `denda`, `total_harga`, `status`) VALUES
-(12, '2024-06-20', '2024-06-25', '3', '1', '72', 10000, 7000, 727000, 0),
-(13, '2024-06-20', '2024-06-24', '1', '1', '24', 750000, 50000, 800000, 0),
-(14, '2024-06-20', '2024-06-20', '2', '2', '48', 450000, 0, 21500000, 0),
-(15, '2024-06-20', '2024-06-21', '3', '2', '12', 300000, 0, 21600000, 0),
-(16, '2024-06-21', '2024-06-21', '3', '1', '48', 300000, 0, 14400000, 0);
+(12, '2024-06-20', '2024-06-25', '3', '1', '72', 10000, 7000, 727000, 1),
+(13, '2024-06-20', '2024-06-24', '1', '1', '24', 750000, 50000, 800000, 1),
+(14, '2024-06-20', '2024-06-20', '2', '2', '48', 450000, 0, 21500000, 1),
+(15, '2024-06-20', '2024-06-21', '3', '2', '12', 300000, 0, 21600000, 1),
+(16, '2024-06-21', '2024-06-21', '3', '1', '48', 300000, 0, 14400000, 1);
 
 -- --------------------------------------------------------
 
@@ -234,6 +202,9 @@ INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `tgl_kembali`, `id_mobil`, 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `nama` varchar(25) NOT NULL,
+  `no_hp` varchar(15) NOT NULL,
+  `alamat` varchar(255) NOT NULL,
+  `jabatan` varchar(20) NOT NULL,
   `email` varchar(60) NOT NULL,
   `password` varchar(60) NOT NULL,
   `role_id` varchar(2) NOT NULL,
@@ -244,20 +215,15 @@ CREATE TABLE `users` (
 -- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role_id`, `status`) VALUES
-(2, 'Admin', 'admin123@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '1', 1),
-(3, 'Pemilik', 'pemilik@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '2', 1),
-(4, 'karyawan', 'karyawan@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '3', 1);
+INSERT INTO `users` (`id`, `nama`, `no_hp`, `alamat`, `jabatan`, `email`, `password`, `role_id`, `status`) VALUES
+(2, 'KKUMA', '08123155123', 'Bawuran', 'Admin', 'admin123@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '1', 1),
+(3, 'Edi', '081234566', 'Bawuran', 'Pemilik', 'pemilik@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '2', 1),
+(4, 'IIS', '0812314156', 'jl. sambisari wkejqwkjrkhkas', 'karyawan', 'karyawan@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '3', 0),
+(6, 'kartap', '0812155', 'Jl. segoroyoso', 'karyawan', 'kartap@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '3', 1);
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indeks untuk tabel `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`id_admin`);
 
 --
 -- Indeks untuk tabel `kategori_akun`
@@ -297,12 +263,6 @@ ALTER TABLE `pendapatan_sewa`
   ADD PRIMARY KEY (`id_pendapatan`);
 
 --
--- Indeks untuk tabel `pengguna`
---
-ALTER TABLE `pengguna`
-  ADD PRIMARY KEY (`id_pengguna`);
-
---
 -- Indeks untuk tabel `sewa_kendaraan`
 --
 ALTER TABLE `sewa_kendaraan`
@@ -317,12 +277,6 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
-
---
--- AUTO_INCREMENT untuk tabel `admin`
---
-ALTER TABLE `admin`
-  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `merek`
@@ -346,7 +300,7 @@ ALTER TABLE `pelanggan`
 -- AUTO_INCREMENT untuk tabel `pendapatan_sewa`
 --
 ALTER TABLE `pendapatan_sewa`
-  MODIFY `id_pendapatan` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_pendapatan` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT untuk tabel `sewa_kendaraan`
@@ -358,7 +312,7 @@ ALTER TABLE `sewa_kendaraan`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
