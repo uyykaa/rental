@@ -27,7 +27,7 @@ require 'koneksi.php';
 
 <body id="page-top">
     <?php $role = $_SESSION['role_id'];
-    echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php'); ?>
+    $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php') ?>
 
     <!-- Main Content -->
     <div id="content">
@@ -37,7 +37,7 @@ require 'koneksi.php';
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-            <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> Tambah Merek</i></button><br>
+            <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> Tambah Merek</button><br>
 
             <div class="modal fade" id="myModalTambah" role="dialog">
                 <div class="modal-dialog">
@@ -98,7 +98,7 @@ require 'koneksi.php';
                                         <td><?= isset($data['merek']) ? htmlspecialchars($data['merek']) : ''; ?></td>
                                         <td>
                                             <!-- Button for modal -->
-                                            <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= isset($data['id_merek']) ? htmlspecialchars($data['id_merek']) : ''; ?>"> Edit</a>
+                                            <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= isset($data['id_merek']) ? htmlspecialchars($data['id_merek']) : ''; ?>"><i class="fa fa-edit"></i> Edit</a>
                                         </td>
                                     </tr>
                                     <!-- Modal Edit -->

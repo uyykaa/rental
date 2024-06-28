@@ -6,10 +6,10 @@
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-chart-pie"></i>
+        <div class="sidebar-brand-icon rotate-n-0">
+          <img src="img/logo.jpg" height="30dvh" alt="">
         </div>
-        <div class="sidebar-brand-text mx-3"> <img src="img/logo.jpg" height="30dvh" alt=""> GC PERSADA</div>
+        <div class="sidebar-brand-text mx-3"> GC PERSADA</div>
       </a>
 
       <!-- Divider -->
@@ -56,7 +56,7 @@
           <span>Biaya Operasional</span>
         </a>
       </li>
-      
+
       <!-- Heading -->
       <div class="sidebar-heading">
         Laporan

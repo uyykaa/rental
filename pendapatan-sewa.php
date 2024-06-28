@@ -25,7 +25,7 @@ require 'koneksi.php';
 
 <body id="page-top">
   <?php $role = $_SESSION['role_id'];
-  echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php'); ?>
+  $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php') ?>
   <?php require 'navbar.php'; ?>
   <div id="content">
 

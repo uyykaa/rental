@@ -29,7 +29,7 @@ session_start();
   <?php
   require 'koneksi.php';
   $role = $_SESSION['role_id'];
-  echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php');
+  $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php');
   ?>
 
   <!-- Main Content -->
@@ -38,7 +38,7 @@ session_start();
 
     <!-- Begin Page Content -->
     <div class="container-fluid">
-      <button type="button" class="btn btn-success" style="margin:5px; visibility:<?= $lihat ?>" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus">Tambah Pelanggan</i></button><br>
+      <button type="button" class="btn btn-success" style="margin:5px; visibility:<?= $lihat ?>" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> Tambah Pelanggan</button><br>
 
       <!-- DataTales Example -->
       <div class="card shadow mb-4">
@@ -72,7 +72,7 @@ session_start();
                     <td><?= $data['no_hp'] ?></td>
                     <td>
                       <!-- Button untuk modal -->
-                      <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['no_pelanggan'] ?>"></a>
+                      <a href="#" type="button" class=" btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['no_pelanggan'] ?>"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                   </tr>
 

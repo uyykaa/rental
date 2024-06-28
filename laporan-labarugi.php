@@ -71,7 +71,10 @@ $LabaRugi = $totalPendapatan - $totalOperasional;
 
 <body id="page-top">
     <div id="content">
-        <?php require 'navbar.php'; ?>
+        <?php
+        $role = $_SESSION['role_id'];
+        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php');
+        require 'navbar.php'; ?>
 
         <!-- Print Button -->
 
@@ -102,9 +105,7 @@ $LabaRugi = $totalPendapatan - $totalOperasional;
                         </select>
                     </div>
                     <div class="col-lg-2">
-                        <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-                            <i class="fa fa-plus"> Cetak</i>
-                        </button><br>
+                        <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
                     </div>
                     <script>
                         document.getElementById('bulan').addEventListener('change', function() {

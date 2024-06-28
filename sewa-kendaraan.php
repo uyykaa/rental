@@ -71,11 +71,11 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
 
 <body id="page-top">
   <?php $role = $_SESSION['role_id'];
-  echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php'); ?>
+  $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php') ?>
   <div id="content">
     <?php require 'navbar.php'; ?>
     <div class="container-fluid">
-      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> Sewa</i></button><br>
+      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> Sewa</button><br>
       <div class="card shadow mb-4">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Daftar Sewa</h6>
@@ -105,7 +105,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                 $no = 0;
                 $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil FROM sewa_kendaraan 
                   JOIN pelanggan ON sewa_kendaraan.no_pelanggan = pelanggan.no_pelanggan 
-                  JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil");
+                  JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil ORDER BY status asc");
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
@@ -133,13 +133,13 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                       <?php } ?>
                     </td>
                     <td>
-                      <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>">Edit</a>
+                      <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
                       <?php
                       if ($data['status'] === '0') {
                       ?>
-                        <a href="#" type="button" class="fa fa-edit btn btn-success btn-md" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>">Konfirmasi</a>
+                        <a href="#" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
                       <?php } else { ?>
-                        <a href=" #" type="button" class="fa fa-edit btn btn-secondary btn-md" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>">Batalkan</a>
+                        <a href=" #" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>"><i class="fa fa-redo"></i> Batalkan</a>
                       <?php } ?>
                     </td>
                   </tr>

@@ -46,6 +46,8 @@ session_start();
 <body id="page-top">
     <?php
     require 'koneksi.php';
+    $role = $_SESSION['role_id'];
+    $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php')
     ?>
 
     <!-- Main Content -->
@@ -77,9 +79,7 @@ session_start();
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary" style="margin:5px" onclick="applyFilter()">Filter</button>
-                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-                        <i class="fa fa-print"> Cetak</i>
-                    </button><br>
+                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
                     <script>
                         function applyFilter() {
                             var tanggal_awal = document.getElementById('tanggal_awal').value;

@@ -73,7 +73,10 @@ $totalKredit = 0;
 </head>
 
 <body id="page-top">
-    <?php require 'navbar.php'; ?>
+    <?php
+    $role = $_SESSION['role_id'];
+    $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php');
+    require 'navbar.php'; ?>
     <div id="content">
         <div class="container">
             <div class="card shadow mb-4">
@@ -95,8 +98,7 @@ $totalKredit = 0;
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary" onclick="applyFilter()">Filter</button>
-                            <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()"><i class="fa fa-print"> Cetak</i>
-                            </button>
+                            <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
                         </div>
                     </div>
                     <script>

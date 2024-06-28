@@ -34,7 +34,7 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
 
 <body id="page-top">
   <?php $role = $_SESSION['role_id'];
-  echo $role == '2' ? require('sidebar.php') : require('sidebar-karyawan.php'); ?>
+  $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php') ?>
   <!-- Main Content -->
   <div id="content">
     <?php require 'navbar.php';
@@ -43,7 +43,7 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
 
     <!-- Begin Page Content -->
     <div class="container-fluid">
-      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus">Tambah Mobil</i></button><br>
+      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> Tambah Mobil</button><br>
 
       <!-- DataTales Example -->
       <div class="card shadow mb-4">
@@ -82,7 +82,7 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                     <td><?= $data['harga'] ?></td>
                     <td>
                       <!-- Button for modal -->
-                      <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_mobil']; ?>"> Edit</a>
+                      <a href="#" type="button" class=" btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_mobil']; ?>"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                   </tr>
                   <!-- Modal Edit -->
