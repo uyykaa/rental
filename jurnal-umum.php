@@ -170,12 +170,6 @@ $totalKredit = 0;
                                 </tfoot>
                             </table>
                         </div>
-                        <?php
-                        // Peringatan jika total debit dan kredit tidak sama
-                        if ($totalDebit !== $totalKredit) {
-                            echo '<div class="alert alert-warning">Total debit dan kredit tidak sama!</div>';
-                        }
-                        ?>
                     </div>
                 </div>
             </div>

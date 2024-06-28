@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $kontak = mysqli_real_escape_string($koneksi, $_POST['kontak']);
 
     // Insert data into database
-    $query = "INSERT INTO penyewa (nama, alamat,  kontak) VALUES ('$nama', '$alamat', '$kontak')";
+    $query = "INSERT INTO pengguna (nama, alamat,  kontak) VALUES ('$nama', '$alamat', '$kontak')";
     if (mysqli_query($koneksi, $query)) {
         echo "Data berhasil ditambahkan";
     } else {

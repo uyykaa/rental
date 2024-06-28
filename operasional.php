@@ -32,6 +32,7 @@ session_start();
     <h2> Selamat Datang di SIA Kas GC Persada </h2>
     <div class="container-fluid">
       <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> Tambah Operasional</i></button><br>
+
       <!-- Modal Tambah Operasional -->
 <div class="modal fade" id="myModalTambah" role="dialog">
   <div class="modal-dialog">
@@ -72,10 +73,6 @@ session_start();
           <div class="form-group">
             <label>Kuantitas</label>
             <input type="number" name="kuantitas" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Total Operasional</label>
-            <input type="number" name="total_operasional" class="form-control" required>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-success">Tambah</button>
@@ -122,7 +119,7 @@ session_start();
                     </td>
                   </tr>
 
-                 <!-- Modal Edit Operasional -->
+<!-- Modal Edit Operasional -->
 <div class="modal fade" id="myModal<?= $data['id_operasional']; ?>" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">

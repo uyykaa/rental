@@ -2,14 +2,14 @@
 //include('dbconnected.php');
 include('koneksi.php');
 
-$id = $_GET['id_pengguna'];
+$id = $_GET['id'];
 
 //query update
-$query = mysqli_query($koneksi,"DELETE FROM `pengguna` WHERE id_pengguna = '$id'");
+$query = mysqli_query($koneksi,"DELETE FROM `users` WHERE id = '$id'");
 
 if ($query) {
  # credirect ke page index
- header("location:karyawan.php"); 
+ header("location:pengguna.php"); 
 }
 else{
  echo "ERROR, data gagal diupdate". mysqli_error($koneksi);
