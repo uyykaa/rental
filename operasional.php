@@ -24,65 +24,65 @@ session_start();
   require('sidebar.php');
   ?>
 
-                <?php
-                $query = mysqli_query($koneksi, "SELECT pendapatan_sewa.*, kategori_akun.nama_akun, pelanggan.nama FROM pendapatan_sewa JOIN kategori_akun ON pendapatan_sewa.id_akun=kategori_akun.id_akun JOIN pelanggan ON pelanggan.no_pelanggan = pendapatan_sewa.no_pelanggan");
-                while ($data = mysqli_fetch_assoc($query)) 
-                ?>
+  <?php
+  $query = mysqli_query($koneksi, "SELECT pendapatan_sewa.*, kategori_akun.nama_akun, pelanggan.nama FROM pendapatan_sewa JOIN kategori_akun ON pendapatan_sewa.id_akun=kategori_akun.id_akun JOIN pelanggan ON pelanggan.no_pelanggan = pendapatan_sewa.no_pelanggan");
+  while ($data = mysqli_fetch_assoc($query))
+  ?>
   <div id="content">
-    <h2> Selamat Datang di SIA Kas GC Persada </h2>
+  <?php require 'navbar.php'; ?>
     <div class="container-fluid">
-      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> Tambah Operasional</i></button><br>
+      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> Tambah Operasional</button><br>
 
       <!-- Modal Tambah Operasional -->
-<div class="modal fade" id="myModalTambah" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Input Data Operasional</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <div class="modal fade" id="myModalTambah" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Input Data Operasional</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <form role="form" action="tambah-operasional.php" method="get">
+                <div class="form-group">
+                  <label>Id Operasional</label>
+                  <input type="text" name="id_operasional" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Akun</label>
+                  <select name="id_akun" class="form-control" required>
+                    <?php
+                  $queryKategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
+                  while ($kategori = mysqli_fetch_assoc($queryKategori)) {
+                    echo "<option value='{$kategori['id_akun']}'>{$kategori['nama_akun']}</option>";
+                  }
+                    ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Nama Operasional</label>
+                  <input type="text" name="nama_operasional" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Tanggal Operasional</label>
+                  <input type="date" name="tanggal_operasional" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Harga</label>
+                  <input type="number" name="harga" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Kuantitas</label>
+                  <input type="number" name="kuantitas" class="form-control" required>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">Tambah</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <form role="form" action="tambah-operasional.php" method="get">
-          <div class="form-group">
-            <label>Id Operasional</label>
-            <input type="text" name="id_operasional" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Akun</label>
-            <select name="id_akun" class="form-control" required>
-              <?php
-              $queryKategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
-              while ($kategori = mysqli_fetch_assoc($queryKategori)) {
-                echo "<option value='{$kategori['id_akun']}'>{$kategori['nama_akun']}</option>";
-              }
-              ?>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Nama Operasional</label>
-            <input type="text" name="nama_operasional" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Tanggal Operasional</label>
-            <input type="date" name="tanggal_operasional" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Harga</label>
-            <input type="number" name="harga" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Kuantitas</label>
-            <input type="number" name="kuantitas" class="form-control" required>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Tambah</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
 
       <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -115,71 +115,71 @@ session_start();
                     <td><?= $data['kuantitas'] ?></td>
                     <td>Rp. <?= number_format($data['total_operasional'], 2, ',', '.'); ?></td>
                     <td>
-                      <a href="#" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_operasional']; ?>"></a>
+                      <a href="#" class=" btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_operasional']; ?>"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                   </tr>
 
-<!-- Modal Edit Operasional -->
-<div class="modal fade" id="myModal<?= $data['id_operasional']; ?>" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">Ubah Data Operasional</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form role="form" action="proses-edit-operasional.php" method="get">
-          <?php
-          $id = $data['id_operasional'];
-          $query_edit = mysqli_query($koneksi, "SELECT * FROM operasional WHERE id_operasional='$id'");
-          while ($row = mysqli_fetch_array($query_edit)) {
-          ?>
-            <input type="hidden" name="id_operasional" value="<?= $row['id_operasional']; ?>">
-            <div class="form-group">
-              <label>Id Operasional</label>
-              <input type="text" name="id_operasional" class="form-control" value="<?= $row['id_operasional']; ?>" disabled>
-            </div>
-            <div class="form-group">
-              <label>Akun</label>
-              <select name="id_akun" class="form-control" required>
-                <?php
-                $queryKategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
-                while ($kategori = mysqli_fetch_assoc($queryKategori)) {
-                  $selected = ($kategori['id_akun'] == $row['id_akun']) ? 'selected' : '';
-                  echo "<option value='{$kategori['id_akun']}' $selected>{$kategori['nama_akun']}</option>";
-                }
-                ?>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Nama_operasional</label>
-              <input type="text" name="nama_operasional" class="form-control" value="<?= $row['nama_operasional']; ?>">
-            </div>
-            <div class="form-group">
-              <label>Tanggal Operasional</label>
-              <input type="date" name="tanggal_operasional" class="form-control" value="<?= $row['tanggal_operasional']; ?>">
-            </div>
-            <div class="form-group">
-              <label>Harga</label>
-              <input type="number" name="harga" class="form-control" value="<?= $row['harga']; ?>">
-            </div>
-            <div class="form-group">
-              <label>Kuantitas</label>
-              <input type="number" name="kuantitas" class="form-control" value="<?= $row['kuantitas']; ?>">
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-success">Ubah</button>
-              <a href="hapus-operasional.php?id_operasional=<?= $row['id_operasional']; ?>" onclick="return confirm('Anda Yakin Ingin Menghapus?')" class="btn btn-danger">Hapus</a>
-              <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-            </div>
-          <?php
-          }
-          ?>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+                  <!-- Modal Edit Operasional -->
+                  <div class="modal fade" id="myModal<?= $data['id_operasional']; ?>" role="dialog">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Ubah Data Operasional</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                          <form role="form" action="proses-edit-operasional.php" method="get">
+                            <?php
+                            $id = $data['id_operasional'];
+                            $query_edit = mysqli_query($koneksi, "SELECT * FROM operasional WHERE id_operasional='$id'");
+                            while ($row = mysqli_fetch_array($query_edit)) {
+                            ?>
+                              <input type="hidden" name="id_operasional" value="<?= $row['id_operasional']; ?>">
+                              <div class="form-group">
+                                <label>Id Operasional</label>
+                                <input type="text" name="id_operasional" class="form-control" value="<?= $row['id_operasional']; ?>" disabled>
+                              </div>
+                              <div class="form-group">
+                                <label>Akun</label>
+                                <select name="id_akun" class="form-control" required>
+                                  <?php
+                                  $queryKategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
+                                  while ($kategori = mysqli_fetch_assoc($queryKategori)) {
+                                    $selected = ($kategori['id_akun'] == $row['id_akun']) ? 'selected' : '';
+                                    echo "<option value='{$kategori['id_akun']}' $selected>{$kategori['nama_akun']}</option>";
+                                  }
+                                  ?>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <label>Nama_operasional</label>
+                                <input type="text" name="nama_operasional" class="form-control" value="<?= $row['nama_operasional']; ?>">
+                              </div>
+                              <div class="form-group">
+                                <label>Tanggal Operasional</label>
+                                <input type="date" name="tanggal_operasional" class="form-control" value="<?= $row['tanggal_operasional']; ?>">
+                              </div>
+                              <div class="form-group">
+                                <label>Harga</label>
+                                <input type="number" name="harga" class="form-control" value="<?= $row['harga']; ?>">
+                              </div>
+                              <div class="form-group">
+                                <label>Kuantitas</label>
+                                <input type="number" name="kuantitas" class="form-control" value="<?= $row['kuantitas']; ?>">
+                              </div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Ubah</button>
+                                <a href="hapus-operasional.php?id_operasional=<?= $row['id_operasional']; ?>" onclick="return confirm('Anda Yakin Ingin Menghapus?')" class="btn btn-danger">Hapus</a>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                              </div>
+                            <?php
+                            }
+                            ?>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 <?php
                 }
                 ?>

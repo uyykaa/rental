@@ -1,13 +1,6 @@
 <?php
 require 'cek-sesi.php';
 
-if ($_SESSION['role_id'] === '2') {
-  header("location:index-pemilik.php");
-} elseif ($_SESSION['role_id'] === '3') {
-  header("location: index-karyawan.php");
-} elseif ($_SESSION['role_id'] === '4') {
-  header("location:index-bagiankeuangan.php");
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,11 +25,6 @@ if ($_SESSION['role_id'] === '2') {
   require 'sidebar.php';
 
   try {
-    $penggunaResult = mysqli_query($koneksi, "SELECT * FROM pengguna");
-    if (!$penggunaResult) {
-      throw new Exception("Query Error: " . mysqli_error($koneksi));
-    }
-    $pengguna = mysqli_num_rows($penggunaResult);
 
     $pengeluaranResult = mysqli_query($koneksi, "SELECT SUM(total_operasional) AS total_operasional FROM operasional WHERE tanggal_operasional = CURDATE()");
     if (!$pengeluaranResult) {

@@ -2,6 +2,18 @@
 require 'cek-sesi.php';
 require 'koneksi.php';
 
+$currDate = date('Y-m-d');
+
+function convert_time($time)
+{
+  if ($time < 24) {
+    return "$time Jam";
+  } else {
+    $days = $time / 24;
+    return round($days) . " Hari";
+  }
+}
+
 // Fetch brands for the dropdown menu
 $brands_query = mysqli_query($koneksi, "SELECT id_merek, merek FROM merek");
 $brands = [];
@@ -33,14 +45,15 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
 </head>
 
 <body id="page-top">
-  <?php require 'sidebar.php'; ?>
+  <?php $role = $_SESSION['role_id'];
+  $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php') ?>
   <!-- Main Content -->
   <div id="content">
     <?php require 'navbar.php'; ?>
 
     <!-- Begin Page Content -->
     <div class="container-fluid">
-      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus">Tambah Mobil</i></button><br>
+      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> Tambah Mobil</button><br>
 
       <!-- DataTales Example -->
       <div class="card shadow mb-4">
@@ -59,7 +72,8 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                   <th>No Polisi</th>
                   <th>Kursi</th>
                   <th>Jenis Sewa</th>
-                  <th>Harga</th>
+                  <th>Lama Sewa</th>
+                  <th>Tarif</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -76,10 +90,11 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                     <td><?= $data['no_polisi'] ?></td>
                     <td><?= $data['jumlah_set'] ?></td>
                     <td><?= $data['jenis_sewa'] ?></td>
+                    <td><?= convert_time($data['lama_sewa']) ?></td>
                     <td><?= $data['harga'] ?></td>
                     <td>
                       <!-- Button for modal -->
-                      <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_mobil']; ?>"> Edit</a>
+                      <a href="#" type="button" class=" btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_mobil']; ?>"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                   </tr>
                   <!-- Modal Edit -->
@@ -137,7 +152,21 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                                 </select>
                               </div>
                               <div class="form-group">
-                                <label>Harga</label>
+                                <label>Lama Sewa</label>
+                                <select name="lama_sewa" class="form-control">
+                                  <option value="12" <?= ($row['lama_sewa'] == 12) ? 'selected' : ''; ?>>12 Jam</option>
+                                  <option value="18" <?= ($row['lama_sewa'] == 18) ? 'selected' : ''; ?>>18 Jam</option>
+                                  <option value="24" <?= ($row['lama_sewa'] == 24) ? 'selected' : ''; ?>>24 Jam</option>
+                                  <option value="48" <?= ($row['lama_sewa'] == 48) ? 'selected' : ''; ?>>2 Hari</option>
+                                  <option value="72" <?= ($row['lama_sewa'] == 72) ? 'selected' : ''; ?>>3 Hari</option>
+                                  <option value="96" <?= ($row['lama_sewa'] == 96) ? 'selected' : ''; ?>>4 Hari</option>
+                                  <option value="120" <?= ($row['lama_sewa'] == 120) ? 'selected' : ''; ?>>5 Hari</option>
+                                  <option value="144" <?= ($row['lama_sewa'] == 144) ? 'selected' : ''; ?>>6 Hari</option>
+                                  <option value="168" <?= ($row['lama_sewa'] == 168) ? 'selected' : ''; ?>>7 Hari</option>
+                                </select>
+                              </div>
+                              <div class="form-group">
+                                <label>Tarif</label>
                                 <input type="text" name="harga" class="form-control" value="<?= $row['harga']; ?>">
                               </div>
                               <div class="modal-footer">
@@ -175,36 +204,62 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
             <!-- body modal -->
             <form action="tambah-mobil.php" method="POST">
               <div class="modal-body">
-                Id Mobil:
-                <input type="number" class="form-control" name="id_mobil" required>
-                Merek:
-                <select name="id_merek" class="form-control" required>
-                  <?php foreach ($brands as $brand) { ?>
-                    <option value="<?= $brand['id_merek']; ?>"><?= $brand['merek']; ?></option>
-                  <?php } ?>
-                </select>
-                Nama:
-                <input type="text" class="form-control" name="nama" required>
-                Warna:
-                <input type="text" class="form-control" name="warna" required>
-                No Polisi:
-                <input type="text" class="form-control" name="no_polisi" required>
-                Kursi:
-                <select name="jumlah_set" class="form-control" required>
-                  <option value="4">4</option>
-                  <option value="6">6</option>
-                  <option value="8">8</option>
-                  <option value="10">10</option>
-                  <option value="14">14</option>
-                  <!-- Add more options as needed -->
-                </select>
-                Jenis Sewa:
-                <select name="jenis_sewa" class="form-control" required>
-                  <option value="Lepas Kunci">Lepas Kunci</option>
-                  <option value="Paket Lengkap">Paket Lengkap</option>
-                </select>
-                Harga:
-                <input type="number" class="form-control" name="harga" required>
+                <div class="form-group">
+                  <label>Merek</label>
+                  <select name="id_merek" class="form-control" required>
+                    <?php foreach ($brands as $brand) { ?>
+                      <option value="<?= $brand['id_merek']; ?>"><?= $brand['merek']; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Nama</label>
+                  <input type="text" class="form-control" name="nama" required>
+                </div>
+                <div class="form-group">
+                  <label>Warna</label>
+                  <input type="text" class="form-control" name="warna" required>
+                </div>
+                <div class="form-group">
+                  <label>No Polisi</label>
+                  <input type="text" class="form-control" name="no_polisi" required>
+                </div>
+                <div class="form-group">
+                  <label>Kursi</label>
+                  <select name="jumlah_set" class="form-control" required>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="14">14</option>
+                    <!-- Add more options as needed -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Jenis Sewa</label>
+                  <select name="jenis_sewa" class="form-control" required>
+                    <option value="Lepas Kunci">Lepas Kunci</option>
+                    <option value="Paket Lengkap">Paket Lengkap</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Lama Sewa</label>
+                  <select name="lama_sewa" class="form-control">
+                    <option value="12">12 Jam</option>
+                    <option value="18">18 Jam</option>
+                    <option value="24">24 Jam</option>
+                    <option value="48">2 Hari</option>
+                    <option value="72">3 Hari</option>
+                    <option value="96">4 Hari</option>
+                    <option value="120">5 Hari</option>
+                    <option value="144">6 Hari</option>
+                    <option value="168">7 Hari</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Tarif</label>
+                  <input type="number" class="form-control" name="harga" required>
+                </div>
               </div>
               <!-- footer modal -->
               <div class="modal-footer">
@@ -216,6 +271,7 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
         </div>
       </div>
 
+
     </div>
     <!-- /.container-fluid -->
 
@@ -224,33 +280,33 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
 
   <?php require 'footer.php' ?>
 
-</div>
-<!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Content Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-  <i class="fas fa-angle-up"></i>
-</a>
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
-<!-- Bootstrap core JavaScript-->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
 
-<!-- Page level plugins -->
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <!-- Page level plugins -->
+  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-<!-- Page level custom scripts -->
-<script src="js/demo/datatables-demo.js"></script>
+  <!-- Page level custom scripts -->
+  <script src="js/demo/datatables-demo.js"></script>
 
 </body>
 

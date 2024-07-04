@@ -1,20 +1,30 @@
 <?php
-//include('dbconnected.php');
-include('koneksi.php');
+require 'koneksi.php';
 
-$no_pelanggan = $_POST['no_pelanggan'];
-$nama = $_POST['nama'];
-$alamat = $_POST['alamat'];
-$no_hp = $_POST['no_hp'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $no_pelanggan = $_POST['no_pelanggan'];
+    $nama = $_POST['nama'];
+    $alamat = $_POST['alamat'];
+    $no_hp = $_POST['no_hp'];
 
-//query update
-$query = mysqli_query($koneksi, "UPDATE pelanggan SET nama='$nama' , alamat='$alamat', no_hp='$no_hp' WHERE no_pelanggan='$no_pelanggan' ");
+    // Handle image upload if a new file is provided
+    if (!empty($_FILES["img"]["name"])) {
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($_FILES["img"]["name"]);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-if ($query) {
-    # credirect ke page index
-    header("location:pelanggan.php");
-} else {
-    echo "ERROR, data gagal diupdate" . mysqli_error($koneksi);
+        if (move_uploaded_file($_FILES["img"]["tmp_name"], $target_file)) {
+            $img = basename($_FILES["img"]["name"]);
+        } else {
+            $img = "default.jpg";
+        }
+        $query = "UPDATE pelanggan SET nama='$nama', alamat='$alamat', no_hp='$no_hp', img='$img' WHERE no_pelanggan='$no_pelanggan'";
+    } else {
+        $query = "UPDATE pelanggan SET nama='$nama', alamat='$alamat', no_hp='$no_hp' WHERE no_pelanggan='$no_pelanggan'";
+    }
+
+    mysqli_query($koneksi, $query);
+
+    header('Location: pelanggan.php');
 }
-
-//mysql_close($host);
+?>

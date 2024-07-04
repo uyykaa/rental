@@ -6,18 +6,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $id_sewa = $_POST['id_sewa'];
   $id_mobil = $_POST['id_mobil'];
   $tgl_sewa = $_POST['tgl_sewa'];
-  $tgl_kembali = $_POST['tgl_kembali'];
+  $jenis_sewa = $_POST['jenis_sewa'];
   $lama_sewa = $_POST['lama_sewa'];
   $harga = $_POST['harga'];
-  $denda = $_POST['denda'];
-
 
   // Calculate the total cost
   $total = calculateTotal(intval($harga), intval($lama_sewa)) + intval($denda);
 
 
   // Insert the new rental into the database
-  $query = "UPDATE sewa_kendaraan SET tgl_sewa='$tgl_sewa', tgl_kembali='$tgl_kembali', id_mobil='$id_mobil', lama_sewa='$lama_sewa', harga='$harga', denda='$denda', total_harga='$total' WHERE id_sewa='$id_sewa'";
+  $query = "UPDATE sewa_kendaraan SET tgl_sewa='$tgl_sewa', id_mobil='$id_mobil',  jenis_sewa='$jenis_sewa', lama_sewa='$lama_sewa', harga='$harga', total_harga='$total' WHERE id_sewa='$id_sewa'";
 
   // var_dump($query);
   // die;

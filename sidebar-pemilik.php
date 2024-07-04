@@ -29,7 +29,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="pengguna.php">
           <i class="fas fa-fw fa-users"></i>
-          <span>Managemen user</span>
+          <span>Kelola Pengguna</span>
         </a>
       </li>
 
@@ -73,14 +73,6 @@
           <span>Laporan Laba Rugi</span>
         </a>
       </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="neraca.php">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Neraca</span>
-        </a>
-      </li>
-
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

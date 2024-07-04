@@ -43,7 +43,10 @@ require 'koneksi.php';
 
 <body id="page-top">
     <!-- Include navbar -->
-    <?php require 'navbar.php'; ?>
+    <?php
+    $role = $_SESSION['role_id'];
+    $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php');
+    require 'navbar.php'; ?>
 
     <!-- Main Content -->
     <div id="content">
@@ -70,8 +73,7 @@ require 'koneksi.php';
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary" onclick="applyFilter()">Filter</button>
-                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-                        <i class="fa fa-print"> Cetak</i>
+                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()"><i class="fa fa-print"></i> Cetak
                     </button>
                     <script>
                         function applyFilter() {

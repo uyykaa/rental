@@ -29,7 +29,8 @@ if ($_SESSION['role_id'] != '2') {
 </head>
 
 <body id="page-top">
-  <?php require 'koneksi.php';
+  <?php
+  require 'koneksi.php';
   require 'sidebar-pemilik.php';
   ?>
 
@@ -40,7 +41,7 @@ if ($_SESSION['role_id'] != '2') {
 
     <!-- Begin Page Content -->
     <div class="container-fluid">
-      <button type="button" class="btn btn-success" style="margin:5px; visibility:<?= $lihat ?>" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> User</i></button><br>
+      <button type="button" class="btn btn-success" style="margin:5px; visibility:<?= $lihat ?>" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> User</button><br>
 
       <!-- DataTales Example -->
       <div class="card shadow mb-4">
@@ -56,7 +57,9 @@ if ($_SESSION['role_id'] != '2') {
                   <th>Nama</th>
                   <th>Jabatan</th>
                   <th>Alamat</th>
-                  <th>password</th>
+                  <th>Email</th>
+                  <th>No. Handphone</th>
+                  <th>Status</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -64,21 +67,23 @@ if ($_SESSION['role_id'] != '2') {
               </tfoot>
               <tbody>
                 <?php
-
-                $query = mysqli_query($koneksi, "SELECT * FROM users");
-                $no = 1;
+                $no = 0;
+                $query = mysqli_query($koneksi, "SELECT * FROM users ORDER BY status desc");
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
-                    <td><?= $data['id'] ?></td>
+                    <td><?= $no += 1; ?></td>
                     <td><?= $data['nama'] ?></td>
                     <td><?= $data['jabatan'] ?></td>
+                    <td style="word-wrap: break-word;"><?= $data['alamat'] ?></td>
                     <td><?= $data['email'] ?></td>
-                    <td><?= $data['password'] ?></td>
+                    <td><?= $data['no_hp'] ?></td>
+                    <td><?= $data['status'] == '1' ? '<span class="badge badge-success">Aktif</span>' : '<span class="badge badge-secondary">Tidak Aktif</span>' ?></td>
                     <td>
 
                       <!-- Button untuk modal -->
-                      <a href="#" type="button" class=" fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?php echo $data['id']; ?>"></a>
+                      <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?php echo $data['id']; ?>"><i class="fa fa-edit"></i> Edit data</a>
+                      <a href="#" type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalPass<?php echo $data['id']; ?>"><i class="fa fa-edit"></i> Edit Password</a>
                     </td>
                   </tr>
 
@@ -92,7 +97,7 @@ if ($_SESSION['role_id'] != '2') {
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body">
-                          <form role="form" action="proses-edit-pengguna.php" method="get">
+                          <form role="form" action="proses-edit-pengguna.php" method="POST">
 
                             <?php
                             $id = $data['id'];
@@ -104,42 +109,45 @@ if ($_SESSION['role_id'] != '2') {
                               <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
 
                               <div class="form-group">
-                                <label>ID</label>
-                                <input type="text" name="id" class="form-control" value="<?php echo $row['id']; ?>" disabled>
-                              </div>
-
-                              <div class="form-group">
                                 <label>Nama</label>
-                                <input type="text" name="nama" class="form-control" value="<?php echo $row['nama']; ?>">
+                                <input type="text" name="nama" class="form-control" value="<?php echo $row['nama']; ?>" required>
                               </div>
 
                               <div class="form-group">
                                 <label>Jabatan</label>
-                                <input type="text" name="jabatan" class="form-control" value="<?php echo $row['jabatan']; ?>">
+                                <select name="jabatan" class="form-control">
+                                  <option value="<?= $row['jabatan']; ?>" selected><?= $row['jabatan'] ?></option>
+                                  <option value="pemilik">Pemilik</option>
+                                  <option value="karyawan">Karyawan</option>
+                                  <option value="keuangan">Keuangan</option>
+                                </select>
                               </div>
 
                               <div class="form-group">
                                 <label>Email</label>
-                                <input type="text" name="email" class="form-control" value="<?php echo $row['email']; ?>">
+                                <input type="email" name="email" class="form-control" value="<?php echo $row['email']; ?>" required>
                               </div>
 
                               <div class="form-group">
-                                <label>Password</label>
-                                <input type="text" name="password" class="form-control" value="<?php echo $row['password']; ?>">
+                                <label>No. Handphone</label>
+                                <input type="number" name="no_hp" class="form-control" value="<?php echo $row['no_hp']; ?>" required>
                               </div>
 
                               <div class="form-group">
-                                <label>Role_id</label>
-                                <input type="text" name="role_id" class="form-control" value="<?php echo $row['role_id']; ?>">
+                                <label>Alamat</label>
+                                <textarea type="text" name="alamat" class="form-control" required><?php echo $row['alamat']; ?></textarea>
                               </div>
 
                               <div class="form-group">
                                 <label>Status</label>
-                                <input type="text" name="status" class="form-control" value="<?php echo $row['status']; ?>">
+                                <select name="status" class="form-control">
+                                  <option value="1" selected>Aktif</option>
+                                  <option value="0">Tidak Aktif</option>
+                                </select>
                               </div>
 
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Ubah</button>
+                                <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Ubah</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
                               </div>
                             <?php
@@ -154,6 +162,56 @@ if ($_SESSION['role_id'] != '2') {
                     </div>
                   </div>
 
+
+                  <div class="modal fade" id="modalPass<?php echo $data['id']; ?>" role="dialog">
+                    <div class="modal-dialog">
+
+                      <!-- Modal content-->
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Ubah Password Pengguna</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                          <form role="form" action="proses-edit-pass-pengguna.php" method="POST">
+
+                            <?php
+                            $id = $data['id'];
+                            $query_edit = mysqli_query($koneksi, "SELECT * FROM users WHERE id='$id'");
+                            //$result = mysqli_query($conn, $query);
+                            while ($row = mysqli_fetch_array($query_edit)) {
+                            ?>
+
+                              <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+
+                              <div class="form-group">
+                                <label>Password Baru</label>
+                                <input type="password" name="password" id="password" class="form-control" required>
+                              </div>
+
+                              <div class="form-group">
+                                <label>Konfirmasi Password</label>
+                                <input type="password" name="konfirmasi_password" id="konfirmasi_password" class="form-control" required onchange="myFunction()">
+                                <span class="text-danger" id='notif_pass'></span>
+                              </div>
+
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-success"><i class="fa fa-paper-plane"></i> Ubah</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                              </div>
+                            <?php
+                            }
+                            //mysql_close($host);
+                            ?>
+
+                          </form>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+
+
                   <!-- Modal -->
                   <div id="myModalTambah" class="modal fade" role="dialog">
                     <div class="modal-dialog">
@@ -166,22 +224,27 @@ if ($_SESSION['role_id'] != '2') {
                           <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         <!-- body modal -->
-                        <form action="tambah-pengguna.php" method="get">
+                        <form action="tambah-pengguna.php" method="POST">
                           <div class="modal-body">
-                            Id pelanggan :
-                            <input type="text" class="form-control" name="id">
                             Nama :
-                            <input type="text" class="form-control" name="nama">
-                            Jabatan :
-                            <input type="text" class="form-control" name="jabatan">
+                            <input type="text" class="form-control" name="nama" required>
+                            <div class="form-group">
+                              <label>Jabatan</label>
+                              <select name="jabatan" class="form-control">
+                                <option value="pemilik">Pemilik</option>
+                                <option value="karyawan">Karyawan</option>
+                                <option value="keuangan">Keuangan</option>
+                              </select>
+                            </div>
                             Email :
-                            <input type="text" class="form-control" name="email">
+                            <input type="email" class="form-control" name="email" required>
                             Password :
-                            <input type="text" class="form-control" name="password">
-                            Role_id :
-                            <input type="text" class="form-control" name="role_id">
-                            Status :
-                            <input type="text" class="form-control" name="status">
+                            <input type="password" class="form-control" name="password" required>
+                            No. Handphone :
+                            <input type="text" class="form-control" name="no_hp">
+                            Alamat :
+                            <textarea rows="2" type="text" class="form-control" name="alamat"></textarea>
+
                           </div>
                           <!-- footer modal -->
                           <div class="modal-footer">
@@ -213,9 +276,6 @@ if ($_SESSION['role_id'] != '2') {
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Logout Modal-->
-  <?php require 'logout.php'; ?>
-
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -232,6 +292,25 @@ if ($_SESSION['role_id'] != '2') {
 
   <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
+  <script>
+    function myFunction() {
+
+      var pass = document.getElementById('password').value;
+      var confirm_pass = document.getElementById('konfirmasi_password').value;
+      var notif = document.getElementById('notif_pass');
+
+      if (pass != confirm_pass) {
+        notif.classList.remove();
+        notif.classList.add('text-danger');
+        notif.innerHTML = 'Password tidak cocok';
+      } else {
+        notif.classList.remove('text-danger');
+        notif.classList.add('text-success');
+        notif.innerHTML = 'password cocok'
+      }
+
+    }
+  </script>
 
 </body>
 

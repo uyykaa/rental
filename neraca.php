@@ -59,7 +59,10 @@ require 'koneksi.php';
 
 <body id="page-top">
     <div id="content">
-        <?php require 'navbar.php'; ?>
+        <?php
+        $role = $_SESSION['role_id'];
+        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php');
+        require 'navbar.php'; ?>
         <div class="container">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 text-center">
@@ -74,9 +77,7 @@ require 'koneksi.php';
                             <input type="month" class="form-control" id="bulan" name="bulan" value="<?php echo isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m'); ?>">
                         </div>
                         <button type="submit" class="btn btn-primary">Filter</button>
-                        <button type="button" class="btn btn-success btn-print" onclick="window.print()">
-                            <i class="fa fa-print"> Cetak</i>
-                        </button>
+                        <button type="button" class="btn btn-success btn-print" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
                     </form>
                     <div class="table-responsive">
                         <?php

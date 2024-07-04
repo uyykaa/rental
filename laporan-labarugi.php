@@ -2,14 +2,15 @@
 session_start();
 require 'koneksi.php';
 
-$selectedMonth = isset($_GET['bulan']) ? $_GET['bulan'] : date('m');
+$tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01');
+$tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-t');
 
-// Query to get pendapatan_sewa for the selected month
-$queryPendapatan_sewa = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE MONTH(tgl_pendapatan) = '$selectedMonth'");
+// Query to get pendapatan_sewa for the selected date range
+$queryPendapatan_sewa = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
 $totalPendapatan = 0;
 
-// Query to get operasional for the selected month
-$queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE MONTH(tanggal_operasional) = '$selectedMonth'");
+// Query to get operasional for the selected date range
+$queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
 $totalOperasional = 0;
 
 // Calculate total pendapatan
@@ -71,69 +72,77 @@ $LabaRugi = $totalPendapatan - $totalOperasional;
 
 <body id="page-top">
     <div id="content">
-        <?php require 'navbar.php'; ?>
+        <?php
+        $role = $_SESSION['role_id'];
+        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php');
+        require 'navbar.php'; ?>
 
-        <!-- Print Button -->
-
-
+        <!-- Begin Page Content -->
         <div class="container">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 text-center">
                     <h4 class="m-0 font-weight-bold text-primary"><img src="img/logo.jpg" height="50px auto"> GC PERSADA TRANSPORT</h4>
                     <h5>Laporan Laba Rugi</h5>
                 </div>
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <div class="form-group">
-                        <label for="bulan">Filter Bulan :</label>
-                        <select class="form-control" id="bulan" name="bulan">
-                            <option value="01">Januari</option>
-                            <option value="02">Februari</option>
-                            <option value="03">Maret</option>
-                            <option value="04">April</option>
-                            <option value="05">Mei</option>
-                            <option value="06">Juni</option>
-                            <option value="07">Juli</option>
-                            <option value="08">Agustus</option>
-                            <option value="09">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
-                        </select>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label for="tanggal_awal">Tanggal Awal:</label>
+                            <input type="date" id="tanggal_awal" class="form-control" onchange="updateURL()">
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="tanggal_akhir">Tanggal Akhir:</label>
+                            <input type="date" id="tanggal_akhir" class="form-control" onchange="updateURL()">
+                        </div>
                     </div>
-                    <div class="col-lg-2">
-                        <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-                            <i class="fa fa-plus"> Cetak</i>
-                        </button><br>
+                    <div class="row mt-3">
+                        <div class="col-lg-4">
+                            <button type="button" class="btn btn-primary" onclick="updateURL()"><i class="fa fa-filter"></i> Filter</button>
+                            <button type="button" class="btn btn-success" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
+                        </div>
                     </div>
-                    <script>
-                        document.getElementById('bulan').addEventListener('change', function() {
-                            var selectedMonth = this.value;
-                            window.location.href = 'laporan-labarugi.php?bulan=' + selectedMonth;
-                        });
-                        document.getElementById('bulan').value = '<?php echo $selectedMonth; ?>';
-                    </script>
-                    <div class="container">
-                        <div class="row">
-                            <table class="label">Total Pendapatan</table>
+                    <div class="row mt-4">
+                        <div class="col-lg-6">
+                            <label>Total Pendapatan</label>
+                            <div class="amount">Rp. <?= number_format($totalPendapatan, 2, ',', '.'); ?></div>
                         </div>
-                        <div class="amount">Rp. <?= number_format($totalPendapatan, 2, ',', '.'); ?></div>
-                        <div class="row">
-                            <table class="label">Total Operasional</table>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-6">
+                            <label>Total Operasional</label>
+                            <div class="amount">Rp. <?= number_format($totalOperasional, 2, ',', '.'); ?></div>
                         </div>
-                        <div class="amount">Rp. <?= number_format($totalOperasional, 2, ',', '.'); ?></div>
-                        <div class="row">
-                            <table class="label">Laba / Rugi</table>
-                        </div>
-                        <div class="amount <?= $LabaRugi >= 0 ? 'laba' : 'rugi'; ?>">
-                            Rp. <?= number_format($LabaRugi, 2, ',', '.'); ?>
-                            <?= $LabaRugi >= 0 ? '(Laba)' : '(Rugi)'; ?>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-6">
+                            <label>Laba / Rugi</label>
+                            <div class="amount <?= $LabaRugi >= 0 ? 'laba' : 'rugi'; ?>">
+                                Rp. <?= number_format($LabaRugi, 2, ',', '.'); ?>
+                                <?= $LabaRugi >= 0 ? '(Laba)' : '(Rugi)'; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function updateURL() {
+            var tanggal_awal = document.getElementById('tanggal_awal').value;
+            var tanggal_akhir = document.getElementById('tanggal_akhir').value;
+            if (tanggal_awal && tanggal_akhir) {
+                window.location.href = 'laporan-labarugi.php?tanggal_awal=' + tanggal_awal + '&tanggal_akhir=' + tanggal_akhir;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('tanggal_awal').value = '<?= isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : ''; ?>';
+            document.getElementById('tanggal_akhir').value = '<?= isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : ''; ?>';
+        });
+    </script>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

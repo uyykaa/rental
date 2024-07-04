@@ -45,7 +45,10 @@ require 'koneksi.php';
 <body id="page-top">
     <!-- Main Content -->
     <div id="content">
+        <?php $role = $_SESSION['role_id'];
+        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php') ?>
         <?php require 'navbar.php'; ?>
+
 
         <!-- Tombol Cetak -->
 
@@ -73,9 +76,7 @@ require 'koneksi.php';
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary" style="margin:5px" onclick="applyFilter()">Filter</button>
-                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()">
-                        <i class="fa fa-plus"> Cetak</i>
-                    </button><br>
+                    <button type="button" class="btn btn-success" style="margin:5px" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button><br>
                     <script>
                         function applyFilter() {
                             var tanggal_awal = document.getElementById('tanggal_awal').value;

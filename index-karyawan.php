@@ -15,8 +15,8 @@ if ($_SESSION['role_id'] !== "3") {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel="shortcut icon" href="img/uang.png">
-  <title>SIA KAS GC PERSADA - Admin</title>
+  <link rel="shortcut icon" href="img/logo.jpg">
+  <title>SIA KAS GC PERSADA</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

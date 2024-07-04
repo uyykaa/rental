@@ -6,10 +6,10 @@
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-chart-pie"></i>
+        <div class="sidebar-brand-icon rotate-n-0">
+          <img src="img/logo.jpg" height="30dvh" alt="">
         </div>
-        <div class="sidebar-brand-text mx-3"> <img src="img/logo.jpg" height="30dvh" alt=""> GC PERSADA</div>
+        <div class="sidebar-brand-text mx-3"> GC PERSADA</div>
       </a>
 
       <!-- Divider -->
@@ -44,6 +44,7 @@
             <a class="collapse-item" href="mobil.php">Data Mobil</a>
             <a class="collapse-item" href="pelanggan.php">Data Pelanggan</a>
             <a class="collapse-item" href="sewa-kendaraan.php">Data Sewa Kendaraan</a>
+            <a class="collapse-item" href="pembayaran.php">Data Pembayaran</a>
             <a class="collapse-item" href="pendapatan-sewa.php">Pendapatan Sewa</a>
           </div>
         </div>
@@ -56,7 +57,7 @@
           <span>Biaya Operasional</span>
         </a>
       </li>
-      
+
       <!-- Heading -->
       <div class="sidebar-heading">
         Laporan
@@ -76,7 +77,7 @@
             <a class="collapse-item" href="jurnal-umum.php">Jurnal Umum</a>
             <a class="collapse-item" href="buku-besar.php">Laporan Buku Besar Kas</a>
             <a class="collapse-item" href="laporan-labarugi.php">Laporan Laba Rugi</a>
-            <a class="collapse-item" href="neraca.php">Neraca</a>
+            <a class="collapse-item" href="neraca.php">neraca</a>
           </div>
         </div>
       </li>

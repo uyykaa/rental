@@ -1,11 +1,10 @@
 <?php
 include('koneksi.php');
 
-$id_merek = $_POST['id_merek'];
 $merek = $_POST['merek'];
 
-// Query insert
-$query = mysqli_query($koneksi, "INSERT INTO merek VALUES ('$id_merek', '$merek')");
+// Query insert, omitting the id_merek field to let it auto-increment
+$query = mysqli_query($koneksi, "INSERT INTO merek (merek) VALUES ('$merek')");
 
 if ($query) {
     // Redirect ke halaman profile jika berhasil
@@ -14,3 +13,4 @@ if ($query) {
     // Menampilkan pesan error jika gagal
     echo "ERROR, data gagal ditambahkan: " . mysqli_error($koneksi);
 }
+?>

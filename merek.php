@@ -26,7 +26,8 @@ require 'koneksi.php';
 </head>
 
 <body id="page-top">
-    <?php require 'sidebar.php'; ?>
+    <?php $role = $_SESSION['role_id'];
+    $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php') ?>
 
     <!-- Main Content -->
     <div id="content">
@@ -34,7 +35,7 @@ require 'koneksi.php';
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-            <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> Tambah Merek</i></button><br>
+            <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> Tambah Merek</button><br>
 
             <div class="modal fade" id="myModalTambah" role="dialog">
                 <div class="modal-dialog">
@@ -48,10 +49,6 @@ require 'koneksi.php';
                         <div class="modal-body">
                             <form role="form" action="tambah-merek.php" method="POST">
 
-                                <div class="form-group">
-                                    <label>ID Merek</label>
-                                    <input type="text" name="id_merek" class="form-control" placeholder="Masukan ID">
-                                </div>
                                 <div class="form-group">
                                     <label>Nama Merek</label>
                                     <input type="text" name="merek" class="form-control" placeholder="Masukan Nama">
@@ -88,18 +85,19 @@ require 'koneksi.php';
                             <tbody>
                                 <?php
                                 $query = mysqli_query($koneksi, "SELECT * FROM merek");
+                                $no = 1;
                                 while ($data = mysqli_fetch_assoc($query)) {
                                 ?>
                                     <tr>
-                                        <td><?= isset($data['id_merek']) ? htmlspecialchars($data['id_merek']) : ''; ?></td>
-                                        <td><?= isset($data['merek']) ? htmlspecialchars($data['merek']) : ''; ?></td>
+                                        <td><?= $no++; ?></td>
+                                        <td><?= htmlspecialchars($data['merek']); ?></td>
                                         <td>
                                             <!-- Button for modal -->
-                                            <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= isset($data['id_merek']) ? htmlspecialchars($data['id_merek']) : ''; ?>"> Edit</a>
+                                            <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= htmlspecialchars($data['id_merek']); ?>"><i class="fa fa-edit"></i> Edit</a>
                                         </td>
                                     </tr>
                                     <!-- Modal Edit -->
-                                    <div class="modal fade" id="myModal<?= isset($data['id_merek']) ? htmlspecialchars($data['id_merek']) : ''; ?>" role="dialog">
+                                    <div class="modal fade" id="myModal<?= htmlspecialchars($data['id_merek']); ?>" role="dialog">
                                         <div class="modal-dialog">
 
                                             <!-- Modal content-->
@@ -110,26 +108,18 @@ require 'koneksi.php';
                                                 </div>
                                                 <div class="modal-body">
                                                     <form role="form" action="proses-edit-merek.php" method="post">
-                                                        <?php
-                                                        $id = isset($data['id_merek']) ? $data['id_merek'] : '';
-                                                        $query_edit = mysqli_query($koneksi, "SELECT * FROM merek WHERE id_merek='$id'");
-                                                        while ($row = mysqli_fetch_array($query_edit)) {
-                                                        ?>
-                                                            <input type="hidden" name="id_merek" value="<?= htmlspecialchars($row['id_merek']); ?>">
+                                                        <input type="hidden" name="id_merek" value="<?= htmlspecialchars($data['id_merek']); ?>">
 
-                                                            <div class="form-group">
-                                                                <label>Merek</label>
-                                                                <input type="text" name="merek" class="form-control" value="<?= htmlspecialchars($row['merek']); ?>">
-                                                            </div>
+                                                        <div class="form-group">
+                                                            <label>Merek</label>
+                                                            <input type="text" name="merek" class="form-control" value="<?= htmlspecialchars($data['merek']); ?>">
+                                                        </div>
 
-                                                            <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-success">Ubah</button>
-                                                                <a href="hapus-merek.php?id_merek=<?= htmlspecialchars($row['id_merek']); ?>" onclick="return confirm('Anda Yakin Ingin Menghapus?')" class="btn btn-danger">Hapus</a>
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-                                                            </div>
-                                                        <?php
-                                                        }
-                                                        ?>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-success">Ubah</button>
+                                                            <a href="hapus-merek.php?id_merek=<?= htmlspecialchars($data['id_merek']); ?>" onclick="return confirm('Anda Yakin Ingin Menghapus?')" class="btn btn-danger">Hapus</a>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                                                        </div>
                                                     </form>
                                                 </div>
                                             </div>

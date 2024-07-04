@@ -5,22 +5,22 @@ require 'koneksi.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $no_pelanggan = $_POST['no_pelanggan'];
   $tgl_sewa = $_POST['tgl_sewa'];
-  $tgl_kembali = $_POST['tgl_kembali'];
+  $jenis_sewa = $_POST['jenis_sewa'];
   $lama_sewa = $_POST['lama_sewa'];
   $id_mobil = $_POST['id_mobil'];
   $harga = 0;
 
-  // Calculate the total cost
+  // Fetch harga mobil
+  $query_harga = mysqli_query($koneksi, "SELECT harga FROM mobil WHERE id_mobil = $id_mobil");
+  $data_harga = mysqli_fetch_assoc($query_harga);
+  $harga = $data_harga['harga'];
 
-  $qHarga = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT harga FROM mobil WHERE id_mobil = $id_mobil"));
+  // Hitung total harga
+  $total_harga = calculateTotal($harga, $lama_sewa);
 
-  $harga = implode('', $qHarga);
-  $total = calculateTotal($harga, $lama_sewa);
-
-
-  // Insert the new rental into the database
-  $query = "INSERT INTO sewa_kendaraan (tgl_sewa, tgl_kembali, id_mobil,no_pelanggan, lama_sewa, harga,  total_harga)
-            VALUES ('$tgl_sewa', '$tgl_kembali','$id_mobil','$no_pelanggan', '$lama_sewa', '$harga', '$total')";
+  // Insert data sewa ke database
+  $query = "INSERT INTO sewa_kendaraan (no_pelanggan, id_mobil, tgl_sewa, jenis_sewa, lama_sewa, harga, total_harga)
+            VALUES ('$no_pelanggan', '$id_mobil', '$tgl_sewa', '$jenis_sewa', '$lama_sewa', '$harga', '$total_harga')";
 
   if (mysqli_query($koneksi, $query)) {
     header('Location: sewa-kendaraan.php');
@@ -29,9 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 
-// Function to calculate the total cost
-function calculateTotal($harga, $lama_sewa)
-{
+function calculateTotal($harga, $lama_sewa) {
   if ($lama_sewa <= 24) {
     // Lama sewa kurang dari atau sama dengan 24 jam
     return $harga;
@@ -40,3 +38,4 @@ function calculateTotal($harga, $lama_sewa)
     return $harga * ($lama_sewa / 24);
   }
 }
+?>

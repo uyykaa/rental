@@ -70,11 +70,12 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
 </head>
 
 <body id="page-top">
-  <?php require 'sidebar.php'; ?>
+  <?php $role = $_SESSION['role_id'];
+  $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php') ?>
   <div id="content">
     <?php require 'navbar.php'; ?>
     <div class="container-fluid">
-      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> Sewa</i></button><br>
+      <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"></i> Sewa</button><br>
       <div class="card shadow mb-4">
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Daftar Sewa</h6>
@@ -88,12 +89,10 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <th>Nama Pelanggan</th>
                   <th>Mobil</th>
                   <th>Tgl Sewa</th>
-                  <th>Tgl Kembali</th>
-                  <th>Lama Sewa</th>
+                  <th>Jenis Sewa</th>
                   <th>Harga</th>
-                  <th>Denda</th>
+                  <th>Lama Sewa</th>
                   <th>Total Harga </th>
-                  <th>Status</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -104,7 +103,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                 $no = 0;
                 $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil FROM sewa_kendaraan 
                   JOIN pelanggan ON sewa_kendaraan.no_pelanggan = pelanggan.no_pelanggan 
-                  JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil");
+                  JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil ORDER BY status asc");
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
@@ -112,34 +111,12 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                     <td><?= $data['nama'] ?></td>
                     <td><?= $data['nama_mobil'] ?></td>
                     <td><?= $data['tgl_sewa'] ?></td>
-                    <td><?= $data['tgl_kembali'] ?></td>
-                    <td><?= convert_time($data['lama_sewa']) ?></td>
+                    <td><?= $data['jenis_sewa'] ?></td>
                     <td><?= $data['harga'] ?></td>
-                    <td><?= $data['denda'] ?></td>
+                    <td><?= convert_time($data['lama_sewa']) ?></td>
                     <td><?= $data['total_harga'] ?></td>
                     <td>
-                      <?php
-                      if ($data['status'] === '1') {
-                      ?>
-                        <span class="badge badge-pill badge-success">Sewa selesai</span>
-                      <?php } elseif ($currDate > $data['tgl_kembali']) { ?>
-                        <span class="badge badge-pill badge-danger">Terlambat</span>
-                      <?php } elseif ($currDate < $data['tgl_kembali']) { ?>
-                        <span class="badge badge-pill badge-primary">Sewa berlangsung</span>
-                      <?php } elseif ($currDate == $data['tgl_kembali']) { ?>
-                        <span class="badge badge-pill badge-warning">Sewa berakhir hari ini</span>
-
-                      <?php } ?>
-                    </td>
-                    <td>
-                      <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>">Edit</a>
-                      <?php
-                      if ($data['status'] === '0') {
-                      ?>
-                        <a href="#" type="button" class="fa fa-edit btn btn-success btn-md" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>">Konfirmasi</a>
-                      <?php } else { ?>
-                        <a href=" #" type="button" class="fa fa-edit btn btn-secondary btn-md" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>">Batalkan</a>
-                      <?php } ?>
+                      <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                   </tr>
                   <div class=" modal fade" id="myModal<?= $data['id_sewa']; ?>" role="dialog">
@@ -183,8 +160,11 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                                 <input type="date" name="tgl_sewa" class="form-control" value="<?= $row['tgl_sewa']; ?>">
                               </div>
                               <div class="form-group">
-                                <label>Tgl Kembali</label>
-                                <input type="date" name="tgl_kembali" class="form-control" value="<?= $row['tgl_kembali']; ?>">
+                                <label>Jenis Sewa</label>
+                                <select name="jenis_sewa" class="form-control">
+                                  <option value="Lepas Kunci" <?= ($row['jenis_sewa'] == "Lepas Kunci") ? 'selected' : ''; ?>>Lepas Kunci</option>
+                                  <option value="Paket Lengkap" <?= ($row['jenis_sewa'] == "Paket Lengkap") ? 'selected' : ''; ?>>Paket Lengkap</option>
+                                </select>
                               </div>
                               <div class="form-group">
                                 <label>Lama Sewa</label>
@@ -205,10 +185,6 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                                 <label>Harga:</label>
                                 <input type="number" class="form-control" name="harga" id="harga" value="<?= $row['harga']; ?>">
                               </div>
-                              <div class="form-group">
-                                <label>Denda</label>
-                                <input type="number" name="denda" class="form-control" value="<?= $row['denda']; ?>">
-                              </div>
                             <?php
                             }
                             ?>
@@ -221,59 +197,6 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                       </div>
                     </div>
                   </div>
-
-
-                  <!-- MODAL KONFIRMASI DAN BATALKAN -->
-                  <div class="modal fade" tabindex="-1" role="dialog" id="myModalKonfirmasi<?= $data['id_sewa']; ?>">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title">Konfirmasi</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Konfirmasi sewa kendaraan?</p>
-                        </div>
-                        <div class="modal-footer">
-                          <form action="" method="POST">
-
-                            <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
-                            <button type="submit" class="btn btn-success" name="btnKonfirmasi">Konfirmasi</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div class="modal fade" tabindex="-1" role="dialog" id="myModalBatalkan<?= $data['id_sewa']; ?>">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title">Konfirmasi</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <div class="modal-body">
-                          <p>Batalkan status terkonfirmasi?</p>
-                        </div>
-                        <div class="modal-footer">
-                          <form action="" method="POST">
-
-                            <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
-                            <button type="submit" class="btn btn-warning" name="btnBatalkan">Batalkan</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
 
                 <?php
                 }
@@ -320,8 +243,11 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <input type="date" class="form-control" name="tgl_sewa">
                 </div>
                 <div class="form-group">
-                  <label>Tanggal Kembali:</label>
-                  <input type="date" class="form-control" name="tgl_kembali">
+                  <label>Jenis Sewa</label>
+                  <select name="jenis_sewa" class="form-control">
+                    <option value="Lepas Kunci">Lepas Kunci</option>
+                    <option value="Paket Lengkap">Paket Lengkap</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label>Lama Sewa:</label>
@@ -348,8 +274,6 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
       </div>
     </div>
 
-
-
     <?php require 'footer.php'; ?>
   </div>
   <a class="scroll-to-top rounded" href="#page-top">
@@ -372,7 +296,6 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
 
   <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
-
 
 </body>
 

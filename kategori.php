@@ -26,8 +26,11 @@ require 'cek-sesi.php';
 </head>
 
 <body id="page-top">
-    <?php require 'koneksi.php'; ?>
-    <?php require 'sidebar.php'; ?>
+    <?php
+    require 'koneksi.php';
+    $role = $_SESSION['role_id'];
+    $role == '3' ? require('sidebar-karyawan.php') : require('sidebar.php');
+    ?>
     <!-- Main Content -->
     <div id="content">
 
@@ -36,7 +39,7 @@ require 'cek-sesi.php';
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-            <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> Akun</i></button><br>
+            <button type="button" class="btn btn-success" style="margin:5px" data-toggle="modal" data-target="#myModalTambah"><i class="fa fa-plus"> </i> Akun</button><br>
 
             <div class="modal fade" id="myModalTambah" role="dialog">
                 <div class="modal-dialog">
@@ -134,9 +137,9 @@ require 'cek-sesi.php';
                                         <td><?= $data['nama_akun'] ?></td>
                                         <td>
                                             <!-- Button for modal -->
-                                            <a href="#" type="button" class="fa fa-edit btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?php echo $data['id_akun']; ?>"> Edit</a>
+                                            <a href="#" type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal<?php echo $data['id_akun']; ?>"> <i class="fa fa-edit"></i>Edit</a>
                                             <!-- Button for modal Hapus -->
-                                            <a href="#" type="button" class="fa fa-trash btn btn-danger btn-md" data-toggle="modal" data-target="#modalHapus<?php echo $data['id_akun']; ?>"> Hapus</a>
+                                            <a href="#" type="button" class="btn btn-danger btn-md" data-toggle="modal" data-target="#modalHapus<?php echo $data['id_akun']; ?>"><i class="fa fa-trash"></i> Hapus</a>
                                             <!-- Modal Hapus -->
                                             <div class="modal fade" id="modalHapus<?php echo $data['id_akun']; ?>" role="dialog">
                                                 <div class="modal-dialog">

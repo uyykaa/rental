@@ -2,15 +2,16 @@
 // Include the database connection file
 require 'koneksi.php';
 
-// Retrieve the variables from the POST request
-$id_mobil = $_POST['id_mobil'];
-$id_merek = $_POST['id_merek'];
-$nama = $_POST['nama'];
-$warna = $_POST['warna'];
-$no_polisi = $_POST['no_polisi'];
-$jumlah_set = $_POST['jumlah_set'];
-$jenis_sewa = $_POST['jenis_sewa'];
-$harga = $_POST['harga'];
+// Retrieve the variables from the POST request and sanitize them
+$id_mobil = mysqli_real_escape_string($koneksi, $_POST['id_mobil']);
+$id_merek = mysqli_real_escape_string($koneksi, $_POST['id_merek']);
+$nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
+$warna = mysqli_real_escape_string($koneksi, $_POST['warna']);
+$no_polisi = mysqli_real_escape_string($koneksi, $_POST['no_polisi']);
+$jumlah_set = mysqli_real_escape_string($koneksi, $_POST['jumlah_set']);
+$jenis_sewa = mysqli_real_escape_string($koneksi, $_POST['jenis_sewa']);
+$lama_sewa = mysqli_real_escape_string($koneksi, $_POST['lama_sewa']);
+$harga = mysqli_real_escape_string($koneksi, $_POST['harga']);
 
 // Query Update
 $query = "UPDATE mobil SET 
@@ -20,6 +21,7 @@ $query = "UPDATE mobil SET
     no_polisi = '$no_polisi', 
     jumlah_set = '$jumlah_set',
     jenis_sewa = '$jenis_sewa',
+    lama_sewa = '$lama_sewa',
     harga = '$harga'
     WHERE id_mobil = '$id_mobil'";
 
@@ -30,4 +32,7 @@ if (mysqli_query($koneksi, $query)) {
     // Show an error message if the query failed
     echo "ERROR, data gagal diupdate: " . mysqli_error($koneksi);
 }
+
+// Close the database connection
+mysqli_close($koneksi);
 ?>

@@ -1,6 +1,4 @@
 <?php
-
-
 include 'koneksi.php';
 //periksa apakah file ini tidak dipanggil secara langsung, jika dipanggil secara langsung
 //maka user akan di kembalikan ke login.thml
@@ -26,11 +24,11 @@ if (!isset($_POST['email']) || !isset($_POST['pass'])) {
 		$_SESSION['status'] = "login";
 
 		if ($sesi['role_id'] == '1') {
-			header("location:index.php");
+			header("location: index.php");
 		} elseif ($sesi['role_id'] == '2') {
-			header("location:index-pemilik.php");
+			header("location: index-pemilik.php");
 		} elseif ($sesi['role_id'] == '3') {
-			header("location:index-karyawan.php");
+			header("location: index-karyawan.php");
 		}
 	} else {
 		//jika $rowCheck = 0, berarti email atau password salah, atau tidak terdaftar di database

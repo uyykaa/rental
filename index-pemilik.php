@@ -1,8 +1,8 @@
 <?php
 session_start();
-// if ($_SESSION['role_id'] != '2') {
-//   header("location:logout.php?pesan=gagal");
-// }
+if ($_SESSION['role_id'] != '2') {
+  header("location:logout.php?pesan=gagal");
+}
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +14,7 @@ session_start();
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel="shortcut icon" href="img/uang.png">
+  <link rel="shortcut icon" href="img/logo.jpg">
   <title>SIA KAS GC PERSADA </title>
 
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
