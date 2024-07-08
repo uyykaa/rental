@@ -79,11 +79,12 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
               </thead>
               <tbody>
                 <?php
+                $no = 1; // Initialize the counter
                 $query = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek");
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
-                    <td><?= $data['id_mobil'] ?></td>
+                    <td><?= $no++ ?></td> <!-- Increment the counter -->
                     <td><?= $data['merek'] ?></td>
                     <td><?= $data['nama'] ?></td>
                     <td><?= $data['warna'] ?></td>
@@ -137,11 +138,11 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                               <div class="form-group">
                                 <label>Kursi</label>
                                 <select name="jumlah_set" class="form-control">
-                                  <option value="4" <?= ($row['jumlah_set'] == 4) ? 'selected' : ''; ?>>4</option>
-                                  <option value="6" <?= ($row['jumlah_set'] == 6) ? 'selected' : ''; ?>>6</option>
+                                  <option value="5" <?= ($row['jumlah_set'] == 5) ? 'selected' : ''; ?>>4</option>
+                                  <option value="7" <?= ($row['jumlah_set'] == 7) ? 'selected' : ''; ?>>6</option>
                                   <option value="8" <?= ($row['jumlah_set'] == 8) ? 'selected' : ''; ?>>8</option>
-                                  <option value="10" <?= ($row['jumlah_set'] == 10) ? 'selected' : ''; ?>>10</option>
-                                  <option value="14" <?= ($row['jumlah_set'] == 14) ? 'selected' : ''; ?>>14</option>
+                                  <option value="12" <?= ($row['jumlah_set'] == 12) ? 'selected' : ''; ?>>12</option>
+                                  <option value="16" <?= ($row['jumlah_set'] == 16) ? 'selected' : ''; ?>>16</option>
                                 </select>
                               </div>
                               <div class="form-group">
@@ -227,11 +228,11 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                 <div class="form-group">
                   <label>Kursi</label>
                   <select name="jumlah_set" class="form-control" required>
-                    <option value="4">4</option>
-                    <option value="6">6</option>
+                    <option value="5">5</option>
+                    <option value="7">7</option>
                     <option value="8">8</option>
-                    <option value="10">10</option>
-                    <option value="14">14</option>
+                    <option value="12">12</option>
+                    <option value="16">16</option>
                     <!-- Add more options as needed -->
                   </select>
                 </div>

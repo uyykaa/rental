@@ -24,18 +24,18 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
 
 if (isset($_POST['btnKonfirmasi'])) {
     $id = $_POST['id'];
-    if (mysqli_query($koneksi, "UPDATE pembayaran SET status = '1' WHERE no_bayar = $id")) {
-        $query = mysqli_query($koneksi, "SELECT * FROM pembayaran WHERE no_bayar=$id");
+    if (mysqli_query($koneksi, "UPDATE pembayaran SET status = '1' WHERE id_sewa = $id")) {
+        $query = mysqli_query($koneksi, "SELECT * FROM pembayaran WHERE id_sewa=$id");
         if ($query) {
             while ($data = mysqli_fetch_assoc($query)) {
                 $id_akun = '4-01';
                 $no_pelanggan = $data['no_pelanggan'];
-                $no_bayar = $data['no_bayar'];
+                $id_sewa = $data['id_sewa'];
                 $nama_pendapatan = 'Pendapatan Sewa';
                 $tgl_pendapatan = date("Y-m-d");
                 $jumlah_pendapatan = $data['total_bayar'];
 
-                $updatePendapatan = mysqli_query($koneksi, "INSERT INTO pendapatan_sewa(id_akun, no_pelanggan, no_bayar, nama_pendapatan, tgl_pendapatan, jumlah_pendapatan) VALUES ('$id_akun', '$no_pelanggan', '$no_bayar', '$nama_pendapatan', '$tgl_pendapatan', '$jumlah_pendapatan')");
+                $updatePendapatan = mysqli_query($koneksi, "INSERT INTO pendapatan_sewa(id_akun, no_pelanggan, id_sewa, nama_pendapatan, tgl_pendapatan, jumlah_pendapatan) VALUES ('$id_akun', '$no_pelanggan', '$id_sewa', '$nama_pendapatan', '$tgl_pendapatan', '$jumlah_pendapatan')");
                 if (!$updatePendapatan) {
                     die("Query Error: " . mysqli_error($koneksi));
                 }
@@ -48,8 +48,8 @@ if (isset($_POST['btnKonfirmasi'])) {
     }
 } else if (isset($_POST['btnBatalkan'])) {
     $id = $_POST['id'];
-    if (mysqli_query($koneksi, "UPDATE pembayaran SET status = '0' WHERE no_bayar = $id")) {
-        $query = mysqli_query($koneksi, "DELETE FROM pendapatan_sewa WHERE no_bayar=$id");
+    if (mysqli_query($koneksi, "UPDATE pembayaran SET status = '0' WHERE id_sewa = $id")) {
+        $query = mysqli_query($koneksi, "DELETE FROM pendapatan_sewa WHERE id_sewa=$id");
         if (!$query) {
             die("Query Error: " . mysqli_error($koneksi));
         }
@@ -97,8 +97,8 @@ if ($role == '3') {
                             <th>No</th>
                             <th>Nama Pelanggan</th>
                             <th>Tgl Bayar</th>
-                            <th>Uang Muka</th>
                             <th>Harga</th>
+                            <th>Uang Muka</th>
                             <th>Denda</th>
                             <th>Total Bayar</th>
                             <th>Status</th>
@@ -120,8 +120,8 @@ if ($role == '3') {
                                     <td><?= ++$no; ?></td>
                                     <td><?= $data['nama_pelanggan'] ?></td>
                                     <td><?= $data['tanggal_bayar'] ?></td>
-                                    <td><?= $data['uang_muka'] ?></td>
                                     <td><?= $data['total_harga'] ?></td>
+                                    <td><?= $data['uang_muka'] ?></td>
                                     <td><?= $data['denda'] ?></td>
                                     <td><?= $data['total_bayar'] ?></td>
                                     <td>
@@ -134,15 +134,15 @@ if ($role == '3') {
                                         ?>
                                     </td>
                                     <td>
-                                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['no_bayar']; ?>"><i class="fa fa-edit"></i> Edit</a>
+                                        <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
                                         <?php if ($data['status'] === '0') { ?>
-                                            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['no_bayar']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
+                                            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
                                         <?php } else { ?>
-                                            <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModalBatalkan<?= $data['no_bayar']; ?>"><i class="fa fa-redo"></i> Batalkan</a>
+                                            <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>"><i class="fa fa-redo"></i> Batalkan</a>
                                         <?php } ?>
                                     </td>
                                 </tr>
-                                <div class="modal fade" id="myModal<?= $data['no_bayar']; ?>" role="dialog">
+                                <div class="modal fade" id="myModal<?= $data['id_sewa']; ?>" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -151,52 +151,44 @@ if ($role == '3') {
                                             </div>
                                             <div class="modal-body">
                                                 <form role="form" action="proses-edit-bayar.php" method="POST">
-                                                    <?php
-                                                    $id = $data['no_bayar'];
-                                                    $query_edit = mysqli_query($koneksi, "SELECT * FROM pembayaran WHERE no_bayar='$id'");
-                                                    if ($query_edit) {
-                                                        while ($row = mysqli_fetch_array($query_edit)) {
-                                                            ?>
-                                                            <input type="hidden" name="no_bayar" value="<?= $row['no_bayar']; ?>">
-                                                            <div class="form-group">
-                                                                <label>Harga:</label>
-                                                                <select name="id_sewa" class="form-control" id="id_sewa">
-                                                                    <?php
-                                                                    foreach ($brands as $brand) {
-                                                                        $selected = $row['id_sewa'] == $brand['id_sewa'] ? 'selected' : '';
-                                                                        echo "<option value='{$brand['id_sewa']}' $selected>{$brand['nama_mobil']} | {$brand['total_harga']}</option>";
-                                                                    }
-                                                                    ?>
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Tgl Bayar</label>
-                                                                <input type="date" name="tanggal_bayar" class="form-control" value="<?= $row['tanggal_bayar']; ?>">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Uang Muka</label>
-                                                                <input type="number" name="uang_muka" class="form-control" value="<?= $row['uang_muka']; ?>">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Denda</label>
-                                                                <input type="number" name="denda" class="form-control" value="<?= $row['denda']; ?>">
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-success">Ubah</button>
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-                                                            </div>
+                                                    <input type="hidden" name="id_sewa" value="<?= $data['id_sewa']; ?>">
+                                                    <div class="form-group">
+                                                        <label>Harga:</label>
+                                                        <select name="id_sewa" class="form-control" id="id_sewa">
                                                             <?php
-                                                        }
-                                                    } else {
-                                                        die("Query Error: " . mysqli_error($koneksi));
-                                                    }
-                                                    ?>
+                                                            foreach ($brands as $brand) {
+                                                                $selected = $data['id_sewa'] == $brand['id_sewa'] ? 'selected' : '';
+                                                                echo "<option value='{$brand['id_sewa']}' $selected>{$brand['nama_mobil']} | {$brand['total_harga']}</option>";
+                                                            }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Tgl Bayar</label>
+                                                        <input type="date" name="tanggal_bayar" class="form-control" value="<?= $data['tanggal_bayar']; ?>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Uang Muka</label>
+                                                        <input type="text" name="uang_muka" class="form-control" value="<?= $data['uang_muka']; ?>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Denda</label>
+                                                        <input type="text" name="denda" class="form-control" value="<?= $data['denda']; ?>">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Total Bayar</label>
+                                                        <input type="text" name="total_bayar" class="form-control" value="<?= $data['total_bayar']; ?>" readonly>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-success">Ubah</button>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal fade" id="myModalKonfirmasi<?= $data['no_bayar']; ?>" role="dialog">
+                                <div class="modal fade" id="myModalKonfirmasi<?= $data['id_sewa']; ?>" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -205,9 +197,9 @@ if ($role == '3') {
                                             </div>
                                             <div class="modal-body">
                                                 <form role="form" action="" method="POST">
-                                                    <input type="hidden" name="id" value="<?= $data['no_bayar']; ?>">
+                                                    <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
                                                     <div class="form-group">
-                                                        <h4>Apakah anda ingin konfirmasi pembayaran?</h4>
+                                                        <h5>Apakah anda yakin ingin mengonfirmasi pembayaran ini?</h5>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="submit" name="btnKonfirmasi" class="btn btn-success">Ya</button>
@@ -218,7 +210,7 @@ if ($role == '3') {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal fade" id="myModalBatalkan<?= $data['no_bayar']; ?>" role="dialog">
+                                <div class="modal fade" id="myModalBatalkan<?= $data['id_sewa']; ?>" role="dialog">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -227,12 +219,12 @@ if ($role == '3') {
                                             </div>
                                             <div class="modal-body">
                                                 <form role="form" action="" method="POST">
-                                                    <input type="hidden" name="id" value="<?= $data['no_bayar']; ?>">
+                                                    <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
                                                     <div class="form-group">
-                                                        <h4>Apakah anda ingin batalkan pembayaran?</h4>
+                                                        <h5>Apakah anda yakin ingin membatalkan pembayaran ini?</h5>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" name="btnBatalkan" class="btn btn-danger">Ya</button>
+                                                        <button type="submit" name="btnBatalkan" class="btn btn-success">Ya</button>
                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
                                                     </div>
                                                 </form>
@@ -249,12 +241,7 @@ if ($role == '3') {
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<?php require 'footer.php' ?>
-</div>
-</div>
-<div class="modal fade" id="myModalTambah" role="dialog">
+        <div id="myModalTambah" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -262,25 +249,27 @@ if ($role == '3') {
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form action="proses-tambah-bayar.php" method="POST">
+                <form action="tambah-bayar.php" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Nama Pelanggan:</label>
                         <select name="no_pelanggan" class="form-control">
-                            <?php foreach ($customers as $customer) { ?>
+                            <option value="">--- Pilih Pelanggan ---</option>
+                            <?php foreach ($customers as $customer): ?>
                                 <option value="<?= $customer['no_pelanggan'] ?>"><?= $customer['nama'] ?></option>
-                            <?php } ?>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Harga:</label>
                         <select name="id_sewa" class="form-control">
-                            <?php foreach ($brands as $brand) { ?>
+                            <option value="">--- Pilih Mobil ---</option>
+                            <?php foreach ($brands as $brand): ?>
                                 <option value="<?= $brand['id_sewa'] ?>"><?= $brand['nama_mobil'] ?> | <?= $brand['total_harga'] ?></option>
-                            <?php } ?>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Tgl Bayar:</label>
+                        <label>Tanggal Bayar:</label>
                         <input type="date" name="tanggal_bayar" class="form-control">
                     </div>
                     <div class="form-group">
@@ -300,6 +289,9 @@ if ($role == '3') {
         </div>
     </div>
 </div>
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>

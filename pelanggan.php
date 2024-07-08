@@ -50,7 +50,7 @@ require 'koneksi.php';
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>No </th>
+                  <th>No</th>
                   <th>Nama pelanggan</th>
                   <th>Alamat</th>
                   <th>Kontak</th>
@@ -67,7 +67,7 @@ require 'koneksi.php';
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
-                    <td><?= $data['no_pelanggan'] ?></td>
+                    <td><?= $no++ ?></td> <!-- Increment the counter -->
                     <td><?= $data['nama'] ?></td>
                     <td><?= $data['alamat'] ?></td>
                     <td><?= $data['no_hp'] ?></td>
@@ -85,7 +85,7 @@ require 'koneksi.php';
                       <div class="modal-content">
                         <div class="modal-header">
                           <h4 class="modal-title">Ubah Data Pelanggan</h4>
-                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <button type="button" class="close" data-dismiss="modal">&times;"></button>
                         </div>
                         <div class="modal-body">
                           <form role="form" action="proses-edit-pelanggan.php" method="POST" enctype="multipart/form-data">
@@ -96,7 +96,7 @@ require 'koneksi.php';
                             ?>
                               <input type="hidden" name="no_pelanggan" value="<?= $row['no_pelanggan'] ?>">
                               <div class="form-group">
-                                <label>No pelanggan </label>
+                                <label>No pelanggan</label>
                                 <input type="number" name="no_pelanggan" class="form-control" value="<?= $row['no_pelanggan'] ?>" disabled>
                               </div>
                               <div class="form-group">
@@ -116,7 +116,7 @@ require 'koneksi.php';
                                 <input type="file" name="img" class="form-control">
                               </div>
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Ubah</button>
+                                <button type="submit" class="btn btn-success">Tambah</button>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
                               </div>
                             <?php
@@ -128,7 +128,6 @@ require 'koneksi.php';
                     </div>
                   </div>
                 <?php
-                $no++;
                 }
                 ?>
 
@@ -146,7 +145,7 @@ require 'koneksi.php';
             <!-- heading modal -->
             <div class="modal-header">
               <h4 class="modal-title">Tambah pelanggan</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <button type="button" class="close" data-dismiss="modal">&times;"></button>
             </div>
             <!-- body modal -->
             <form action="tambah-pelanggan.php" method="post" enctype="multipart/form-data">

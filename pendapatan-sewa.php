@@ -216,8 +216,7 @@ require 'koneksi.php';
                 Tgl Pendapatan:
                 <input type="date" class="form-control mb-4" name="tgl_pendapatan" value="">
                 <div id="hidden_jumlah" style="display:block">
-                  Jumlah Pendapatan :
-                  <input type="number" class="form-control mb-4" name="jumlah_pendapatan">
+                  
                 </div>
               </div>
               <!-- footer modal -->

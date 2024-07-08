@@ -3,30 +3,32 @@ require 'cek-sesi.php';
 require 'koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id_pelanggan = $_POST['id_pelanggan'];
+    $no_pelanggan = $_POST['no_pelanggan'];
     $id_sewa = $_POST['id_sewa'];
     $tanggal_bayar = $_POST['tanggal_bayar'];
-    $denda = isset($_POST['denda']) ? $_POST['denda'] : 0;
-    $total_bayar = isset($_POST['total_bayar']) ? $_POST['total_bayar'] : 0;
-    
+    $uang_muka = $_POST['uang_muka'];
+    $denda = $_POST['denda'];
 
     // Fetch the total_harga for the selected sewa
-    $sewa_query = mysqli_query($koneksi, "SELECT total_harga FROM pembayaran WHERE id_sewa='$id_sewa'");
-    if ($sewa_query) {
-        $sewa = mysqli_fetch_assoc($sewa_query);
+    $stmt = $koneksi->prepare("SELECT total_harga FROM sewa_kendaraan WHERE id_sewa=?");
+    $stmt->bind_param("i", $id_sewa);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && $result->num_rows > 0) {
+        $sewa = $result->fetch_assoc();
         $total_harga = $sewa['total_harga'];
-        // Calculate total_bayar
-        $total_bayar = ($total_harga - $uang_muka) + $denda;
+        $total_bayar = (($total_harga - $uang_muka) + $denda);
 
         // Insert into the database
-        $query = "INSERT INTO pembayaran (no_pelanggan, id_sewa, tanggal_bayar, uang_muka, denda, total_bayar) VALUES ('$id_pelanggan', '$id_sewa', '$tanggal_bayar', '$uang_muka', '$denda', '$total_bayar')";
-        if (mysqli_query($koneksi, $query)) {
+        $stmt = $koneksi->prepare("INSERT INTO pembayaran (no_pelanggan, id_sewa, tanggal_bayar, uang_muka, denda, total_bayar) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iissii", $no_pelanggan, $id_sewa, $tanggal_bayar, $uang_muka, $denda, $total_bayar);
+        if ($stmt->execute()) {
             header("Location: pembayaran.php");
         } else {
-            die("Query Error: " . mysqli_error($koneksi));
+            die("Query Error: " . $stmt->error);
         }
     } else {
-        die("Query Error: " . mysqli_error($koneksi));
+        die("Query Error: " . $koneksi->error);
     }
 }
 ?>
