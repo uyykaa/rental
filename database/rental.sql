@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 04, 2024 at 02:16 PM
+-- Generation Time: Jul 11, 2024 at 03:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `kategori_akun` (
   `id_akun` varchar(5) NOT NULL,
-  `nama_akun` varchar(20) NOT NULL
+  `nama_akun` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -37,6 +37,10 @@ CREATE TABLE `kategori_akun` (
 --
 
 INSERT INTO `kategori_akun` (`id_akun`, `nama_akun`) VALUES
+('1-01', 'Kas (Aktiva Lancar)'),
+('1-22', 'Gedung (Aktiva Tetap)'),
+('2-01', 'Utang'),
+('3-00', 'Modal'),
 ('4-01', 'Pendapatan Sewa'),
 ('5-02', 'Beban Gaji'),
 ('5-03', 'Beban Service'),
@@ -79,20 +83,21 @@ CREATE TABLE `mobil` (
   `lama_sewa` varchar(8) NOT NULL,
   `jumlah_set` varchar(10) NOT NULL,
   `harga` int(11) NOT NULL,
-  `id_merek` int(2) NOT NULL
+  `id_merek` int(2) NOT NULL,
+  `status` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `mobil`
 --
 
-INSERT INTO `mobil` (`id_mobil`, `nama`, `warna`, `no_polisi`, `jenis_sewa`, `lama_sewa`, `jumlah_set`, `harga`, `id_merek`) VALUES
-(1, 'Hiace Premio', 'Silver', 'K 4803 TO', 'Paket Lengkap', '18', '14', 1400000, 1),
-(2, 'Brio', 'Hitam', 'AB 4950 QJ', 'Lepas Kunci', '12', '6', 350000, 1),
-(3, 'Brio', 'Hitam', 'AB 4950 QJ', 'Paket Lengkap', '18', '6', 450000, 1),
-(4, 'pregio', 'Silver', 'AD 555 DC', 'Lepas Kunci', '12', '8', 1000, 5),
-(5, 'pregio', 'Silver', 'AD 555 DC', 'Paket Lengkap', '18', '8', 1200, 5),
-(39, 'Grand New Xenia', 'Putih', 'B 1829 IM', 'Lepas Kunci', '18', '8', 300000, 4);
+INSERT INTO `mobil` (`id_mobil`, `nama`, `warna`, `no_polisi`, `jenis_sewa`, `lama_sewa`, `jumlah_set`, `harga`, `id_merek`, `status`) VALUES
+(1, 'Hiace Premio', 'Silver', 'K 4803 TO', 'Paket Lengkap', '18', '14', 1400000, 1, '0'),
+(2, 'Brio L', 'Hitam', 'AB 4950 QJ', 'Lepas Kunci', '12', '5', 350000, 1, '1'),
+(3, 'Brio K', 'Hitam', 'AB 4950 QJ', 'Paket Lengkap', '18', '5', 450000, 1, '0'),
+(4, 'pregio L', 'Silver', 'AD 555 DC', 'Lepas Kunci', '12', '8', 1000, 5, '0'),
+(5, 'pregio K', 'Silver', 'AD 555 DC', 'Paket Lengkap', '18', '8', 1200, 5, '1'),
+(41, 'Grand New Xenia', 'Silver', 'B 1829 IM', 'Lepas Kunci', '12', '5', 10000, 1, '1');
 
 -- --------------------------------------------------------
 
@@ -117,7 +122,9 @@ CREATE TABLE `operasional` (
 INSERT INTO `operasional` (`id_operasional`, `id_akun`, `nama_operasional`, `tanggal_operasional`, `harga`, `kuantitas`, `total_operasional`) VALUES
 (501, '5-01', 'Biaya Gaji', '2024-06-05', 40000, 2, 80000),
 (502, '5-02', 'Bayar Servic bulanan', '2024-05-29', 1750000, 1, 1750000),
-(503, '6-01', 'Biaya Tidak Terduga', '2024-06-30', 50000, 3, 150000);
+(503, '6-01', 'Biaya Tidak Terduga', '2024-06-30', 50000, 3, 150000),
+(504, '6-01', 'Biaya Pajak', '2024-07-11', 10000, 3, 30000),
+(505, '2-01', 'utang usaha', '2024-07-11', 10000, 1, 10000);
 
 -- --------------------------------------------------------
 
@@ -130,7 +137,7 @@ CREATE TABLE `pelanggan` (
   `nama` varchar(15) NOT NULL,
   `alamat` varchar(20) NOT NULL,
   `no_hp` varchar(13) NOT NULL,
-  `img` varchar(50) NOT NULL
+  `img` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -141,9 +148,8 @@ INSERT INTO `pelanggan` (`no_pelanggan`, `nama`, `alamat`, `no_hp`, `img`) VALUE
 (1, 'Azka', 'Jl. Paris, Bantul', '089603077352', 'fauna.jpg'),
 (2, 'Zidny', 'Jl Samas, Bantul', '085432167891', 'pbdd1.jpeg'),
 (3, 'Elang ', 'Jl. Kaliurang', '0816030773511', 'Diagram11.jpeg'),
-(4, 'Kirana', 'Jl Seyegan, Sleman', '087762514245', 'WIN_20230330_08_08_09_Pro.jpg'),
-(5, 'alo', 'sleman', '081', 'ss3.png'),
-(11, 'Rio', 'Pleret Bantul', '09877564', 'ss4.png');
+(4, 'Kirana', 'Jl Seyegan, Sleman', '087762514245', 'ss3.png'),
+(5, 'alo', 'sleman', '081', 'ss3.png');
 
 -- --------------------------------------------------------
 
@@ -161,6 +167,15 @@ CREATE TABLE `pembayaran` (
   `total_bayar` int(11) NOT NULL,
   `status` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pembayaran`
+--
+
+INSERT INTO `pembayaran` (`no_bayar`, `tanggal_bayar`, `uang_muka`, `denda`, `id_sewa`, `no_pelanggan`, `total_bayar`, `status`) VALUES
+(10, '2024-05-30', 400000, 140000, 32, '1', 1140000, '0'),
+(11, '2024-06-12', 200000, 0, 33, '2', 700000, '0'),
+(12, '2024-07-11', 500, 0, 34, '5', 500, '');
 
 -- --------------------------------------------------------
 
@@ -183,12 +198,9 @@ CREATE TABLE `pendapatan_sewa` (
 --
 
 INSERT INTO `pendapatan_sewa` (`id_pendapatan`, `id_akun`, `no_pelanggan`, `id_sewa`, `nama_pendapatan`, `tgl_pendapatan`, `jumlah_pendapatan`) VALUES
-(401, '4-01', '2', 1, 'Pendapatan Sewa', '2024-06-06', 1540000),
-(402, '4-01', '3', 3, 'Pendapatan Sewa', '2024-06-21', 500000),
-(411, '4-01', '4', 3, 'Pendapatan Sewa', '2024-07-02', 350000),
-(412, '4-01', '7', 22, 'Pendapatan Sewa', '2024-07-03', 7000),
-(413, '4-01', '5', 23, 'Pendapatan Sewa', '2024-07-03', 2000),
-(414, '4-01', '1', 29, 'Pendapatan Sewa', '2024-07-04', 300000);
+(401, '4-01', '1', 32, 'Pendapatan Sewa', '2024-05-30', 1400000),
+(402, '4-01', '2', 33, 'Pendapatan Sewa', '2024-06-12', 900000),
+(403, '4-01', '3', 34, 'Pendapatan Sewa', '2024-07-12', 1000);
 
 -- --------------------------------------------------------
 
@@ -205,7 +217,7 @@ CREATE TABLE `sewa_kendaraan` (
   `lama_sewa` varchar(8) NOT NULL,
   `harga` int(11) NOT NULL,
   `total_harga` int(11) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 0
+  `status` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -213,11 +225,9 @@ CREATE TABLE `sewa_kendaraan` (
 --
 
 INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `id_mobil`, `no_pelanggan`, `jenis_sewa`, `lama_sewa`, `harga`, `total_harga`, `status`) VALUES
-(1, '2024-07-02', '1', '2', 'Lepas Kunci', '48', 1400000, 2800000, 1),
-(2, '2024-06-20', '2', '3', 'Lepas Kunci', '18', 350000, 350000, 1),
-(3, '2024-07-01', '3', '4', 'Paket Lengkap', '72', 450000, 1350000, 1),
-(4, '2024-07-03', '4', '5', 'Lepas Kunci', '48', 1000, 2000, 1),
-(29, '2024-07-04', '39', '1', 'Lepas Kunci', '24', 300000, 300000, 0);
+(32, '2024-05-29', '1', '1', 'Paket Lengkap', '18', 1400000, 1400000, ''),
+(33, '2024-06-11', '3', '2', 'Lepas Kunci', '48', 450000, 900000, ''),
+(34, '2024-07-11', '4', '3', 'Lepas Kunci', '12', 1000, 1000, '');
 
 -- --------------------------------------------------------
 
@@ -242,10 +252,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nama`, `no_hp`, `alamat`, `jabatan`, `email`, `password`, `role_id`, `status`) VALUES
-(1, 'Bagian Keuangan', '08123155123', 'Bawuran', 'Admin', 'admin123@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '1', 1),
-(2, 'Pemilik', '08903077352', 'Bawuran', 'Pemilik', 'pemilik@gmail.com', '58399557dae3c60e23c78606771dfa3d', '', 1),
-(3, 'IIS', '081231415689', 'jl. sambisari wkejqwkjrkh', 'karyawan', 'iiskaryawan@gmail.com', 'b19fb11bd01b65832169fd0a44b36ba9', '3', 0),
-(4, 'Karyawan', '081092155234', 'Jl. segoroyoso', 'karyawan', 'karyawan@gmail.com', '9e014682c94e0f2cc834bf7348bda428', '3', 1);
+(1, 'Bagian Keuangan', '856789123', 'Jl. Samas', 'Admin', 'admin123@gmail.com', '21232f297a57a5a743894a0e4a801fc3', '1', 1),
+(2, 'Pemilik', '089603077352', 'Jl. Bantul', 'Pemilik', 'pemilik@gmail.com', '58399557dae3c60e23c78606771dfa3d', '', 1),
+(3, 'IIS', '08954321456', 'Jl. Wonosari', 'karyawan', 'iiskaryawan@gmail.com', '9e014682c94e0f2cc834bf7348bda428', '3', 0),
+(4, 'Karyawan', '08765432167', 'Jl. Semar', 'karyawan', 'karyawan@gmail.com', '9e014682c94e0f2cc834bf7348bda428', '3', 1);
 
 --
 -- Indexes for dumped tables
@@ -320,7 +330,13 @@ ALTER TABLE `merek`
 -- AUTO_INCREMENT for table `mobil`
 --
 ALTER TABLE `mobil`
-  MODIFY `id_mobil` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_mobil` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT for table `operasional`
+--
+ALTER TABLE `operasional`
+  MODIFY `id_operasional` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=506;
 
 --
 -- AUTO_INCREMENT for table `pelanggan`
@@ -332,25 +348,25 @@ ALTER TABLE `pelanggan`
 -- AUTO_INCREMENT for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `no_bayar` int(2) NOT NULL AUTO_INCREMENT;
+  MODIFY `no_bayar` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pendapatan_sewa`
 --
 ALTER TABLE `pendapatan_sewa`
-  MODIFY `id_pendapatan` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=415;
+  MODIFY `id_pendapatan` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=442;
 
 --
 -- AUTO_INCREMENT for table `sewa_kendaraan`
 --
 ALTER TABLE `sewa_kendaraan`
-  MODIFY `id_sewa` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id_sewa` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

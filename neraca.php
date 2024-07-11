@@ -73,8 +73,12 @@ require 'koneksi.php';
                 <div class="container-fluid">
                     <form method="GET" action="neraca.php">
                         <div class="form-group">
-                            <label for="bulan">Bulan:</label>
-                            <input type="month" class="form-control" id="bulan" name="bulan" value="<?php echo isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m'); ?>">
+                            <label for="tanggal_awal">Tanggal Awal:</label>
+                            <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01'); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="tanggal_akhir">Tanggal Akhir:</label>
+                            <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d'); ?>">
                         </div>
                         <button type="submit" class="btn btn-primary">Filter</button>
                         <button type="button" class="btn btn-success btn-print" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
@@ -92,7 +96,7 @@ require 'koneksi.php';
                         $result_kas = mysqli_query($koneksi, $query_kas);
                         if ($result_kas && $row_kas = mysqli_fetch_assoc($result_kas)) {
                             $kas = $row_kas['total_kas'];
-                        }
+                        } 
 
                         // Fetch utang from operasional
                         $query_utang = "SELECT SUM(total_operasional) as total_utang FROM operasional WHERE DATE_FORMAT(tanggal_operasional, '%Y-%m') = '$bulan'";
@@ -156,11 +160,7 @@ require 'koneksi.php';
                                     </td>
                                 </tr>
                                 <?php if ($jumlah_aktiva !== $jumlah_passiva) : ?>
-                                    <tr>
-                                        <td colspan="2" class="text-danger text-center">
-                                            <strong>Jumlah Aktiva tidak sama dengan Jumlah Passiva!</strong>
-                                        </td>
-                                    </tr>
+                                    
                                 <?php endif; ?>
                             </tbody>
                         </table>

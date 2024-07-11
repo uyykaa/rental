@@ -35,53 +35,45 @@ session_start();
 
       <!-- Modal Tambah Operasional -->
       <div class="modal fade" id="myModalTambah" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Input Data Operasional</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-              <form role="form" action="tambah-operasional.php" method="get">
-                <div class="form-group">
-                  <label>Id Operasional</label>
-                  <input type="text" name="id_operasional" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label>Akun</label>
-                  <select name="id_akun" class="form-control" required>
-                    <?php
-                  $queryKategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
-                  while ($kategori = mysqli_fetch_assoc($queryKategori)) {
-                    echo "<option value='{$kategori['id_akun']}'>{$kategori['nama_akun']}</option>";
-                  }
-                    ?>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Nama Operasional</label>
-                  <input type="text" name="nama_operasional" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label>Tanggal Operasional</label>
-                  <input type="date" name="tanggal_operasional" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label>Harga</label>
-                  <input type="number" name="harga" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label>Kuantitas</label>
-                  <input type="number" name="kuantitas" class="form-control" required>
-                </div>
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-success">Tambah</button>
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-                </div>
-              </form>
-            </div>
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-body">
+                      <form role="form" action="tambah-operasional.php" method="post">
+                          <div class="form-group">
+                              <label>Akun</label>
+                              <select name="id_akun" class="form-control" required>
+                                  <?php
+                                  $queryKategori = mysqli_query($koneksi, "SELECT * FROM kategori_akun");
+                                  while ($kategori = mysqli_fetch_assoc($queryKategori)) {
+                                      echo "<option value='{$kategori['id_akun']}'>{$kategori['nama_akun']}</option>";
+                                  }
+                                  ?>
+                              </select>
+                          </div>
+                          <div class="form-group">
+                              <label>Nama Operasional</label>
+                              <input type="text" name="nama_operasional" class="form-control" required>
+                          </div>
+                          <div class="form-group">
+                              <label>Tanggal Operasional</label>
+                              <input type="date" name="tanggal_operasional" class="form-control" required>
+                          </div>
+                          <div class="form-group">
+                              <label>Harga</label>
+                              <input type="number" name="harga" class="form-control" required>
+                          </div>
+                          <div class="form-group">
+                              <label>Kuantitas</label>
+                              <input type="number" name="kuantitas" class="form-control" required>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="submit" class="btn btn-success">Tambah</button>
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
           </div>
-        </div>
       </div>
 
       <div class="card shadow mb-4">
@@ -98,11 +90,11 @@ session_start();
                   <th width="15%">Tanggal Operasional</th>
                   <th width="15%">Harga</th>
                   <th width="5%">Kuantitas</th>
-                  <th width="15%">Total Operasional</th>
-                  <th width="5%">Aksi</th>
+                  <th width="13%">Total Operasional</th>
+                  <th width="8%">Aksi</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody> 
                 <?php
                 $query = mysqli_query($koneksi, "SELECT * FROM operasional");
                 while ($data = mysqli_fetch_assoc($query)) {

@@ -93,6 +93,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <th>Harga</th>
                   <th>Lama Sewa</th>
                   <th>Total Harga </th>
+                  <th>Status </th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -116,9 +117,31 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                     <td><?= convert_time($data['lama_sewa']) ?></td>
                     <td><?= $data['total_harga'] ?></td>
                     <td>
+                      <?php
+                      $endDate = date('Y-m-d', strtotime($data['tgl_sewa'] . ' + ' . $data['lama_sewa'] . ' days'));
+                      if ($data['status'] == '1') {
+                        echo '<span class="badge badge-pill badge-success">Sewa selesai</span>';
+                      } elseif ($currDate > $endDate) {
+                        echo '<span class="badge badge-pill badge-danger">Terlambat</span>';
+                      } elseif ($currDate < $endDate) {
+                        echo '<span class="badge badge-pill badge-primary">Sewa berlangsung</span>';
+                      } elseif ($currDate == $endDate) {
+                        echo '<span class="badge badge-pill badge-warning">Sewa berakhir hari ini</span>';
+                      }
+                      ?>
+                    </td> 
+                    <td>
                       <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
+                      <?php
+                      if ($data['status'] == '0' && $currDate >= $endDate) {
+                      ?>
+                        <a href="#" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
+                      <?php } elseif ($data['status'] == '1') { ?>
+                        <a href="#" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>"><i class="fa fa-redo"></i> Batalkan</a>
+                      <?php } ?>
                     </td>
                   </tr>
+                  <!-- Modal Edit -->
                   <div class=" modal fade" id="myModal<?= $data['id_sewa']; ?>" role="dialog">
                     <div class="modal-dialog">
                       <div class="modal-content">

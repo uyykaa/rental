@@ -74,6 +74,12 @@
         </a>
       </li>
 
+      <li class="nav-item">neraca.php">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Neraca</span>
+        </a>
+      </li>
+ 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 

@@ -13,14 +13,37 @@ function convert_time($time)
     return round($days) . " Hari";
   }
 }
+// Logika untuk menambahkan pembayaran
+if (isset($_POST['id_mobil']) && isset($_POST['jumlah_bayar'])) {
+  $id_mobil = $_POST['id_mobil'];
+  $jumlah_bayar = $_POST['jumlah_bayar'];
+  $tanggal_bayar = date('Y-m-d H:i:s');
+
+  // Query untuk menambahkan pembayaran
+  $query = "INSERT INTO pembayaran (id_mobil, jumlah_bayar, tanggal_bayar) VALUES ('$id_mobil', '$jumlah_bayar', '$tanggal_bayar')";
+  
+  if (mysqli_query($koneksi, $query)) {
+      // Query untuk memperbarui status mobil menjadi 'Tidak Tersedia' (atau status lain yang sesuai)
+      $update_query = "UPDATE mobil SET status = 0 WHERE id_mobil = '$id_mobil'";
+      
+      if (mysqli_query($koneksi, $update_query)) {
+          echo "Pembayaran berhasil ditambahkan dan status mobil telah diperbarui.";
+      } else {
+          echo "Error updating car status: " . mysqli_error($koneksi);
+      }
+  } else {
+      echo "Error: " . mysqli_error($koneksi);
+  }
+}
 
 // Fetch brands for the dropdown menu
 $brands_query = mysqli_query($koneksi, "SELECT id_merek, merek FROM merek");
 $brands = [];
 while ($brand = mysqli_fetch_assoc($brands_query)) {
-  $brands[] = $brand;
+$brands[] = $brand;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -74,6 +97,7 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                   <th>Jenis Sewa</th>
                   <th>Lama Sewa</th>
                   <th>Tarif</th>
+                  <th>Status</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -93,6 +117,16 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                     <td><?= $data['jenis_sewa'] ?></td>
                     <td><?= convert_time($data['lama_sewa']) ?></td>
                     <td><?= $data['harga'] ?></td>
+                    <td>
+                      <!-- Updated Status Display -->
+                      <?php 
+                        if ($data['status'] == 1) {
+                          echo "Tersedia";
+                        } else {
+                          echo "Tidak Tersedia";
+                        }
+                      ?>
+                    </td>
                     <td>
                       <!-- Button for modal -->
                       <a href="#" type="button" class=" btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_mobil']; ?>"><i class="fa fa-edit"></i> Edit</a>
@@ -138,8 +172,8 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                               <div class="form-group">
                                 <label>Kursi</label>
                                 <select name="jumlah_set" class="form-control">
-                                  <option value="5" <?= ($row['jumlah_set'] == 5) ? 'selected' : ''; ?>>4</option>
-                                  <option value="7" <?= ($row['jumlah_set'] == 7) ? 'selected' : ''; ?>>6</option>
+                                  <option value="5" <?= ($row['jumlah_set'] == 5) ? 'selected' : ''; ?>>5</option>
+                                  <option value="7" <?= ($row['jumlah_set'] == 7) ? 'selected' : ''; ?>>7</option>
                                   <option value="8" <?= ($row['jumlah_set'] == 8) ? 'selected' : ''; ?>>8</option>
                                   <option value="12" <?= ($row['jumlah_set'] == 12) ? 'selected' : ''; ?>>12</option>
                                   <option value="16" <?= ($row['jumlah_set'] == 16) ? 'selected' : ''; ?>>16</option>
@@ -271,11 +305,8 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
           </div>
         </div>
       </div>
-
-
     </div>
     <!-- /.container-fluid -->
-
   </div>
   <!-- End of Main Content -->
 
