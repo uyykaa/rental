@@ -52,7 +52,7 @@ require 'koneksi.php';
 
         .form-group input[type="month"] {
             flex: 1;
-            min-width: 150px;
+            min-width: 50px;
         }
     </style>
 </head>

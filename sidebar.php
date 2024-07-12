@@ -77,11 +77,11 @@
             <a class="collapse-item" href="jurnal-umum.php">Jurnal Umum</a>
             <a class="collapse-item" href="buku-besar.php">Laporan Buku Besar Kas</a>
             <a class="collapse-item" href="laporan-labarugi.php">Laporan Laba Rugi</a>
-            <a class="collapse-item" href="neraca.php">neraca</a>
+            <a class="collapse-item" href="laporan-perubahan-modal.php">Laporan Perubahan Modal</a>
+            <a class="collapse-item" href="neraca.php">Neraca</a>
           </div>
         </div>
       </li>
-
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

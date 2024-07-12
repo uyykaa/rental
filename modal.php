@@ -12,11 +12,15 @@
 <div class="container">
     <div class="card shadow mb-4">
         <div class="card-header py-3 text-center">
-            <h4 class="m-0 font-weight-bold text-primary">Input Modal</h4>
+            <h4 class="m-0 font-weight-bold text-primary">Tambah Modal</h4>
         </div>
         <div class="card-body">
-            <form method="POST" action="input_modal.php">
+            <form method="POST" action="tambah-modal.php">
                 <div class="form-group">
+                <div class="form-group">
+                    <label for="tanggal">Tanggal</label>
+                    <input type="date" class="form-control" id="tanggal" name="tanggal" required>
+                </div>
                     <label for="nominal">Nominal Saldo</label>
                     <input type="number" class="form-control" id="nominal" name="nominal" required>
                 </div>
