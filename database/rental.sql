@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 11, 2024 at 03:55 AM
+-- Generation Time: Jul 14, 2024 at 12:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -37,10 +37,7 @@ CREATE TABLE `kategori_akun` (
 --
 
 INSERT INTO `kategori_akun` (`id_akun`, `nama_akun`) VALUES
-('1-01', 'Kas (Aktiva Lancar)'),
-('1-22', 'Gedung (Aktiva Tetap)'),
 ('2-01', 'Utang'),
-('3-00', 'Modal'),
 ('4-01', 'Pendapatan Sewa'),
 ('5-02', 'Beban Gaji'),
 ('5-03', 'Beban Service'),
@@ -98,6 +95,26 @@ INSERT INTO `mobil` (`id_mobil`, `nama`, `warna`, `no_polisi`, `jenis_sewa`, `la
 (4, 'pregio L', 'Silver', 'AD 555 DC', 'Lepas Kunci', '12', '8', 1000, 5, '0'),
 (5, 'pregio K', 'Silver', 'AD 555 DC', 'Paket Lengkap', '18', '8', 1200, 5, '1'),
 (41, 'Grand New Xenia', 'Silver', 'B 1829 IM', 'Lepas Kunci', '12', '5', 10000, 1, '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `modal`
+--
+
+CREATE TABLE `modal` (
+  `kode_transaksi` int(3) NOT NULL,
+  `tanggal` date NOT NULL,
+  `nama_akun` varchar(20) NOT NULL,
+  `nominal` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `modal`
+--
+
+INSERT INTO `modal` (`kode_transaksi`, `tanggal`, `nama_akun`, `nominal`) VALUES
+(300, '2024-07-01', 'Modal  Juli', 1000000);
 
 -- --------------------------------------------------------
 
@@ -280,6 +297,12 @@ ALTER TABLE `mobil`
   ADD PRIMARY KEY (`id_mobil`);
 
 --
+-- Indexes for table `modal`
+--
+ALTER TABLE `modal`
+  ADD PRIMARY KEY (`kode_transaksi`);
+
+--
 -- Indexes for table `operasional`
 --
 ALTER TABLE `operasional`
@@ -331,6 +354,12 @@ ALTER TABLE `merek`
 --
 ALTER TABLE `mobil`
   MODIFY `id_mobil` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT for table `modal`
+--
+ALTER TABLE `modal`
+  MODIFY `kode_transaksi` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=302;
 
 --
 -- AUTO_INCREMENT for table `operasional`

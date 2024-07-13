@@ -17,10 +17,14 @@
         <div class="card-body">
             <form method="POST" action="tambah-modal.php">
                 <div class="form-group">
-                <div class="form-group">
                     <label for="tanggal">Tanggal</label>
                     <input type="date" class="form-control" id="tanggal" name="tanggal" required>
                 </div>
+                <div class="form-group">
+                    <label for="nama_akun">Nama Akun</label>
+                    <input type="text" class="form-control" id="nama_akun" name="nama_akun" required>
+                </div>
+                <div class="form-group">
                     <label for="nominal">Nominal Saldo</label>
                     <input type="number" class="form-control" id="nominal" name="nominal" required>
                 </div>

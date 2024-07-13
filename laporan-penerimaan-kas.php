@@ -45,21 +45,19 @@ require 'koneksi.php';
 <body id="page-top">
     <!-- Main Content -->
     <div id="content">
-        <?php $role = $_SESSION['role_id'];
-        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php') ?>
-        <?php require 'navbar.php'; ?>
-
+        <?php 
+        $role = $_SESSION['role_id'];
+        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php'); 
+        require 'navbar.php'; 
+        ?>
 
         <!-- Tombol Cetak -->
-
-
         <div class="container">
             <div class="card shadow mb-3">
                 <div class="card-header py-3 text-center">
                     <h4 class="m-0 font-weight-bold text-primary"><img src="img/logo.jpg" height="50px auto"> GC PERSADA TRANSPORT</h4>
                     <h5>Laporan Penerimaan Kas</h5>
                 </div>
-
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -93,8 +91,8 @@ require 'koneksi.php';
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Tanggal Pendapatan</th>
-                                        <th>Kode Pendapatan</th>
+                                        <th>Tanggal</th>
+                                        <th>Kode</th>
                                         <th>Nama Akun</th>
                                         <th>Jumlah Penerimaan</th>
                                     </tr>
@@ -102,6 +100,7 @@ require 'koneksi.php';
                                 <tbody>
                                     <?php
                                     $totalPendapatan = 0;
+                                    $totalNominal = 0;
                                     $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d');
                                     $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
@@ -117,11 +116,25 @@ require 'koneksi.php';
                                             <td><?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?></td>
                                         </tr>
                                     <?php endwhile; ?>
+
+                                    <?php
+                                    $queryModal = mysqli_query($koneksi, "SELECT * FROM modal WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    while ($data = mysqli_fetch_assoc($queryModal)) :
+                                        $nominal = $data['nominal'];
+                                        $totalNominal += $nominal;
+                                    ?>
+                                        <tr>
+                                            <td><?= $data['tanggal'] ?></td>
+                                            <td><?= $data['kode_transaksi'] ?></td>
+                                            <td>Modal</td>
+                                            <td><?= number_format($data['nominal'], 2, ',', '.'); ?></td>
+                                        </tr>
+                                    <?php endwhile; ?>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="3" style="text-align: right;">Total</th>
-                                        <th>Rp. <?= number_format($totalPendapatan, 2, ',', '.'); ?></th>
+                                        <th colspan="3" style="text-align: right;">Total Pendapatan</th>
+                                        <th>Rp. <?= number_format($totalPendapatan + $totalNominal, 2, ',', '.'); ?></th>
                                     </tr>
                                 </tfoot>
                             </table>

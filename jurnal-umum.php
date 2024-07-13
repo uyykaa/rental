@@ -6,11 +6,30 @@ require 'koneksi.php';
 $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d');
 $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
-// Query untuk mengambil data pendapatan sewa
-$queryPendapatanSewa = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+// Query untuk mengambil data pendapatan sewa dan modal
+$queryPendapatanSql = "
+    SELECT 'pendapatan_sewa' AS jenis, tgl_pendapatan AS tanggal, id_pendapatan AS id, nama_pendapatan AS nama, jumlah_pendapatan AS jumlah
+    FROM pendapatan_sewa 
+    WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'
+    UNION ALL
+    SELECT 'modal' AS jenis, tanggal AS tanggal, kode_transaksi AS id, nama_akun AS nama, nominal AS jumlah
+    FROM modal
+    WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'
+";
+
+$queryPendapatan = mysqli_query($koneksi, $queryPendapatanSql);
+
+if (!$queryPendapatan) {
+    die("Query Error: " . mysqli_error($koneksi));
+}
 
 // Query untuk mengambil data operasional
-$queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryOperasionalSql = "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
+$queryOperasional = mysqli_query($koneksi, $queryOperasionalSql);
+
+if (!$queryOperasional) {
+    die("Query Error: " . mysqli_error($koneksi));
+}
 
 // Variabel total untuk pendapatan dan operasional
 $totalPendapatan = 0;
@@ -124,17 +143,17 @@ $totalKredit = 0;
                                 </thead>
                                 <tbody>
                                     <?php
-                                    // Loop untuk data pendapatan sewa
-                                    while ($data = mysqli_fetch_assoc($queryPendapatanSewa)) {
-                                        $jumlah = isset($data['jumlah_pendapatan']) ? $data['jumlah_pendapatan'] : 0;
+                                    // Loop untuk data pendapatan
+                                    while ($data = mysqli_fetch_assoc($queryPendapatan)) {
+                                        $jumlah = isset($data['jumlah']) ? $data['jumlah'] : 0;
                                         $totalPendapatan += $jumlah;
                                         $totalDebit += $jumlah;
                                     ?>
                                         <tr>
-                                            <td><?= date('Y-m-d', strtotime($data['tgl_pendapatan'])); ?></td>
-                                            <td><?= $data['id_pendapatan']; ?></td>
+                                            <td><?= date('Y-m-d', strtotime($data['tanggal'])); ?></td>
+                                            <td><?= $data['id']; ?></td>
                                             <td>
-                                                Kas<br>&nbsp;&nbsp; <?= $data['nama_pendapatan']; ?><br><?= $data['nama_pendapatan']; ?>
+                                                Kas<br>&nbsp;&nbsp; <?= $data['nama']; ?><br><?= $data['nama']; ?>
                                             </td>
                                             <td><?= "Rp." . number_format($jumlah); ?></td>
                                             <td></td>

@@ -50,7 +50,7 @@ require 'koneksi.php';
             margin-right: 10px;
         }
 
-        .form-group input[type="month"] {
+        .form-group input[type="date"] {
             flex: 1;
             min-width: 50px;
         }
@@ -58,98 +58,92 @@ require 'koneksi.php';
 </head>
 
 <body id="page-top">
-    <div id="content">
+    <div id="wrapper">
         <?php
         $role = $_SESSION['role_id'];
-        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php');
-        require 'navbar.php'; ?>
-        <div class="container">
-            <div class="card shadow mb-4">
-                <div class="card-header py-3 text-center">
-                    <h4 class="m-0 font-weight-bold text-primary">GC PERSADA TRANSPORT</h4>
-                    <h5>Laporan Perubahan Modal</h5>
-                    <h6>Per <?php echo isset($_GET['bulan']) ? date('F Y', strtotime($_GET['bulan'])) : date('F Y'); ?></h6>
-                </div>
-                <div class="container-fluid">
-                    <form method="GET" action="laporan-perubahan-modal.php">
-                        <div class="form-group">
-                            <label for="tanggal_awal">Tanggal Awal:</label>
-                            <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01'); ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="tanggal_akhir">Tanggal Akhir:</label>
-                            <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d'); ?>">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Filter</button>
-                        <button type="button" class="btn btn-success btn-print" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
-                    </form>
-                    
-                    <!-- Laporan Perubahan Modal Section -->
+        if ($role == '2') {
+            require 'sidebar-pemilik.php';
+        } else {
+            require 'sidebar.php';
+        }
+        require 'navbar.php';
+        ?>
+        <div id="content">
+            <div class="container">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 text-center">
+                        <h4 class="m-0 font-weight-bold text-primary">GC PERSADA TRANSPORT</h4>
+                        <h5>Laporan Perubahan Modal</h5>
+                        <h6>Per <?php echo isset($_GET['tanggal_akhir']) ? date('d F Y', strtotime($_GET['tanggal_akhir'])) : date('d F Y'); ?></h6>
+                    </div>
                     <div class="container-fluid">
-                        <?php
-                        // Set the $bulan variable
-                        $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
+                        <form method="GET" action="laporan-perubahan-modal.php">
+                            <div class="form-group">
+                                <label for="tanggal_awal">Tanggal Awal:</label>
+                                <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01'); ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="tanggal_akhir">Tanggal Akhir:</label>
+                                <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d'); ?>">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <button type="button" class="btn btn-success btn-print" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
+                        </form>
 
-                        // Default values for Laporan Perubahan Modal
-                        $modal_awal = 0;
-                        $laba = 0;
-                        $prive = 0;
+                        <!-- Laporan Perubahan Modal Section -->
+                        <div class="container-fluid">
+                            <?php
+                            $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01');
+                            $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
-                        // Fetch Modal Awal from modal_awal table or similar
-                        $query_modal_awal = "SELECT modal_awal FROM modal_awal LIMIT 1";
-                        $result_modal_awal = mysqli_query($koneksi, $query_modal_awal);
-                        if ($result_modal_awal && $row_modal_awal = mysqli_fetch_assoc($result_modal_awal)) {
-                            $modal_awal = $row_modal_awal['modal_awal'];
-                        }
+                            $modal_awal = 0;
+                            $laba_rugi = 0;
 
-                        // Fetch Laba from laporan laba/rugi
-                        $query_laba = "SELECT SUM(total_pendapatan) - SUM(total_biaya) as total_laba FROM laporan_laba_rugi WHERE DATE_FORMAT(tanggal, '%Y-%m') = '$bulan'";
-                        $result_laba = mysqli_query($koneksi, $query_laba);
-                        if ($result_laba && $row_laba = mysqli_fetch_assoc($result_laba)) {
-                            $laba = $row_laba['total_laba'];
-                        }
+                            // Fetch Modal Awal from modal table
+                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal FROM modal WHERE tanggal < '$tanggal_awal'";
+                            $result_modal_awal = mysqli_query($koneksi, $query_modal_awal);
+                            if ($result_modal_awal && $row_modal_awal = mysqli_fetch_assoc($result_modal_awal)) {
+                                $modal_awal = $row_modal_awal['total_modal_awal'];
+                            }
 
-                        // Fetch Prive from prive table or similar
-                        $query_prive = "SELECT SUM(prive) as total_prive FROM prive WHERE DATE_FORMAT(tanggal, '%Y-%m') = '$bulan'";
-                        $result_prive = mysqli_query($koneksi, $query_prive);
-                        if ($result_prive && $row_prive = mysqli_fetch_assoc($result_prive)) {
-                            $prive = $row_prive['total_prive'];
-                        }
+                            // Fetch Laba/Rugi from laporan laba/rugi
+                            $query_laba_rugi = "SELECT SUM(total_pendapatan) - SUM(total_biaya) as total_laba_rugi FROM laporan_laba_rugi WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
+                            $result_laba_rugi = mysqli_query($koneksi, $query_laba_rugi);
+                            if ($result_laba_rugi && $row_laba_rugi = mysqli_fetch_assoc($result_laba_rugi)) {
+                                $laba_rugi = $row_laba_rugi['total_laba_rugi'];
+                            }
 
-                        // Calculate Modal Akhir
-                        $modal_akhir = $modal_awal + $laba - $prive;
-                        ?>
-                        <table class="table table-bordered report-table">
-                            <tr>
-                                <td>Modal Awal</td>
-                                <td class="amount">Rp. <?php echo number_format($modal_awal, 2); ?></td>
-                            </tr>
-                            <tr>
-                                <td>Laba </td>
-                                <td class="amount">Rp. <?php echo number_format($laba, 2); ?></td>
-                            </tr>
-                            <tr>
-                                <td>Prive</td>
-                                <td class="amount">(Rp. <?php echo number_format($prive, 2); ?>)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Modal Akhir</strong></td>
-                                <td class="amount"><strong>Rp. <?php echo number_format($modal_akhir, 2); ?></strong></td>
-                            </tr>
-                        </table>
+                            // Calculate Modal Akhir
+                            $modal_akhir = $modal_awal + $laba_rugi;
+                            ?>
+                            <table class="table table-bordered report-table">
+                                <tr>
+                                    <td>Modal Awal</td>
+                                    <td class="amount">Rp. <?php echo number_format($modal_awal, 2, ',', '.'); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><?php echo $laba_rugi >= 0 ? 'Laba' : 'Rugi'; ?></td>
+                                    <td class="amount">Rp. <?php echo number_format(abs($laba_rugi), 2, ',', '.'); ?></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Modal Akhir</strong></td>
+                                    <td class="amount"><strong>Rp. <?php echo number_format($modal_akhir, 2, ',', '.'); ?></strong></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-<script src="js/sb-admin-2.min.js"></script>
-<script src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="js/demo/datatables-demo.js"></script>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="js/demo/datatables-demo.js"></script>
 </body>
 
 </html>
+                            

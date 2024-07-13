@@ -29,14 +29,14 @@ require 'koneksi.php';
         /* Show print area */
         #content,
         #content * {
-            visibility: visible;
+            visibility: visible.
         }
 
         /* Set position for print area */
         #content {
             position: absolute;
             left: 0;
-            top: 0;
+            top: 0.
         }
     </style>
 </head>
@@ -103,42 +103,52 @@ require 'koneksi.php';
                                     $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
                                     // Query untuk mengambil data pendapatan_sewa berdasarkan periode tanggal yang dipilih
-                                    $queryPendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    $queryPendapatan = mysqli_query($koneksi, "SELECT tgl_pendapatan AS tanggal, id_pendapatan AS kode_transaksi, nama_pendapatan AS nama_akun, jumlah_pendapatan AS debet, 0 AS kredit FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    if (!$queryPendapatan) {
+                                        die('Query Error: ' . mysqli_error($koneksi));
+                                    }
+
+                                    // Query untuk mengambil data modal berdasarkan periode tanggal yang dipilih
+                                    $queryModal = mysqli_query($koneksi, "SELECT tanggal, kode_transaksi AS kode_transaksi, nama_akun AS nama_akun, nominal AS debet, 0 AS kredit FROM modal WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    if (!$queryModal) {
+                                        die('Query Error: ' . mysqli_error($koneksi));
+                                    }
 
                                     // Query untuk mengambil data operasional berdasarkan periode tanggal yang dipilih
-                                    $queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    $queryOperasional = mysqli_query($koneksi, "SELECT tanggal_operasional AS tanggal, id_operasional AS kode_transaksi, nama_operasional AS nama_akun, 0 AS debet, total_operasional AS kredit FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    if (!$queryOperasional) {
+                                        die('Query Error: ' . mysqli_error($koneksi));
+                                    }
 
-                                    $totalPendapatan = 0;
-                                    $totalOperasional = 0;
+                                    // Gabungkan semua query dalam satu array
+                                    $transactions = array_merge(mysqli_fetch_all($queryPendapatan, MYSQLI_ASSOC), mysqli_fetch_all($queryModal, MYSQLI_ASSOC), mysqli_fetch_all($queryOperasional, MYSQLI_ASSOC));
+
+                                    // Urutkan array berdasarkan tanggal
+                                    usort($transactions, function($a, $b) {
+                                        return strtotime($a['tanggal']) - strtotime($b['tanggal']);
+                                    });
+
                                     $var_saldo = 0;
+                                    $totalPendapatan = 0;
+                                    $totalModal = 0;
+                                    $totalOperasional = 0;
 
-                                    // Menampilkan data pendapatan
-                                    while ($data = $queryPendapatan->fetch_assoc()) : ?>
+                                    // Tampilkan data transaksi
+                                    foreach ($transactions as $transaction) :
+                                        $var_saldo += $transaction['debet'] - $transaction['kredit'];
+                                    ?>
                                         <tr>
-                                            <td align="center"><?= date('Y-m-d', strtotime($data['tgl_pendapatan'])); ?></td>
-                                            <td align="center"><?= $data['id_pendapatan']; ?></td>
-                                            <td><?= $data['nama_pendapatan']; ?></td>
-                                            <td>Rp. <?= number_format($data['jumlah_pendapatan'], 2, ',', '.'); ?></td>
-                                            <td></td>
-                                            <td>Rp. <?= number_format($var_saldo += $data['jumlah_pendapatan'], 2, ',', '.'); ?></td>
+                                            <td align="center"><?= date('Y-m-d', strtotime($transaction['tanggal'])); ?></td>
+                                            <td align="center"><?= $transaction['kode_transaksi']; ?></td>
+                                            <td><?= $transaction['nama_akun']; ?></td>
+                                            <td><?= $transaction['debet'] != 0 ? 'Rp. ' . number_format($transaction['debet'], 2, ',', '.') : ''; ?></td>
+                                            <td><?= $transaction['kredit'] != 0 ? 'Rp. ' . number_format($transaction['kredit'], 2, ',', '.') : ''; ?></td>
+                                            <td>Rp. <?= number_format($var_saldo, 2, ',', '.'); ?></td>
                                         </tr>
                                     <?php
-                                        $totalPendapatan += $data['jumlah_pendapatan'];
-                                    endwhile;
-
-                                    // Menampilkan data operasional
-                                    while ($data = $queryOperasional->fetch_assoc()) : ?>
-                                        <tr>
-                                            <td align="center"><?= date('Y-m-d', strtotime($data['tanggal_operasional'])); ?></td>
-                                            <td align="center"><?= $data['id_operasional']; ?></td>
-                                            <td><?= $data['nama_operasional']; ?></td>
-                                            <td></td>
-                                            <td>Rp. <?= number_format($data['total_operasional'], 2, ',', '.'); ?></td>
-                                            <td>Rp. <?= number_format($var_saldo -= $data['total_operasional'], 2, ',', '.'); ?></td>
-                                        </tr>
-                                    <?php
-                                        $totalOperasional += $data['total_operasional'];
-                                    endwhile;
+                                        $totalPendapatan += $transaction['debet'];
+                                        $totalOperasional += $transaction['kredit'];
+                                    endforeach;
                                     ?>
                                 </tbody>
                                 <tfoot>
