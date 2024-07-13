@@ -129,7 +129,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                         echo '<span class="badge badge-pill badge-warning">Sewa berakhir hari ini</span>';
                       }
                       ?>
-                    </td> 
+                    </td>
                     <td>
                       <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
                       <?php
@@ -252,7 +252,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <select name="id_mobil" class="form-control" id="id_mobil">
                     <option value="" disabled selected>pilih kendaraan...</option>
                     <?php
-                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek");
+                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek WHERE status='1'");
                     while ($brand = mysqli_fetch_array($query_mobil)) { ?>
                       <option value="<?= $brand['id_mobil']; ?>"><?php echo $brand['nama'];
                                                                   echo " | ";
@@ -297,7 +297,6 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
       </div>
     </div>
 
-    <?php require 'footer.php'; ?>
   </div>
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
@@ -320,6 +319,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
   <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
 
+  <?php require 'footer.php'; ?>
 </body>
 
 <script>

@@ -22,14 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $query = "INSERT INTO sewa_kendaraan (no_pelanggan, id_mobil, tgl_sewa, jenis_sewa, lama_sewa, harga, total_harga)
             VALUES ('$no_pelanggan', '$id_mobil', '$tgl_sewa', '$jenis_sewa', '$lama_sewa', '$harga', '$total_harga')";
 
+  $updateMobil = "UPDATE mobil set status='0' WHERE id_mobil=$id_mobil";
+
+
   if (mysqli_query($koneksi, $query)) {
+    mysqli_query($koneksi, $updateMobil);
     header('Location: sewa-kendaraan.php');
   } else {
     echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
   }
 }
 
-function calculateTotal($harga, $lama_sewa) {
+function calculateTotal($harga, $lama_sewa)
+{
   if ($lama_sewa <= 24) {
     // Lama sewa kurang dari atau sama dengan 24 jam
     return $harga;
@@ -38,4 +43,3 @@ function calculateTotal($harga, $lama_sewa) {
     return $harga * ($lama_sewa / 24);
   }
 }
-?>

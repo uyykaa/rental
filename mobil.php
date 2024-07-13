@@ -21,18 +21,18 @@ if (isset($_POST['id_mobil']) && isset($_POST['jumlah_bayar'])) {
 
   // Query untuk menambahkan pembayaran
   $query = "INSERT INTO pembayaran (id_mobil, jumlah_bayar, tanggal_bayar) VALUES ('$id_mobil', '$jumlah_bayar', '$tanggal_bayar')";
-  
+
   if (mysqli_query($koneksi, $query)) {
-      // Query untuk memperbarui status mobil menjadi 'Tidak Tersedia' (atau status lain yang sesuai)
-      $update_query = "UPDATE mobil SET status = 0 WHERE id_mobil = '$id_mobil'";
-      
-      if (mysqli_query($koneksi, $update_query)) {
-          echo "Pembayaran berhasil ditambahkan dan status mobil telah diperbarui.";
-      } else {
-          echo "Error updating car status: " . mysqli_error($koneksi);
-      }
+    // Query untuk memperbarui status mobil menjadi 'Tidak Tersedia' (atau status lain yang sesuai)
+    $update_query = "UPDATE mobil SET status = 0 WHERE id_mobil = '$id_mobil'";
+
+    if (mysqli_query($koneksi, $update_query)) {
+      echo "Pembayaran berhasil ditambahkan dan status mobil telah diperbarui.";
+    } else {
+      echo "Error updating car status: " . mysqli_error($koneksi);
+    }
   } else {
-      echo "Error: " . mysqli_error($koneksi);
+    echo "Error: " . mysqli_error($koneksi);
   }
 }
 
@@ -40,7 +40,7 @@ if (isset($_POST['id_mobil']) && isset($_POST['jumlah_bayar'])) {
 $brands_query = mysqli_query($koneksi, "SELECT id_merek, merek FROM merek");
 $brands = [];
 while ($brand = mysqli_fetch_assoc($brands_query)) {
-$brands[] = $brand;
+  $brands[] = $brand;
 }
 ?>
 
@@ -104,7 +104,7 @@ $brands[] = $brand;
               <tbody>
                 <?php
                 $no = 1; // Initialize the counter
-                $query = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek");
+                $query = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek order by status desc");
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
@@ -119,12 +119,12 @@ $brands[] = $brand;
                     <td><?= $data['harga'] ?></td>
                     <td>
                       <!-- Updated Status Display -->
-                      <?php 
-                        if ($data['status'] == 1) {
-                          echo "Tersedia";
-                        } else {
-                          echo "Tidak Tersedia";
-                        }
+                      <?php
+                      if ($data['status'] == 1) {
+                        echo '<span class="badge badge-pill badge-success"><i class="fa fa-check"></i> Tersedia</span>';;
+                      } else {
+                        echo '<span class="badge badge-pill badge-warning text-dark"><i class="fa fa-circle-xmark"></i> Tidak Tersedia</span>';
+                      }
                       ?>
                     </td>
                     <td>
