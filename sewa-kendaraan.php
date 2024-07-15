@@ -15,6 +15,8 @@ function convert_time($time)
   }
 }
 
+$paket = mysqli_query($koneksi, "SELECT * FROM paket");
+
 // Fetch brands for the dropdown menu
 $brands_query = mysqli_query($koneksi, "SELECT * FROM merek");
 $brands = [];
@@ -33,23 +35,8 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
 if (array_key_exists('btnKonfirmasi', $_POST)) {
   $id = $_POST['id'];
   mysqli_query($koneksi, "UPDATE sewa_kendaraan SET status = '1' WHERE id_sewa = $id");
-
-  $query = mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan WHERE id_sewa=$id");
-  while ($data = mysqli_fetch_assoc($query)) {
-    $id_akun  = '4-01';
-    $no_pelanggan = $data['no_pelanggan'];
-    $id_sewa = $data['id_sewa'];
-    $nama_pendapatan = 'Pendapatan Sewa';
-    $tgl_pendapatan = date("Y-m-d");
-    $jumlah_pendapatan = $data['total_harga'];
-
-    $updatPendapatan = mysqli_query($koneksi, "INSERT INTO pendapatan_sewa(id_akun, no_pelanggan, id_sewa,nama_pendapatan, tgl_pendapatan, jumlah_pendapatan ) values('$id_akun', '$no_pelanggan', '$id_sewa','$nama_pendapatan','$tgl_pendapatan', '$jumlah_pendapatan')");
-  }
-} else if (array_key_exists('btnBatalkan', $_POST)) {
-  $id = $_POST['id'];
-  mysqli_query($koneksi, "UPDATE sewa_kendaraan SET status = '0' WHERE id_sewa = $id");
-
-  $query = mysqli_query($koneksi, "DELETE FROM pendapatan_sewa WHERE id_sewa=$id");
+  mysqli_query($koneksi, "UPDATE pembayaran SET is_sewa_done = '1' WHERE id_sewa = $id");
+  header("location:pembayaran.php");
 }
 
 ?>
@@ -87,12 +74,8 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                 <tr>
                   <th>No</th>
                   <th>Nama Pelanggan</th>
-                  <th>Mobil</th>
                   <th>Tgl Sewa</th>
-                  <th>Jenis Sewa</th>
-                  <th>Harga</th>
                   <th>Lama Sewa</th>
-                  <th>Total Harga </th>
                   <th>Status </th>
                   <th>Aksi</th>
                 </tr>
@@ -102,7 +85,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
               <tbody>
                 <?php
                 $no = 0;
-                $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil FROM sewa_kendaraan 
+                $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil, mobil.no_polisi AS plat_mobil FROM sewa_kendaraan 
                   JOIN pelanggan ON sewa_kendaraan.no_pelanggan = pelanggan.no_pelanggan 
                   JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil ORDER BY status asc");
                 while ($data = mysqli_fetch_assoc($query)) {
@@ -110,15 +93,20 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <tr>
                     <td><?= $no += 1; ?></td>
                     <td><?= $data['nama'] ?></td>
-                    <td><?= $data['nama_mobil'] ?></td>
                     <td><?= $data['tgl_sewa'] ?></td>
-                    <td><?= $data['jenis_sewa'] ?></td>
-                    <td><?= $data['harga'] ?></td>
                     <td><?= convert_time($data['lama_sewa']) ?></td>
-                    <td><?= $data['total_harga'] ?></td>
                     <td>
                       <?php
-                      $endDate = date('Y-m-d', strtotime($data['tgl_sewa'] . ' + ' . $data['lama_sewa'] . ' days'));
+                      // $endDate = date('Y-m-d', strtotime($data['tgl_sewa'] . ' + ' . $data['lama_sewa'] . ' days'));
+                      $endDate = '';
+                      if ($data['lama_sewa'] > 23) {
+                        $lama_hari = $data['lama_sewa'] / 24;
+                        $addDate = strtotime("+$lama_hari day", strtotime($data['tgl_sewa']));
+                        $endDate = date('Y-m-d', $addDate);
+                      } else {
+                        $endDate = $data['tgl_sewa'];
+                      }
+
                       if ($data['status'] == '1') {
                         echo '<span class="badge badge-pill badge-success">Sewa selesai</span>';
                       } elseif ($currDate > $endDate) {
@@ -129,15 +117,18 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                         echo '<span class="badge badge-pill badge-warning">Sewa berakhir hari ini</span>';
                       }
                       ?>
-                    </td> 
+                    </td>
                     <td>
-                      <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
+                      <?php if ($data['status'] == 1) { ?>
+                        <a href="#" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalDetail<?= $data['id_sewa']; ?>"><i class="fa fa-circle-info"></i> Detail</a>
+                      <?php } elseif ($data['status'] == 0 && $data['is_paid'] == 0) { ?>
+                        <a href="#" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalDetail<?= $data['id_sewa']; ?>"><i class="fa fa-circle-info"></i> Detail</a>
+                        <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
+                      <?php } ?>
                       <?php
                       if ($data['status'] == '0' && $currDate >= $endDate) {
                       ?>
-                        <a href="#" type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
-                      <?php } elseif ($data['status'] == '1') { ?>
-                        <a href="#" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>"><i class="fa fa-redo"></i> Batalkan</a>
+                        <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
                       <?php } ?>
                     </td>
                   </tr>
@@ -165,15 +156,17 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                                   $query_mobil = mysqli_query($koneksi, "SELECT * FROM mobil");
                                   while ($brand = mysqli_fetch_array($query_mobil)) {
                                     if ($row['id_mobil'] == $brand['id_mobil']) { ?>
-                                      <option value="<?= $brand['id_mobil']; ?>" selected><?php echo $brand['nama'];
-                                                                                          echo " | ";
-                                                                                          echo $brand['no_polisi'];
-                                                                                          ?></option>
+                                      <option value="<?= $brand['id_mobil']; ?>" selected>
+                                        <?php echo $brand['nama'];
+                                        echo " | ";
+                                        echo $brand['no_polisi'];
+                                        ?></option>
                                     <?php } else { ?>
-                                      <option value="<?= $brand['id_mobil']; ?>"><?php echo $brand['nama'];
-                                                                                  echo " | ";
-                                                                                  echo $brand['no_polisi'];
-                                                                                  ?></option>
+                                      <option value="<?= $brand['id_mobil']; ?>">
+                                        <?php echo $brand['nama'];
+                                        echo " | ";
+                                        echo $brand['no_polisi'];
+                                        ?></option>
                                     <?php } ?>
                                   <?php } ?>
                                 </select>
@@ -221,6 +214,104 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                     </div>
                   </div>
 
+                  <!-- Modal Detail -->
+                  <div id="modalDetail<?= $data['id_sewa']; ?>" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Detail Sewa</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+
+                          <div class="form-group row">
+                            <label for="nama" class="col-sm-3 col-form-label">Nama Pelanggan: </label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['nama']; ?>">
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="nama" class="col-sm-3 col-form-label">Tanggal Sewa: </label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= date("d F Y", strtotime($data['tgl_sewa'])) ?>">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="nama" class="col-sm-3 col-form-label">Tanggal Kembali: </label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= date("d F Y", strtotime($endDate)) ?>">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="nama" class="col-sm-3 col-form-label">Lama Sewa: </label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['lama_sewa'] > 23 ? $data['lama_sewa'] / 24 . ' Hari' : $data['lama_sewa'] . ' Jam' ?>">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="nama" class="col-sm-3 col-form-label">Mobil: </label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['nama_mobil'] . ' | ' . $data['plat_mobil']  ?>">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="nama" class="col-sm-3 col-form-label">Jenis Sewa: </label>
+                            <div class="col-sm-9">
+
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?php foreach ($paket as $pak) {
+                                                                                                            if ($data['jenis_sewa'] == $pak['id']) {
+                                                                                                              echo $pak['nama_paket'];
+                                                                                                            }
+                                                                                                          } ?>">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="nama" class="col-sm-3 col-form-label">Harga: </label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['harga'] ?>">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="nama" class="col-sm-3 col-form-label">Total Harga: </label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['total_harga'] ?>">
+                            </div>
+                          </div>
+
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Modal Konfirmasi -->
+                  <div class="modal fade" id="myModalKonfirmasi<?= $data['id_sewa']; ?>" role="dialog">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Konfirmasi sewa</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                          <form role="form" action="" method="POST">
+                            <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
+                            <div class="form-group">
+                              <h6>Apakah anda yakin ingin menyelesaikan data sewa ini?</h6>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" name="btnKonfirmasi" class="btn btn-success">Ya</button>
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
                 <?php
                 }
                 ?>
@@ -252,12 +343,13 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <select name="id_mobil" class="form-control" id="id_mobil">
                     <option value="" disabled selected>pilih kendaraan...</option>
                     <?php
-                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek");
+                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek WHERE mobil.status='1'");
                     while ($brand = mysqli_fetch_array($query_mobil)) { ?>
-                      <option value="<?= $brand['id_mobil']; ?>"><?php echo $brand['nama'];
-                                                                  echo " | ";
-                                                                  echo $brand['no_polisi'];
-                                                                  ?></option>
+                      <option value="<?= $brand['id_mobil']; ?>">
+                        <?php echo $brand['nama'];
+                        echo " | ";
+                        echo $brand['no_polisi'];
+                        ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -268,8 +360,9 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                 <div class="form-group">
                   <label>Jenis Sewa</label>
                   <select name="jenis_sewa" class="form-control">
-                    <option value="Lepas Kunci">Lepas Kunci</option>
-                    <option value="Paket Lengkap">Paket Lengkap</option>
+                    <?php foreach ($paket as $pak) : ?>
+                      <option value="<?= $pak['id']; ?>"><?= $pak['nama_paket']; ?></option>
+                    <?php endforeach; ?>
                   </select>
                 </div>
                 <div class="form-group">
@@ -286,6 +379,11 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                     <option value="168">7 Hari</option>
                   </select>
                 </div>
+                <div class="form-group">
+                  <label>Uang Muka</label>
+                  <input type="number" class="form-control" id="uang_muka" name="uang_muka" aria-describedby="uang-muka" value="0" min="0">
+                  <small id="uang-muka" class="form-text text-muted">boleh dikosongkan jika tidak ada.</small>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Tambah</button>
@@ -297,7 +395,6 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
       </div>
     </div>
 
-    <?php require 'footer.php'; ?>
   </div>
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
@@ -320,10 +417,8 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
   <!-- Page level custom scripts -->
   <script src="js/demo/datatables-demo.js"></script>
 
+  <?php require 'footer.php'; ?>
 </body>
 
-<script>
-
-</script>
 
 </html>

@@ -21,18 +21,18 @@ if (isset($_POST['id_mobil']) && isset($_POST['jumlah_bayar'])) {
 
   // Query untuk menambahkan pembayaran
   $query = "INSERT INTO pembayaran (id_mobil, jumlah_bayar, tanggal_bayar) VALUES ('$id_mobil', '$jumlah_bayar', '$tanggal_bayar')";
-  
+
   if (mysqli_query($koneksi, $query)) {
-      // Query untuk memperbarui status mobil menjadi 'Tidak Tersedia' (atau status lain yang sesuai)
-      $update_query = "UPDATE mobil SET status = 0 WHERE id_mobil = '$id_mobil'";
-      
-      if (mysqli_query($koneksi, $update_query)) {
-          echo "Pembayaran berhasil ditambahkan dan status mobil telah diperbarui.";
-      } else {
-          echo "Error updating car status: " . mysqli_error($koneksi);
-      }
+    // Query untuk memperbarui status mobil menjadi 'Tidak Tersedia' (atau status lain yang sesuai)
+    $update_query = "UPDATE mobil SET status = 0 WHERE id_mobil = '$id_mobil'";
+
+    if (mysqli_query($koneksi, $update_query)) {
+      echo "Pembayaran berhasil ditambahkan dan status mobil telah diperbarui.";
+    } else {
+      echo "Error updating car status: " . mysqli_error($koneksi);
+    }
   } else {
-      echo "Error: " . mysqli_error($koneksi);
+    echo "Error: " . mysqli_error($koneksi);
   }
 }
 
@@ -40,7 +40,7 @@ if (isset($_POST['id_mobil']) && isset($_POST['jumlah_bayar'])) {
 $brands_query = mysqli_query($koneksi, "SELECT id_merek, merek FROM merek");
 $brands = [];
 while ($brand = mysqli_fetch_assoc($brands_query)) {
-$brands[] = $brand;
+  $brands[] = $brand;
 }
 ?>
 
@@ -94,8 +94,6 @@ $brands[] = $brand;
                   <th>Warna</th>
                   <th>No Polisi</th>
                   <th>Kursi</th>
-                  <th>Jenis Sewa</th>
-                  <th>Lama Sewa</th>
                   <th>Tarif</th>
                   <th>Status</th>
                   <th>Aksi</th>
@@ -114,17 +112,15 @@ $brands[] = $brand;
                     <td><?= $data['warna'] ?></td>
                     <td><?= $data['no_polisi'] ?></td>
                     <td><?= $data['jumlah_set'] ?></td>
-                    <td><?= $data['jenis_sewa'] ?></td>
-                    <td><?= convert_time($data['lama_sewa']) ?></td>
                     <td><?= $data['harga'] ?></td>
                     <td>
                       <!-- Updated Status Display -->
-                      <?php 
-                        if ($data['status'] == 1) {
-                          echo "Tersedia";
-                        } else {
-                          echo "Tidak Tersedia";
-                        }
+                      <?php
+                      if ($data['status'] == 1) {
+                        echo "Tersedia";
+                      } else {
+                        echo "Tidak Tersedia";
+                      }
                       ?>
                     </td>
                     <td>
@@ -177,27 +173,6 @@ $brands[] = $brand;
                                   <option value="8" <?= ($row['jumlah_set'] == 8) ? 'selected' : ''; ?>>8</option>
                                   <option value="12" <?= ($row['jumlah_set'] == 12) ? 'selected' : ''; ?>>12</option>
                                   <option value="16" <?= ($row['jumlah_set'] == 16) ? 'selected' : ''; ?>>16</option>
-                                </select>
-                              </div>
-                              <div class="form-group">
-                                <label>Jenis Sewa</label>
-                                <select name="jenis_sewa" class="form-control">
-                                  <option value="Lepas Kunci" <?= ($row['jenis_sewa'] == "Lepas Kunci") ? 'selected' : ''; ?>>Lepas Kunci</option>
-                                  <option value="Paket Lengkap" <?= ($row['jenis_sewa'] == "Paket Lengkap") ? 'selected' : ''; ?>>Paket Lengkap</option>
-                                </select>
-                              </div>
-                              <div class="form-group">
-                                <label>Lama Sewa</label>
-                                <select name="lama_sewa" class="form-control">
-                                  <option value="12" <?= ($row['lama_sewa'] == 12) ? 'selected' : ''; ?>>12 Jam</option>
-                                  <option value="18" <?= ($row['lama_sewa'] == 18) ? 'selected' : ''; ?>>18 Jam</option>
-                                  <option value="24" <?= ($row['lama_sewa'] == 24) ? 'selected' : ''; ?>>24 Jam</option>
-                                  <option value="48" <?= ($row['lama_sewa'] == 48) ? 'selected' : ''; ?>>2 Hari</option>
-                                  <option value="72" <?= ($row['lama_sewa'] == 72) ? 'selected' : ''; ?>>3 Hari</option>
-                                  <option value="96" <?= ($row['lama_sewa'] == 96) ? 'selected' : ''; ?>>4 Hari</option>
-                                  <option value="120" <?= ($row['lama_sewa'] == 120) ? 'selected' : ''; ?>>5 Hari</option>
-                                  <option value="144" <?= ($row['lama_sewa'] == 144) ? 'selected' : ''; ?>>6 Hari</option>
-                                  <option value="168" <?= ($row['lama_sewa'] == 168) ? 'selected' : ''; ?>>7 Hari</option>
                                 </select>
                               </div>
                               <div class="form-group">
