@@ -50,7 +50,7 @@ require 'koneksi.php';
             margin-right: 10px;
         }
 
-        .form-group input[type="month"] {
+        .form-group input[type="date"] {
             flex: 1;
             min-width: 50px;
         }
@@ -63,12 +63,12 @@ require 'koneksi.php';
         $role = $_SESSION['role_id'];
         $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php');
         require 'navbar.php'; ?>
-        <div class="container">
+        <div class="container-fluid">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 text-center">
                     <h4 class="m-0 font-weight-bold text-primary">GC PERSADA TRANSPORT</h4>
                     <h5>Neraca</h5>
-                    <h6>Per <?php echo isset($_GET['bulan']) ? date('F Y', strtotime($_GET['bulan'])) : date('F Y'); ?></h6>
+                    <h6>Per <?php echo isset($_GET['tanggal_akhir']) ? date('d F Y', strtotime($_GET['tanggal_akhir'])) : date('d F Y'); ?></h6>
                 </div>
                 <div class="container-fluid">
                     <form method="GET" action="neraca.php">
@@ -88,18 +88,19 @@ require 'koneksi.php';
                         // Default values
                         $kas = $utang = $akm_peny_peralatan = $modal_gc_persada = 0;
 
-                        // Get the month value
-                        $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
+                        // Get the date range values
+                        $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01');
+                        $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
                         // Fetch kas from pendapatan_sewa
-                        $query_kas = "SELECT SUM(jumlah_pendapatan) as total_kas FROM pendapatan_sewa WHERE DATE_FORMAT(tgl_pendapatan, '%Y-%m') = '$bulan'";
+                        $query_kas = "SELECT SUM(jumlah_pendapatan) as total_kas FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
                         $result_kas = mysqli_query($koneksi, $query_kas);
                         if ($result_kas && $row_kas = mysqli_fetch_assoc($result_kas)) {
                             $kas = $row_kas['total_kas'];
-                        } 
+                        }
 
                         // Fetch utang from operasional
-                        $query_utang = "SELECT SUM(total_operasional) as total_utang FROM operasional WHERE DATE_FORMAT(tanggal_operasional, '%Y-%m') = '$bulan'";
+                        $query_utang = "SELECT SUM(total_operasional) as total_utang FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
                         $result_utang = mysqli_query($koneksi, $query_utang);
                         if ($result_utang && $row_utang = mysqli_fetch_assoc($result_utang)) {
                             $utang = $row_utang['total_utang'];

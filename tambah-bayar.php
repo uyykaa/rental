@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result && $result->num_rows > 0) {
         $sewa = $result->fetch_assoc();
         $total_harga = $sewa['total_harga'];
-        $total_bayar = (($total_harga - $uang_muka) + $denda);
+        $total_bayar = (($total_harga-$uang_muka)+$denda);
 
         // Insert into the database
         $stmt = $koneksi->prepare("INSERT INTO pembayaran (no_pelanggan, id_sewa, tanggal_bayar, uang_muka, denda, total_bayar) VALUES (?, ?, ?, ?, ?, ?)");

@@ -13,18 +13,30 @@ function convert_time($time)
     return round($days) . " Hari";
   }
 }
-// Logika untuk menambahkan pembayaran
+
 if (isset($_POST['id_mobil']) && isset($_POST['jumlah_bayar'])) {
   $id_mobil = $_POST['id_mobil'];
   $jumlah_bayar = $_POST['jumlah_bayar'];
   $tanggal_bayar = date('Y-m-d H:i:s');
 
-  // Query untuk menambahkan pembayaran
+  // Query to get no_polisi for the given id_mobil
+  $get_no_polisi_query = "SELECT no_polisi FROM mobil WHERE id_mobil = '$id_mobil'";
+  $result = mysqli_query($koneksi, $get_no_polisi_query);
+  $row = mysqli_fetch_assoc($result);
+  $no_polisi = $row['no_polisi'];
+
+  // Query to add payment
   $query = "INSERT INTO pembayaran (id_mobil, jumlah_bayar, tanggal_bayar) VALUES ('$id_mobil', '$jumlah_bayar', '$tanggal_bayar')";
 
   if (mysqli_query($koneksi, $query)) {
-    // Query untuk memperbarui status mobil menjadi 'Tidak Tersedia' (atau status lain yang sesuai)
-    $update_query = "UPDATE mobil SET status = 0 WHERE id_mobil = '$id_mobil'";
+    // Check current status of the car
+    $check_status_query = "SELECT status FROM mobil WHERE id_mobil = '$id_mobil'";
+    $status_result = mysqli_query($koneksi, $check_status_query);
+    $status_row = mysqli_fetch_assoc($status_result);
+    $current_status = $status_row['status'];
+
+    // Update status of all cars with the same no_polisi to the current status
+    $update_query = "UPDATE mobil SET status = '$current_status' WHERE no_polisi = '$no_polisi'";
 
     if (mysqli_query($koneksi, $update_query)) {
       echo "Pembayaran berhasil ditambahkan dan status mobil telah diperbarui.";

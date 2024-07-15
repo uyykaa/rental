@@ -52,7 +52,7 @@ require 'koneksi.php';
 
         .form-group input[type="date"] {
             flex: 1;
-            min-width: 150px;
+            min-width: 10px;
         }
     </style>
 </head>
@@ -69,7 +69,7 @@ require 'koneksi.php';
         require 'navbar.php';
         ?>
         <div id="content">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 text-center">
                         <h4 class="m-0 font-weight-bold text-primary">GC PERSADA TRANSPORT</h4>
@@ -80,7 +80,7 @@ require 'koneksi.php';
                         <form method="GET" action="laporan-perubahan-modal.php">
                             <div class="form-group">
                                 <label for="tanggal_awal">Tanggal Awal:</label>
-                                <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01'); ?>">
+                                <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d'); ?>">
                             </div>
                             <div class="form-group">
                                 <label for="tanggal_akhir">Tanggal Akhir:</label>
@@ -90,8 +90,8 @@ require 'koneksi.php';
                             <button type="button" class="btn btn-success btn-print" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
                         </form>
 
-                        <!-- Laporan Perubahan Modal Section -->
-                        <div class="container-fluid">
+                         <!-- Laporan Perubahan Modal Section -->
+                         <div class="container-fluid">
                             <?php
                             $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01');
                             $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
@@ -145,5 +145,4 @@ require 'koneksi.php';
     <script src="js/demo/datatables-demo.js"></script>
 </body>
 
-</html>
-                            
+</html>                        

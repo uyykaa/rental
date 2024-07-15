@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 14, 2024 at 12:56 AM
+-- Generation Time: Jul 15, 2024 at 05:07 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -89,12 +89,12 @@ CREATE TABLE `mobil` (
 --
 
 INSERT INTO `mobil` (`id_mobil`, `nama`, `warna`, `no_polisi`, `jenis_sewa`, `lama_sewa`, `jumlah_set`, `harga`, `id_merek`, `status`) VALUES
-(1, 'Hiace Premio', 'Silver', 'K 4803 TO', 'Paket Lengkap', '18', '14', 1400000, 1, '0'),
-(2, 'Brio L', 'Hitam', 'AB 4950 QJ', 'Lepas Kunci', '12', '5', 350000, 1, '1'),
-(3, 'Brio K', 'Hitam', 'AB 4950 QJ', 'Paket Lengkap', '18', '5', 450000, 1, '0'),
-(4, 'pregio L', 'Silver', 'AD 555 DC', 'Lepas Kunci', '12', '8', 1000, 5, '0'),
-(5, 'pregio K', 'Silver', 'AD 555 DC', 'Paket Lengkap', '18', '8', 1200, 5, '1'),
-(41, 'Grand New Xenia', 'Silver', 'B 1829 IM', 'Lepas Kunci', '12', '5', 10000, 1, '1');
+(1, 'Hiace Premio', 'Silver', 'K 4803 TO', 'Paket Lengkap', '18', '14', 1400000, 1, '1'),
+(2, 'Brio L', 'Hitam', 'AB 4950 QJ', 'Lepas Kunci', '12', '5', 350000, 1, '0'),
+(3, 'Brio K', 'Hitam', 'AB 4950 QJ', 'Paket Lengkap', '18', '5', 450000, 1, '1'),
+(4, 'pregio L', 'Silver', 'AD 555 DC', 'Lepas Kunci', '12', '8', 1000, 5, '1'),
+(5, 'pregio K', 'Silver', 'AD 555 DC', 'Paket Lengkap', '18', '8', 1200, 5, '0'),
+(6, 'Grand New Xenia', 'Silver', 'B 1829 IM', 'Lepas Kunci', '12', '5', 10000, 4, '1');
 
 -- --------------------------------------------------------
 
@@ -166,7 +166,8 @@ INSERT INTO `pelanggan` (`no_pelanggan`, `nama`, `alamat`, `no_hp`, `img`) VALUE
 (2, 'Zidny', 'Jl Samas, Bantul', '085432167891', 'pbdd1.jpeg'),
 (3, 'Elang ', 'Jl. Kaliurang', '0816030773511', 'Diagram11.jpeg'),
 (4, 'Kirana', 'Jl Seyegan, Sleman', '087762514245', 'ss3.png'),
-(5, 'alo', 'sleman', '081', 'ss3.png');
+(5, 'alo', 'sleman', '081', 'ss3.png'),
+(12, 'Reza ', 'Jl. Bawuran, Pleret', '0856789123', 'Screenshot (29).png');
 
 -- --------------------------------------------------------
 
@@ -190,9 +191,7 @@ CREATE TABLE `pembayaran` (
 --
 
 INSERT INTO `pembayaran` (`no_bayar`, `tanggal_bayar`, `uang_muka`, `denda`, `id_sewa`, `no_pelanggan`, `total_bayar`, `status`) VALUES
-(10, '2024-05-30', 400000, 140000, 32, '1', 1140000, '0'),
-(11, '2024-06-12', 200000, 0, 33, '2', 700000, '0'),
-(12, '2024-07-11', 500, 0, 34, '5', 500, '');
+(19, '2024-07-15', 100000, 35000, 40, '1', 285000, '1');
 
 -- --------------------------------------------------------
 
@@ -215,9 +214,7 @@ CREATE TABLE `pendapatan_sewa` (
 --
 
 INSERT INTO `pendapatan_sewa` (`id_pendapatan`, `id_akun`, `no_pelanggan`, `id_sewa`, `nama_pendapatan`, `tgl_pendapatan`, `jumlah_pendapatan`) VALUES
-(401, '4-01', '1', 32, 'Pendapatan Sewa', '2024-05-30', 1400000),
-(402, '4-01', '2', 33, 'Pendapatan Sewa', '2024-06-12', 900000),
-(403, '4-01', '3', 34, 'Pendapatan Sewa', '2024-07-12', 1000);
+(450, '4-01', '1', 40, 'Pendapatan Sewa', '2024-07-15', 285000);
 
 -- --------------------------------------------------------
 
@@ -242,9 +239,8 @@ CREATE TABLE `sewa_kendaraan` (
 --
 
 INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `id_mobil`, `no_pelanggan`, `jenis_sewa`, `lama_sewa`, `harga`, `total_harga`, `status`) VALUES
-(32, '2024-05-29', '1', '1', 'Paket Lengkap', '18', 1400000, 1400000, ''),
-(33, '2024-06-11', '3', '2', 'Lepas Kunci', '48', 450000, 900000, ''),
-(34, '2024-07-11', '4', '3', 'Lepas Kunci', '12', 1000, 1000, '');
+(40, '2024-07-15', '2', '1', 'Lepas Kunci', '12', 350000, 350000, ''),
+(41, '2024-07-13', '5', '2', 'Paket Lengkap', '48', 1200, 2400, '');
 
 -- --------------------------------------------------------
 
@@ -371,25 +367,25 @@ ALTER TABLE `operasional`
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `no_pelanggan` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `no_pelanggan` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `no_bayar` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `no_bayar` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `pendapatan_sewa`
 --
 ALTER TABLE `pendapatan_sewa`
-  MODIFY `id_pendapatan` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=442;
+  MODIFY `id_pendapatan` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=451;
 
 --
 -- AUTO_INCREMENT for table `sewa_kendaraan`
 --
 ALTER TABLE `sewa_kendaraan`
-  MODIFY `id_sewa` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_sewa` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `users`
