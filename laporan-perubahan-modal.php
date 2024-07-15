@@ -58,7 +58,7 @@ require 'koneksi.php';
 </head>
 
 <body id="page-top">
-    <div id="wrapper">
+    <div id="container">
         <?php
         $role = $_SESSION['role_id'];
         if ($role == '2') {
@@ -80,38 +80,58 @@ require 'koneksi.php';
                         <form method="GET" action="laporan-perubahan-modal.php">
                             <div class="form-group">
                                 <label for="tanggal_awal">Tanggal Awal:</label>
-                                <input type="date" class="form-control" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-d'); ?>">
+                                <input type="date" class="form-control col-sm-2" id="tanggal_awal" name="tanggal_awal" value="<?php echo isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01'); ?>">
                             </div>
                             <div class="form-group">
                                 <label for="tanggal_akhir">Tanggal Akhir:</label>
-                                <input type="date" class="form-control" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d'); ?>">
+                                <input type="date" class="form-control col-sm-2" id="tanggal_akhir" name="tanggal_akhir" value="<?php echo isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d'); ?>">
                             </div>
-                            <button type="submit" class="btn btn-primary">Filter</button>
-                            <button type="button" class="btn btn-success btn-print" onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
+                            <div class="form-group row ">
+                                <button type="submit" class="btn btn-primary m-2"><i class="fa fa-filter"></i> Filter</button>
+                                <button type="button" class="btn btn-success " onclick="window.print()"><i class="fa fa-print"></i> Cetak</button>
+                                <a href="laporan-perubahan-modal.php" class="btn btn-warning m-2"><i class="fa fa-refresh"></i> Reset</a>
+                            </div>
                         </form>
 
-                         <!-- Laporan Perubahan Modal Section -->
-                         <div class="container-fluid">
+                        <!-- Laporan Perubahan Modal Section -->
+                        <div class="container-fluid">
                             <?php
                             $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01');
                             $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
                             $modal_awal = 0;
                             $laba_rugi = 0;
+                            $total_pendapatan = 0;
+                            $total_pengeluaran = 0;
 
                             // Fetch Modal Awal from modal table
-                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal FROM modal WHERE tanggal < '$tanggal_awal'";
+                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal FROM modal WHERE tanggal <= '$tanggal_awal'";
                             $result_modal_awal = mysqli_query($koneksi, $query_modal_awal);
+
                             if ($result_modal_awal && $row_modal_awal = mysqli_fetch_assoc($result_modal_awal)) {
                                 $modal_awal = $row_modal_awal['total_modal_awal'];
                             }
 
-                            // Fetch Laba/Rugi from laporan laba/rugi
-                            $query_laba_rugi = "SELECT SUM(total_pendapatan) - SUM(total_biaya) as total_laba_rugi FROM laporan_laba_rugi WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
-                            $result_laba_rugi = mysqli_query($koneksi, $query_laba_rugi);
-                            if ($result_laba_rugi && $row_laba_rugi = mysqli_fetch_assoc($result_laba_rugi)) {
-                                $laba_rugi = $row_laba_rugi['total_laba_rugi'];
+                            // get total pendapatan from pendaptan sewa
+                            $query_pendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                            foreach ($query_pendapatan as $pendapatan) {
+                                $total_pendapatan += $pendapatan['jumlah_pendapatan'];
                             }
+                            // get total pengeluaran from Operasional
+                            $query_operasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                            foreach ($query_operasional as $pengeluaran) {
+                                $total_pengeluaran += $pengeluaran['total_operasional'];
+                            }
+
+                            $laba_rugi = $total_pendapatan - $total_pengeluaran;
+
+                            // Fetch Laba/Rugi from laporan laba/rugi
+                            // $query_laba_rugi = "SELECT SUM(total_pendapatan) - SUM(total_biaya) as total_laba_rugi FROM laporan_laba_rugi WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
+                            // $result_laba_rugi = mysqli_query($koneksi, $query_laba_rugi);
+                            // if ($result_laba_rugi && $row_laba_rugi = mysqli_fetch_assoc($result_laba_rugi)) {
+                            //     $laba_rugi = $row_laba_rugi['total_laba_rugi'];
+                            // }
+
 
                             // Calculate Modal Akhir
                             $modal_akhir = $modal_awal + $laba_rugi;
@@ -145,4 +165,4 @@ require 'koneksi.php';
     <script src="js/demo/datatables-demo.js"></script>
 </body>
 
-</html>                        
+</html>
