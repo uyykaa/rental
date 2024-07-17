@@ -23,12 +23,12 @@ $queryBebanService = executeQuery($koneksi, "SELECT * FROM operasional WHERE tan
 $queryBebanPajak = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
 $queryBebanLainLain = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
 
-// Initialize expenses array
+// Array to hold the expense categories
 $expenses = [
-    'Biaya gaji' => 0,
-    'Biaya Service' => 0,
-    'Biaya pajak' => 0,
-    'Biaya lain-lain' => 0,
+    'Beban gaji' => 0,
+    'Beban pajak' => 0,
+    'Beban service' => 0,
+    'Beban lain-lain' => 0
 ];
 
 // Calculate total pendapatan
@@ -39,39 +39,31 @@ while ($data = mysqli_fetch_assoc($queryPendapatan_sewa)) {
 
 // Calculate total operasional and categorize expenses
 while ($data = mysqli_fetch_assoc($queryBebanGaji)) {
-    if ($data['nama_operasional'] == 'Biaya Gaji') {
-        $harga = isset($data['harga']) ? $data['harga'] : 0;
-        $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
-        $jumlah = $harga * $kuantitas;
-        $expenses['Biaya gaji'] += $jumlah;
-    }
+    $harga = isset($data['harga']) ? $data['harga'] : 0;
+    $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+    $jumlah = $harga * $kuantitas;
+    $expenses['Beban gaji'] += $jumlah;
 }
 
 while ($data = mysqli_fetch_assoc($queryBebanService)) {
-    if ($data['nama_operasional'] == 'Biaya Service') {
-        $harga = isset($data['harga']) ? $data['harga'] : 0;
-        $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
-        $jumlah = $harga * $kuantitas;
-        $expenses['Biaya Service'] += $jumlah;
-    }
+    $harga = isset($data['harga']) ? $data['harga'] : 0;
+    $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+    $jumlah = $harga * $kuantitas;
+    $expenses['Beban service'] += $jumlah;
 }
 
 while ($data = mysqli_fetch_assoc($queryBebanPajak)) {
-    if ($data['nama_operasional'] == 'Biaya Pajak') {
-        $harga = isset($data['harga']) ? $data['harga'] : 0;
-        $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
-        $jumlah = $harga * $kuantitas;
-        $expenses['Biaya pajak'] += $jumlah;
-    }
+    $harga = isset($data['harga']) ? $data['harga'] : 0;
+    $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+    $jumlah = $harga * $kuantitas;
+    $expenses['Beban pajak'] += $jumlah;
 }
 
 while ($data = mysqli_fetch_assoc($queryBebanLainLain)) {
-    if ($data['nama_operasional'] == 'Biaya Lain-lain') {
-        $harga = isset($data['harga']) ? $data['harga'] : 0;
-        $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
-        $jumlah = $harga * $kuantitas;
-        $expenses['Biaya lain-lain'] += $jumlah;
-    }
+    $harga = isset($data['harga']) ? $data['harga'] : 0;
+    $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+    $jumlah = $harga * $kuantitas;
+    $expenses['Beban lain-lain'] += $jumlah;
 }
 
 // Calculate total operasional as sum of categorized expenses
