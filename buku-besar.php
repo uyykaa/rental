@@ -29,7 +29,7 @@ require 'koneksi.php';
         /* Show print area */
         #content,
         #content * {
-            visibility: visible.
+            visibility: visible;
         }
 
         /* Set position for print area */
