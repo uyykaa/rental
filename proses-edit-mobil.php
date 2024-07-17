@@ -11,7 +11,6 @@ $no_polisi = mysqli_real_escape_string($koneksi, $_POST['no_polisi']);
 $jumlah_set = mysqli_real_escape_string($koneksi, $_POST['jumlah_set']);
 $jenis_sewa = mysqli_real_escape_string($koneksi, $_POST['jenis_sewa']);
 $lama_sewa = mysqli_real_escape_string($koneksi, $_POST['lama_sewa']);
-$harga = mysqli_real_escape_string($koneksi, $_POST['harga']);
 
 // Query Update
 $query = "UPDATE mobil SET 
@@ -22,7 +21,6 @@ $query = "UPDATE mobil SET
     jumlah_set = '$jumlah_set',
     jenis_sewa = '$jenis_sewa',
     lama_sewa = '$lama_sewa',
-    harga = '$harga'
     WHERE id_mobil = '$id_mobil'";
 
 if (mysqli_query($koneksi, $query)) {
@@ -35,4 +33,3 @@ if (mysqli_query($koneksi, $query)) {
 
 // Close the database connection
 mysqli_close($koneksi);
-?>

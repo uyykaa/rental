@@ -14,7 +14,6 @@ function convert_time($time)
   }
 }
 
-
 // Fetch brands for the dropdown menu
 $brands_query = mysqli_query($koneksi, "SELECT id_merek, merek FROM merek");
 $brands = [];
@@ -73,7 +72,6 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                   <th>Warna</th>
                   <th>No Polisi</th>
                   <th>Kursi</th>
-                  <th>Tarif</th>
                   <th>Status</th>
                   <th>Aksi</th>
                 </tr>
@@ -91,7 +89,6 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                     <td><?= $data['warna'] ?></td>
                     <td><?= $data['no_polisi'] ?></td>
                     <td><?= $data['jumlah_set'] ?></td>
-                    <td><?= $data['harga'] ?></td>
                     <td>
                       <!-- Updated Status Display -->
                       <?php
@@ -153,10 +150,6 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                                   <option value="12" <?= ($row['jumlah_set'] == 12) ? 'selected' : ''; ?>>12</option>
                                   <option value="16" <?= ($row['jumlah_set'] == 16) ? 'selected' : ''; ?>>16</option>
                                 </select>
-                              </div>
-                              <div class="form-group">
-                                <label>Tarif</label>
-                                <input type="text" name="harga" class="form-control" value="<?= $row['harga']; ?>">
                               </div>
                               <div class="modal-footer">
                                 <button type="submit" class="btn btn-success">Ubah</button>
@@ -244,10 +237,6 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                     <option value="144">6 Hari</option>
                     <option value="168">7 Hari</option>
                   </select>
-                </div>
-                <div class="form-group">
-                  <label>Tarif</label>
-                  <input type="number" class="form-control" name="harga" required>
                 </div>
               </div>
               <!-- footer modal -->

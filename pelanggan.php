@@ -74,12 +74,12 @@ require 'koneksi.php';
                     <td><img src="uploads/<?= $data['img'] ?>" alt="Identitas" style="width: 100px;"></td>
                     <td>
                       <!-- Button untuk modal -->
-                      <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['no_pelanggan'] ?>"><i class="fa fa-edit"></i> Edit</a>
+                      <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_pelanggan'] ?>"><i class="fa fa-edit"></i> Edit</a>
                     </td>
                   </tr>
 
                   <!-- Modal Edit Pelanggan -->
-                  <div class="modal fade" id="myModal<?= $data['no_pelanggan'] ?>" role="dialog">
+                  <div class="modal fade" id="myModal<?= $data['id_pelanggan'] ?>" role="dialog">
                     <div class="modal-dialog">
                       <!-- Modal content-->
                       <div class="modal-content">
@@ -90,14 +90,14 @@ require 'koneksi.php';
                         <div class="modal-body">
                           <form role="form" action="proses-edit-pelanggan.php" method="POST" enctype="multipart/form-data">
                             <?php
-                            $id = $data['no_pelanggan'];
-                            $query_edit = mysqli_query($koneksi, "SELECT * FROM pelanggan WHERE no_pelanggan='$id'");
+                            $id = $data['id_pelanggan'];
+                            $query_edit = mysqli_query($koneksi, "SELECT * FROM pelanggan WHERE id_pelanggan='$id'");
                             while ($row = mysqli_fetch_array($query_edit)) {
                             ?>
-                              <input type="hidden" name="no_pelanggan" value="<?= $row['no_pelanggan'] ?>">
+                              <input type="hidden" name="id_pelanggan" value="<?= $row['id_pelanggan'] ?>">
                               <div class="form-group">
                                 <label>No pelanggan</label>
-                                <input type="number" name="no_pelanggan" class="form-control" value="<?= $row['no_pelanggan'] ?>" disabled>
+                                <input type="number" name="id_pelanggan" class="form-control" value="<?= $row['id_pelanggan'] ?>" disabled>
                               </div>
                               <div class="form-group">
                                 <label>Nama pelanggan</label>
@@ -150,7 +150,7 @@ require 'koneksi.php';
             <!-- body modal -->
             <form action="tambah-pelanggan.php" method="post" enctype="multipart/form-data">
               <div class="modal-body">
-                <input type="hidden" name="no_pelanggan" value="<?= $no ?>">
+                <input type="hidden" name="id_pelanggan" value="<?= $no ?>">
                 Nama pelanggan:
                 <input type="text" class="form-control" name="nama" required>
                 Alamat:

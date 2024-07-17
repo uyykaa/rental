@@ -2,10 +2,10 @@
 //include('dbconnected.php');
 include('koneksi.php');
 
-$id = $_GET['no_pelanggan'];
+$id = $_GET['id_pelanggan'];
 
 //query update
-$query = mysqli_query($koneksi,"DELETE FROM `pelanggan` WHERE no_pelanggan = '$id'");
+$query = mysqli_query($koneksi, "DELETE FROM `pelanggan` WHERE id_pelanggan = '$id'");
 
 if ($query) {
     header("location:bagiankeuangan.php");
@@ -15,4 +15,3 @@ if ($query) {
     echo "ERROR, data gagal diupdate" . mysqli_error($koneksi);
 }
 //mysql_close($host);
-?>

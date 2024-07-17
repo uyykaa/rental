@@ -2,7 +2,7 @@
 require 'koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $no_pelanggan = $_POST['no_pelanggan'];
+    $id_pelanggan = $_POST['id_pelanggan'];
     $nama = $_POST['nama'];
     $alamat = $_POST['alamat'];
     $no_hp = $_POST['no_hp'];
@@ -18,13 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $img = "default.jpg";
         }
-        $query = "UPDATE pelanggan SET nama='$nama', alamat='$alamat', no_hp='$no_hp', img='$img' WHERE no_pelanggan='$no_pelanggan'";
+        $query = "UPDATE pelanggan SET nama='$nama', alamat='$alamat', no_hp='$no_hp', img='$img' WHERE id_pelanggan='$id_pelanggan'";
     } else {
-        $query = "UPDATE pelanggan SET nama='$nama', alamat='$alamat', no_hp='$no_hp' WHERE no_pelanggan='$no_pelanggan'";
+        $query = "UPDATE pelanggan SET nama='$nama', alamat='$alamat', no_hp='$no_hp' WHERE id_pelanggan='$id_pelanggan'";
     }
 
     mysqli_query($koneksi, $query);
 
     header('Location: pelanggan.php');
 }
-?>

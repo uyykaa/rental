@@ -15,8 +15,6 @@ function convert_time($time)
   }
 }
 
-$paket = mysqli_query($koneksi, "SELECT * FROM paket");
-
 // Fetch brands for the dropdown menu
 $brands_query = mysqli_query($koneksi, "SELECT * FROM merek");
 $brands = [];
@@ -86,8 +84,8 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                 <?php
                 $no = 0;
                 $query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, pelanggan.nama, mobil.nama AS nama_mobil, mobil.no_polisi AS plat_mobil FROM sewa_kendaraan 
-                  JOIN pelanggan ON sewa_kendaraan.no_pelanggan = pelanggan.no_pelanggan 
-                  JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil ORDER BY status asc");
+                JOIN pelanggan ON sewa_kendaraan.id_pelanggan = pelanggan.id_pelanggan 
+                JOIN mobil ON mobil.id_mobil = sewa_kendaraan.id_mobil ORDER BY status asc");
                 while ($data = mysqli_fetch_assoc($query)) {
                 ?>
                   <tr>
@@ -177,9 +175,9 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                               </div>
                               <div class="form-group">
                                 <label>Jenis Sewa</label>
-                                <select name="jenis_sewa" class="form-control">
-                                  <option value="Lepas Kunci" <?= ($row['jenis_sewa'] == "Lepas Kunci") ? 'selected' : ''; ?>>Lepas Kunci</option>
-                                  <option value="Paket Lengkap" <?= ($row['jenis_sewa'] == "Paket Lengkap") ? 'selected' : ''; ?>>Paket Lengkap</option>
+                                <select name="jenis_paket" class="form-control">
+                                  <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
+                                  <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
                                 </select>
                               </div>
                               <div class="form-group">
@@ -255,16 +253,12 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                               <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['nama_mobil'] . ' | ' . $data['plat_mobil']  ?>">
                             </div>
                           </div>
-                          <div class="form-group row">
-                            <label for="nama" class="col-sm-3 col-form-label">Jenis Sewa: </label>
-                            <div class="col-sm-9">
-
-                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?php foreach ($paket as $pak) {
-                                                                                                            if ($data['jenis_sewa'] == $pak['id']) {
-                                                                                                              echo $pak['nama_paket'];
-                                                                                                            }
-                                                                                                          } ?>">
-                            </div>
+                          <div class="form-group">
+                            <label>Paket</label>
+                            <select name="jenis_paket" class="form-control">
+                              <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
+                              <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
+                            </select>
                           </div>
                           <div class="form-group row">
                             <label for="nama" class="col-sm-3 col-form-label">Harga: </label>
@@ -332,9 +326,9 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
               <div class="modal-body">
                 <div class="form-group">
                   <label>Nama Pelanggan:</label>
-                  <select name="no_pelanggan" class="form-control">
+                  <select name="id_pelanggan" class="form-control">
                     <?php foreach ($customers as $customer) { ?>
-                      <option value="<?= $customer['no_pelanggan']; ?>"><?= $customer['nama']; ?></option>
+                      <option value="<?= $customer['id_pelanggan']; ?>"><?= $customer['nama']; ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -358,11 +352,10 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <input type="date" class="form-control" name="tgl_sewa">
                 </div>
                 <div class="form-group">
-                  <label>Jenis Sewa</label>
-                  <select name="jenis_sewa" class="form-control">
-                    <?php foreach ($paket as $pak) : ?>
-                      <option value="<?= $pak['id']; ?>"><?= $pak['nama_paket']; ?></option>
-                    <?php endforeach; ?>
+                  <label>Paket</label>
+                  <select name="jenis_paket" class="form-control">
+                    <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
+                    <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
                   </select>
                 </div>
                 <div class="form-group">

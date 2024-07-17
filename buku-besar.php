@@ -103,19 +103,19 @@ require 'koneksi.php';
                                     $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
 
                                     // Query untuk mengambil data pendapatan_sewa berdasarkan periode tanggal yang dipilih
-                                    $queryPendapatan = mysqli_query($koneksi, "SELECT tgl_pendapatan AS tanggal, id_pendapatan AS kode_transaksi, nama_pendapatan AS nama_akun, jumlah_pendapatan AS debet, 0 AS kredit FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    $queryPendapatan = mysqli_query($koneksi, "SELECT tgl_pendapatan AS tanggal, id_pendapatan AS id_modal, nama_pendapatan AS nama_akun, jumlah_pendapatan AS debet, 0 AS kredit FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
                                     if (!$queryPendapatan) {
                                         die('Query Error: ' . mysqli_error($koneksi));
                                     }
 
                                     // Query untuk mengambil data modal berdasarkan periode tanggal yang dipilih
-                                    $queryModal = mysqli_query($koneksi, "SELECT tanggal, kode_transaksi AS kode_transaksi, nama_akun AS nama_akun, nominal AS debet, 0 AS kredit FROM modal WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    $queryModal = mysqli_query($koneksi, "SELECT tanggal, id_modal AS id_modal, nama_akun AS nama_akun, nominal AS debet, 0 AS kredit FROM modal WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
                                     if (!$queryModal) {
                                         die('Query Error: ' . mysqli_error($koneksi));
                                     }
 
                                     // Query untuk mengambil data operasional berdasarkan periode tanggal yang dipilih
-                                    $queryOperasional = mysqli_query($koneksi, "SELECT tanggal_operasional AS tanggal, id_operasional AS kode_transaksi, nama_operasional AS nama_akun, 0 AS debet, total_operasional AS kredit FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+                                    $queryOperasional = mysqli_query($koneksi, "SELECT tanggal_operasional AS tanggal, id_operasional AS id_modal, nama_operasional AS nama_akun, 0 AS debet, total_operasional AS kredit FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
                                     if (!$queryOperasional) {
                                         die('Query Error: ' . mysqli_error($koneksi));
                                     }
@@ -124,7 +124,7 @@ require 'koneksi.php';
                                     $transactions = array_merge(mysqli_fetch_all($queryPendapatan, MYSQLI_ASSOC), mysqli_fetch_all($queryModal, MYSQLI_ASSOC), mysqli_fetch_all($queryOperasional, MYSQLI_ASSOC));
 
                                     // Urutkan array berdasarkan tanggal
-                                    usort($transactions, function($a, $b) {
+                                    usort($transactions, function ($a, $b) {
                                         return strtotime($a['tanggal']) - strtotime($b['tanggal']);
                                     });
 
@@ -139,7 +139,7 @@ require 'koneksi.php';
                                     ?>
                                         <tr>
                                             <td align="center"><?= date('Y-m-d', strtotime($transaction['tanggal'])); ?></td>
-                                            <td align="center"><?= $transaction['kode_transaksi']; ?></td>
+                                            <td align="center"><?= $transaction['id_modal']; ?></td>
                                             <td><?= $transaction['nama_akun']; ?></td>
                                             <td><?= $transaction['debet'] != 0 ? 'Rp. ' . number_format($transaction['debet'], 2, ',', '.') : ''; ?></td>
                                             <td><?= $transaction['kredit'] != 0 ? 'Rp. ' . number_format($transaction['kredit'], 2, ',', '.') : ''; ?></td>

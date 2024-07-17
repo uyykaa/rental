@@ -43,6 +43,7 @@
             <a class="collapse-item" href="kategori.php">Data Kategori Akun</a>
             <a class="collapse-item" href="merek.php">Data Merek</a>
             <a class="collapse-item" href="mobil.php">Data Mobil</a>
+            <a class="collapse-item" href="harga.php">Data Harga</a>
             <a class="collapse-item" href="pelanggan.php">Data Pelanggan</a>
             <a class="collapse-item" href="sewa-kendaraan.php">Data Sewa Kendaraan</a>
             <a class="collapse-item" href="pembayaran.php">Data Pembayaran</a>

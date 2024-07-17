@@ -5,13 +5,32 @@ require 'koneksi.php';
 $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01');
 $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-t');
 
+function executeQuery($koneksi, $query)
+{
+    $result = mysqli_query($koneksi, $query);
+    if (!$result) {
+        die("Query failed: " . mysqli_error($koneksi));
+    }
+    return $result;
+}
+
 // Query to get pendapatan_sewa for the selected date range
-$queryPendapatan_sewa = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryPendapatan_sewa = executeQuery($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
 $totalPendapatan = 0;
 
-// Query to get operasional for the selected date range
-$queryOperasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-$totalOperasional = 0;
+// Queries to get expenses for the selected date range from different tables
+$queryBebanGaji = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryBebanService = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryBebanPajak = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryBebanLainLain = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+
+// Initialize expenses array
+$expenses = [
+    'Biaya gaji' => 0,
+    'Biaya Service' => 0,
+    'Biaya pajak' => 0,
+    'Biaya lain-lain' => 0,
+];
 
 // Calculate total pendapatan
 while ($data = mysqli_fetch_assoc($queryPendapatan_sewa)) {
@@ -19,13 +38,45 @@ while ($data = mysqli_fetch_assoc($queryPendapatan_sewa)) {
     $totalPendapatan += $jumlah;
 }
 
-// Calculate total operasional
-while ($data = mysqli_fetch_assoc($queryOperasional)) {
-    $harga = isset($data['harga']) ? $data['harga'] : 0;
-    $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
-    $jumlah = $harga * $kuantitas;
-    $totalOperasional += $jumlah;
+// Calculate total operasional and categorize expenses
+while ($data = mysqli_fetch_assoc($queryBebanGaji)) {
+    if ($data['nama_operasional'] == 'Biaya Gaji') {
+        $harga = isset($data['harga']) ? $data['harga'] : 0;
+        $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+        $jumlah = $harga * $kuantitas;
+        $expenses['Biaya gaji'] += $jumlah;
+    }
 }
+
+while ($data = mysqli_fetch_assoc($queryBebanService)) {
+    if ($data['nama_operasional'] == 'Biaya Service') {
+        $harga = isset($data['harga']) ? $data['harga'] : 0;
+        $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+        $jumlah = $harga * $kuantitas;
+        $expenses['Biaya Service'] += $jumlah;
+    }
+}
+
+while ($data = mysqli_fetch_assoc($queryBebanPajak)) {
+    if ($data['nama_operasional'] == 'Biaya Pajak') {
+        $harga = isset($data['harga']) ? $data['harga'] : 0;
+        $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+        $jumlah = $harga * $kuantitas;
+        $expenses['Biaya pajak'] += $jumlah;
+    }
+}
+
+while ($data = mysqli_fetch_assoc($queryBebanLainLain)) {
+    if ($data['nama_operasional'] == 'Biaya Lain-lain') {
+        $harga = isset($data['harga']) ? $data['harga'] : 0;
+        $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
+        $jumlah = $harga * $kuantitas;
+        $expenses['Biaya lain-lain'] += $jumlah;
+    }
+}
+
+// Calculate total operasional as sum of categorized expenses
+$totalOperasional = array_sum($expenses);
 
 // Calculate Laba Rugi
 $LabaRugi = $totalPendapatan - $totalOperasional;
@@ -103,19 +154,32 @@ $LabaRugi = $totalPendapatan - $totalOperasional;
                         </div>
                     </div>
                     <div class="row mt-4">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12 d-flex justify-content-between">
                             <label>Total Pendapatan</label>
                             <div class="amount">Rp. <?= number_format($totalPendapatan, 2, ',', '.'); ?></div>
                         </div>
                     </div>
+                    <div class="row mt-4">
+                        <div class="col-lg-12">
+                            <h5> Beban</h5>
+                            <?php foreach ($expenses as $nama_operasional => $jumlah) : ?>
+                                <div class="row mt-2">
+                                    <div class="col-lg-12 d-flex justify-content-between">
+                                        <label><?= $nama_operasional ?></label>
+                                        <div class="amount">Rp. <?= number_format($jumlah, 2, ',', '.'); ?></div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
                     <div class="row mt-2">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12 d-flex justify-content-between" style="margin-left: 20px;">
                             <label>Total Operasional</label>
                             <div class="amount">Rp. <?= number_format($totalOperasional, 2, ',', '.'); ?></div>
                         </div>
                     </div>
                     <div class="row mt-2">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12 d-flex justify-content-between" style="margin-left: 20px;">
                             <label>Laba / Rugi</label>
                             <div class="amount <?= $LabaRugi >= 0 ? 'laba' : 'rugi'; ?>">
                                 Rp. <?= number_format($LabaRugi, 2, ',', '.'); ?>

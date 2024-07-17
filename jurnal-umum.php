@@ -12,7 +12,7 @@ $queryPendapatanSql = "
     FROM pendapatan_sewa 
     WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'
     UNION ALL
-    SELECT 'modal' AS jenis, tanggal AS tanggal, kode_transaksi AS id, nama_akun AS nama, nominal AS jumlah
+    SELECT 'modal' AS jenis, tanggal AS tanggal, id_modal AS id, nama_akun AS nama, nominal AS jumlah
     FROM modal
     WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'
 ";

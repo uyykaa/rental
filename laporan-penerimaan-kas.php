@@ -45,10 +45,10 @@ require 'koneksi.php';
 <body id="page-top">
     <!-- Main Content -->
     <div id="content">
-        <?php 
+        <?php
         $role = $_SESSION['role_id'];
-        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php'); 
-        require 'navbar.php'; 
+        $role == '2' ? require('sidebar-pemilik.php') : require('sidebar.php');
+        require 'navbar.php';
         ?>
 
         <!-- Tombol Cetak -->
@@ -125,7 +125,7 @@ require 'koneksi.php';
                                     ?>
                                         <tr>
                                             <td><?= $data['tanggal'] ?></td>
-                                            <td><?= $data['kode_transaksi'] ?></td>
+                                            <td><?= $data['id_modal'] ?></td>
                                             <td>Modal</td>
                                             <td><?= number_format($data['nominal'], 2, ',', '.'); ?></td>
                                         </tr>

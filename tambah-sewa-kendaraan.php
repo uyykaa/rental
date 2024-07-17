@@ -3,7 +3,7 @@ require 'cek-sesi.php';
 require 'koneksi.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $no_pelanggan = $_POST['no_pelanggan'];
+  $id_pelanggan = $_POST['id_pelanggan'];
   $tgl_sewa = $_POST['tgl_sewa'];
   $jenis_sewa = $_POST['jenis_sewa'];
   $lama_sewa = $_POST['lama_sewa'];
@@ -20,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $total_harga = calculateTotal($harga, $lama_sewa);
 
   // Insert data sewa ke database
-  $query = "INSERT INTO sewa_kendaraan (no_pelanggan, id_mobil, tgl_sewa, jenis_sewa, lama_sewa, harga, total_harga, status)
-            VALUES ('$no_pelanggan', '$id_mobil', '$tgl_sewa', '$jenis_sewa', '$lama_sewa', '$harga', '$total_harga', '0')";
+  $query = "INSERT INTO sewa_kendaraan (id_pelanggan, id_mobil, tgl_sewa, jenis_sewa, lama_sewa, harga, total_harga, status)
+            VALUES ('$id_pelanggan', '$id_mobil', '$tgl_sewa', '$jenis_sewa', '$lama_sewa', '$harga', '$total_harga', '0')";
 
 
   if (mysqli_query($koneksi, $query)) {
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $total_bayar = $total_harga - $uang_muka;
     foreach ($pembayaran as $row) {
       $id_sewa = $row['id_sewa'];
-      mysqli_query($koneksi, "INSERT INTO pembayaran (tanggal_bayar, uang_muka,id_sewa,no_pelanggan,total_bayar,status) values('$tgl_sewa', '$uang_muka','$id_sewa', '$no_pelanggan', '$total_bayar', '0')");
+      mysqli_query($koneksi, "INSERT INTO pembayaran (tanggal_bayar, uang_muka,id_sewa,id_pelanggan,total_bayar,status) values('$tgl_sewa', '$uang_muka','$id_sewa', '$id_pelanggan', '$total_bayar', '0')");
     }
 
     header('Location: sewa-kendaraan.php');
