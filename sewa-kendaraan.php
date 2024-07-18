@@ -66,6 +66,40 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
   <script src="vendor/jquery/jquery.min.js"></script> <!-- Add this line -->
 </head>
 
+<script>
+  function getMobil(str) {
+    if (str == "") {
+      document.getElementById("id_mobil_hint").innerHTML = "";
+      return;
+    } else {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("id_mobil_hint").innerHTML = this.responseText;
+        }
+      };
+      xmlhttp.open("GET", "test_db.php?q=" + str, true);
+      xmlhttp.send();
+    }
+  }
+
+  function getPaket(str, id) {
+    if (str == "") {
+      document.getElementById("id_paket_hint").innerHTML = "";
+      return;
+    } else {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("id_paket_hint").innerHTML = this.responseText;
+        }
+      };
+      xmlhttp.open("GET", "test_paket_db.php?q='" + str + "'&id=" + id, true);
+      xmlhttp.send();
+    }
+  }
+</script>
+
 
 <body id="page-top">
   <?php $role = $_SESSION['role_id'];
@@ -329,7 +363,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
       </div>
 
       <div id="myModalTambah" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Tambah Sewa</h4>
@@ -347,24 +381,29 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                 </div>
                 <div class="form-group">
                   <label>Mobil :</label>
-                  <select name="id_mobil" class="form-control" id="id_mobil">
+                  <select name="id_mobil" class="form-control" id="id_mobil_daftar" onchange="getMobil(this.value)">
                     <option value="" disabled selected>pilih kendaraan...</option>
                     <?php
-                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek = merek.id_merek WHERE mobil.status='1'");
+                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek=merek.id_merek ");
                     while ($brand = mysqli_fetch_array($query_mobil)) { ?>
                       <option value="<?= $brand['id_mobil']; ?>">
                         <?php echo $brand['nama'];
                         echo " | ";
                         echo $brand['no_polisi'];
-                        ?></option>
+
+                        ?>
+                      </option>
                     <?php } ?>
                   </select>
                 </div>
+
+                <div id="id_mobil_hint"></div>
+                <div id="id_paket_hint"></div>
                 <div class="form-group">
                   <label>Tanggal Sewa:</label>
                   <input type="date" class="form-control" name="tgl_sewa">
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label>Paket</label>
                   <select name="jenis_sewa" class="form-control">
                     <option value="Lepas Kunci">Lepas Kunci</option>
@@ -384,11 +423,11 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                     <option value="144">6 Hari</option>
                     <option value="168">7 Hari</option>
                   </select>
-                </div>
-                <div class="form-group">
+                </div> -->
+                <!-- <div class="form-group">
                   <label>Uang Muka (Down Payment):</label>
                   <input type="number" name="down_payment" class="form-control" id="down_payment" readonly>
-                </div>
+                </div> -->
               </div>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Tambah</button>
@@ -400,67 +439,77 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
       </div>
 
     </div>
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fas fa-angle-up"></i>
-    </a>
+  </div>
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core JavaScript-->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Core plugin JavaScript-->
+  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+  <!-- Custom scripts for all pages-->
+  <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <!-- Page level plugins -->
+  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script>
-      $(document).ready(function() {
-        $('#id_mobil').on('change', function() {
-          var mobilId = $(this).val();
-          updateHarga(mobilId);
-        });
-
-        function updateHarga(mobilId) {
-          if (mobilId) {
-            $.ajax({
-              url: 'get_mobil_harga.php',
-              type: 'POST',
-              data: {
-                id_mobil: mobilId
-              },
-              success: function(data) {
-                $('#harga').val(data);
-                calculateDownPayment();
-              },
-              error: function(xhr, status, error) {
-                console.error('Error fetching price:', error);
-              }
-            });
-          } else {
-            $('#harga').val('');
-            $('#down_payment').val('');
-          }
-        }
-
-        function calculateDownPayment() {
-          var harga = parseFloat($('#harga').val());
-          if (!isNaN(harga)) {
-            var downPayment = (harga * 30) / 100;
-            $('#down_payment').val(downPayment);
-          } else {
-            $('#down_payment').val('');
-          }
-        }
+  <!-- Page level custom scripts -->
+  <script>
+    $(document).ready(function() {
+      $('#id_mobil').on('change', function() {
+        var mobilId = $(this).val();
+        updateHarga(mobilId);
       });
-    </script>
 
-    <?php require 'footer.php'; ?>
+      function updateHarga(mobilId) {
+        if (mobilId) {
+          $.ajax({
+            url: 'get_mobil_harga.php',
+            type: 'POST',
+            data: {
+              id_mobil: mobilId
+            },
+            success: function(data) {
+              $('#harga').val(data);
+              calculateDownPayment();
+            },
+            error: function(xhr, status, error) {
+              console.error('Error fetching price:', error);
+            }
+          });
+        } else {
+          $('#harga').val('');
+          $('#down_payment').val('');
+        }
+      }
+
+      function calculateDownPayment() {
+        var harga = parseFloat($('#harga').val());
+        if (!isNaN(harga)) {
+          var downPayment = (harga * 30) / 100;
+          $('#down_payment').val(downPayment);
+        } else {
+          $('#down_payment').val('');
+        }
+      }
+    });
+  </script>
+
+
+  <!-- <script>
+    function myFunction() {
+      let x = document.getElementById("id_mobil_daftar").value;
+      document.getElementById("demo").innerHTML = "You selected: " + x;
+      document.getElementById("j_paket").value = x;
+    }
+  </script> -->
+
+  <?php require 'footer.php'; ?>
 </body>
 
 

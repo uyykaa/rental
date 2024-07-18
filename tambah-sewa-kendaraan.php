@@ -40,7 +40,7 @@ if (mysqli_query($koneksi, $query)) {
 
     // Insert data pembayaran
     $total_bayar = $total_harga - $uang_muka;
-    $insert_pembayaran = "INSERT INTO pembayaran (tanggal_bayar, uang_muka, id_sewa, id_pelanggan, total_bayar, status) 
+    $insert_pembayaran = "INSERT INTO pembayaran (tanggal_bayar, uang_muka, id_sewa, no_pelanggan, total_bayar, status) 
                           VALUES ('$tgl_sewa', '$uang_muka', '$id_sewa', '$id_pelanggan', '$total_bayar', '0')";
     if (mysqli_query($koneksi, $insert_pembayaran)) {
         header('Location: sewa-kendaraan.php');
