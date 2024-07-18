@@ -116,9 +116,10 @@ require 'koneksi.php';
                                 <input type="file" name="img" class="form-control">
                               </div>
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Tambah</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-                              </div>
+                                    <button type="submit" class="btn btn-success">Tambah</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
+                                </div>
+                            </form>
                             <?php
                             }
                             ?>
@@ -162,11 +163,10 @@ require 'koneksi.php';
               </div>
               <!-- footer modal -->
               <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Tambah</button>
+                  <button type="submit" class="btn btn-success">Tambah</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
               </div>
-            </form>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Keluar</button>
-          </div>
+          </form>
         </div>
       </div>
     </div>

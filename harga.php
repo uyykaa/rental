@@ -67,6 +67,7 @@ while ($mobil = mysqli_fetch_assoc($mobil_query)) {
                                     <th>Paket</th> 
                                     <th>Lama sewa</th>
                                     <th>Harga</th> 
+                                    <th>Uang Muka</th> 
                                     <th>Status</th> 
                                     <th>Aksi</th> 
                                 </tr> 
@@ -92,7 +93,9 @@ while ($mobil = mysqli_fetch_assoc($mobil_query)) {
                                     <td><?= $data['nama'] ?></td> 
                                     <td><?= $data['jenis_paket'] ?></td> 
                                     <td><?= $data['lama_sewa'] ?></td> 
-                                    <td><?= $data['harga'] ?></td> 
+                                    <td><?= $data['harga'] ?></td>
+                                    <td><?= $data['harga'] / 2 ?></td> <!-- Kolom untuk menampilkan uang muka -->
+
                                     <td> 
                                       <!-- Menampilkan Status yang Diperbarui --> 
                                         <?php 
@@ -192,46 +195,43 @@ while ($mobil = mysqli_fetch_assoc($mobil_query)) {
                             <button type="button" class="close" data-dismiss="modal">×</button> 
                         </div> 
                         <!-- body modal --> 
-                        <form action="tambah-harga.php" method="POST"> 
-                            <div class="modal-body"> 
-                                <div class="form-group"> 
-                                    <label>Nama</label> 
-                                    <select name="id_mobil" class="form-control" required> 
-                                        <?php 
-                                        foreach ($mobils as $mobil) { 
-                                        ?> 
-                                        <option value="<?= $mobil['id_mobil']; ?>"><?= $mobil['nama']; ?></option> 
-                                        <?php 
-                                        } 
-                                        ?> 
-                                    </select> 
-                                </div> 
-                                <div class="form-group"> 
-                                    <label>Paket</label> 
-                                    <select name="jenis_paket" class="form-control"> 
-                                        <option value="Lepas Kunci">Lepas Kunci</option> 
-                                        <option value="Paket Komplit">Paket Komplit</option> 
-                                    </select> 
-                                </div> 
-                                <div class="form-group"> 
-                                    <label>Lama Sewa</label> 
-                                    <select name="lama_sewa" class="form-control"> 
-                                        <option value="12">12 Jam</option> 
-                                        <option value="18">18 Jam</option> 
-                                        <option value="24">24 Jam</option> 
-                                        <option value="48">2 Hari</option> 
-                                        <option value="72">3 Hari</option> 
-                                        <option value="96">4 Hari</option> 
-                                        <option value="120">5 Hari</option> 
-                                        <option value="144">6 Hari</option> 
-                                        <option value="168">7 Hari</option> 
-                                    </select> 
-                                </div> 
-                                <div class="form-group"> 
-                                    <label>Harga</label> 
-                                    <input type="number" class="form-control" name="harga" required> 
-                                </div> 
-                            </div> 
+                        <form action="tambah-harga.php" method="POST">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                <label>Nama</label>
+                                <select name="id_mobil" class="form-control" required>
+                                    <?php foreach ($mobils as $mobil) { ?>
+                                    <option value="<?= $mobil['id_mobil']; ?>"><?= $mobil['nama']; ?></option>
+                                    <?php } ?>
+                                </select>
+                                </div>
+                                <div class="form-group">
+                                <label>Paket</label>
+                                <select name="jenis_paket" class="form-control">
+                                    <option value="Lepas Kunci">Lepas Kunci</option>
+                                    <option value="Paket Komplit">Paket Komplit</option>
+                                </select>
+                                </div>
+                                <div class="form-group">
+                                <label>Lama Sewa</label>
+                                <select name="lama_sewa" class="form-control">
+                                    <option value="12">12 Jam</option>
+                                    <option value="18">18 Jam</option>
+                                    <option value="24">24 Jam</option>
+                                    <option value="48">2 Hari</option>
+                                    <option value="72">3 Hari</option>
+                                    <option value="96">4 Hari</option>
+                                    <option value="120">5 Hari</option>
+                                    <option value="144">6 Hari</option>
+                                    <option value="168">7 Hari</option>
+                                </select>
+                                </div>
+                                <div class="form-group">
+                                <label>Harga</label>
+                                <input type="number" class="form-control" name="harga" required>
+                                </div>
+                                <input type="hidden" name="status" value="1">
+                            </div>
                             <!-- modal footer --> 
                             <div class="modal-footer"> 
                                 <button type="submit" class="btn btn-success">Tambah</button> 

@@ -39,8 +39,8 @@
         <div id="collapsePendapatan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Data Master</h6>
-            <a class="collapse-item" href="modal.php">Modal</a>
             <a class="collapse-item" href="kategori.php">Data Kategori Akun</a>
+            <a class="collapse-item" href="modal.php">Modal</a>
             <a class="collapse-item" href="merek.php">Data Merek</a>
             <a class="collapse-item" href="mobil.php">Data Mobil</a>
             <a class="collapse-item" href="harga.php">Data Harga</a>

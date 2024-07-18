@@ -144,6 +144,8 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                               <div class="form-group">
                                 <label>Kursi</label>
                                 <select name="jumlah_set" class="form-control">
+                                  <option value="2" <?= ($row['jumlah_set'] == 2) ? 'selected' : ''; ?>>2</option>
+                                  <option value="4" <?= ($row['jumlah_set'] == 4) ? 'selected' : ''; ?>>4</option>
                                   <option value="5" <?= ($row['jumlah_set'] == 5) ? 'selected' : ''; ?>>5</option>
                                   <option value="7" <?= ($row['jumlah_set'] == 7) ? 'selected' : ''; ?>>7</option>
                                   <option value="8" <?= ($row['jumlah_set'] == 8) ? 'selected' : ''; ?>>8</option>
@@ -209,6 +211,8 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                 <div class="form-group">
                   <label>Kursi</label>
                   <select name="jumlah_set" class="form-control" required>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
                     <option value="5">5</option>
                     <option value="7">7</option>
                     <option value="8">8</option>
@@ -217,28 +221,6 @@ while ($brand = mysqli_fetch_assoc($brands_query)) {
                     <!-- Add more options as needed -->
                   </select>
                 </div>
-                <div class="form-group">
-                  <label>Jenis Sewa</label>
-                  <select name="jenis_sewa" class="form-control" required>
-                    <option value="Lepas Kunci">Lepas Kunci</option>
-                    <option value="Paket Lengkap">Paket Lengkap</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Lama Sewa</label>
-                  <select name="lama_sewa" class="form-control">
-                    <option value="12">12 Jam</option>
-                    <option value="18">18 Jam</option>
-                    <option value="24">24 Jam</option>
-                    <option value="48">2 Hari</option>
-                    <option value="72">3 Hari</option>
-                    <option value="96">4 Hari</option>
-                    <option value="120">5 Hari</option>
-                    <option value="144">6 Hari</option>
-                    <option value="168">7 Hari</option>
-                  </select>
-                </div>
-              </div>
               <!-- footer modal -->
               <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Tambah</button>

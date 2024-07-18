@@ -15,6 +15,17 @@ function convert_time($time)
   }
 }
 
+if (isset($_POST['id_mobil'])) {
+  $id_mobil = $_POST['id_mobil'];
+  $query = mysqli_query($koneksi, "SELECT harga FROM mobil WHERE id_mobil = '$id_mobil'");
+  if ($query) {
+    $result = mysqli_fetch_assoc($query);
+    echo $result['harga'];
+  } else {
+    echo 'Error fetching price';
+  }
+}
+
 // Fetch brands for the dropdown menu
 $brands_query = mysqli_query($koneksi, "SELECT * FROM merek");
 $brands = [];
@@ -52,7 +63,9 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <script src="vendor/jquery/jquery.min.js"></script> <!-- Add this line -->
 </head>
+
 
 <body id="page-top">
   <?php $role = $_SESSION['role_id'];
@@ -175,9 +188,9 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                               </div>
                               <div class="form-group">
                                 <label>Jenis Sewa</label>
-                                <select name="jenis_paket" class="form-control">
-                                  <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
-                                  <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
+                                <select name="jenis_sewa" class="form-control">
+                                  <option value="Lepas Kunci" <?= ($row['jenis_sewa'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
+                                  <option value="Paket Komplit" <?= ($row['jenis_sewa'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
                                 </select>
                               </div>
                               <div class="form-group">
@@ -255,9 +268,9 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                           </div>
                           <div class="form-group">
                             <label>Paket</label>
-                            <select name="jenis_paket" class="form-control">
-                              <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
-                              <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
+                            <select name="jenis_sewa" class="form-control">
+                              <option value="Lepas Kunci" <?= (isset($data['jenis_sewa']) && $data['jenis_sewa'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
+                              <option value="Paket Komplit" <?= (isset($data['jenis_sewa']) && $data['jenis_sewa'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
                             </select>
                           </div>
                           <div class="form-group row">
@@ -353,9 +366,9 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                 </div>
                 <div class="form-group">
                   <label>Paket</label>
-                  <select name="jenis_paket" class="form-control">
-                    <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
-                    <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
+                  <select name="jenis_sewa" class="form-control">
+                    <option value="Lepas Kunci">Lepas Kunci</option>
+                    <option value="Paket Komplit">Paket Komplit</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -373,9 +386,8 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   </select>
                 </div>
                 <div class="form-group">
-                  <label>Uang Muka</label>
-                  <input type="number" class="form-control" id="uang_muka" name="uang_muka" aria-describedby="uang-muka" value="0" min="0">
-                  <small id="uang-muka" class="form-text text-muted">boleh dikosongkan jika tidak ada.</small>
+                  <label>Uang Muka (Down Payment):</label>
+                  <input type="number" name="down_payment" class="form-control" id="down_payment" readonly>
                 </div>
               </div>
               <div class="modal-footer">
@@ -386,31 +398,69 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
           </div>
         </div>
       </div>
+
     </div>
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
 
-  </div>
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="js/sb-admin-2.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-  <!-- Page level plugins -->
-  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-  <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Page level custom scripts -->
+    <script>
+      $(document).ready(function() {
+        $('#id_mobil').on('change', function() {
+          var mobilId = $(this).val();
+          updateHarga(mobilId);
+        });
 
-  <!-- Page level custom scripts -->
-  <script src="js/demo/datatables-demo.js"></script>
+        function updateHarga(mobilId) {
+          if (mobilId) {
+            $.ajax({
+              url: 'get_mobil_harga.php',
+              type: 'POST',
+              data: {
+                id_mobil: mobilId
+              },
+              success: function(data) {
+                $('#harga').val(data);
+                calculateDownPayment();
+              },
+              error: function(xhr, status, error) {
+                console.error('Error fetching price:', error);
+              }
+            });
+          } else {
+            $('#harga').val('');
+            $('#down_payment').val('');
+          }
+        }
 
-  <?php require 'footer.php'; ?>
+        function calculateDownPayment() {
+          var harga = parseFloat($('#harga').val());
+          if (!isNaN(harga)) {
+            var downPayment = (harga * 30) / 100;
+            $('#down_payment').val(downPayment);
+          } else {
+            $('#down_payment').val('');
+          }
+        }
+      });
+    </script>
+
+    <?php require 'footer.php'; ?>
 </body>
 
 

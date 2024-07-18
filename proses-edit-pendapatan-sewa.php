@@ -5,14 +5,14 @@ include('koneksi.php');
 // Retrieve the variables from the POST request
 $id_pendapatan = $_POST['id_pendapatan'];
 $id_akun = $_POST['id_akun'];
-$no_pelanggan = $_POST['no_pelanggan'];
+$id_pelanggan = $_POST['id_pelanggan'];
 $tgl_pendapatan = $_POST['tgl_pendapatan'];
 $jumlah_pendapatan = $_POST['jumlah_pendapatan'];
 
 // Query Update
 $query = mysqli_query($koneksi, "UPDATE pendapatan_sewa SET 
         id_akun = '$id_akun', 
-        no_pelanggan = '$no_pelanggan', 
+        id_pelanggan = '$id_pelanggan', 
         tgl_pendapatan = '$tgl_pendapatan', 
         jumlah_pendapatan = '$jumlah_pendapatan'
         WHERE id_pendapatan = '$id_pendapatan'");

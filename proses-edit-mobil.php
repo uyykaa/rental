@@ -9,7 +9,6 @@ $nama = mysqli_real_escape_string($koneksi, $_POST['nama']);
 $warna = mysqli_real_escape_string($koneksi, $_POST['warna']);
 $no_polisi = mysqli_real_escape_string($koneksi, $_POST['no_polisi']);
 $jumlah_set = mysqli_real_escape_string($koneksi, $_POST['jumlah_set']);
-$jenis_sewa = mysqli_real_escape_string($koneksi, $_POST['jenis_sewa']);
 $lama_sewa = mysqli_real_escape_string($koneksi, $_POST['lama_sewa']);
 
 // Query Update
@@ -19,7 +18,6 @@ $query = "UPDATE mobil SET
     warna = '$warna', 
     no_polisi = '$no_polisi', 
     jumlah_set = '$jumlah_set',
-    jenis_sewa = '$jenis_sewa',
     lama_sewa = '$lama_sewa',
     WHERE id_mobil = '$id_mobil'";
 

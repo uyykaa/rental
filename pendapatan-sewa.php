@@ -1,7 +1,7 @@
 <?php
 require 'cek-sesi.php';
 require 'koneksi.php';
-// $sewa_query = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan GROUP BY no_pelanggan "));
+// $sewa_query = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan GROUP BY id_pelanggan "));
 // var_dump($sewa_query);
 // die;
 
@@ -55,7 +55,7 @@ require 'koneksi.php';
                 <?php
                 $no = 0;
                 $total_pendapatan = 0;
-                $query = mysqli_query($koneksi, "SELECT pendapatan_sewa.*, kategori_akun.nama_akun, pelanggan.nama FROM pendapatan_sewa JOIN kategori_akun ON pendapatan_sewa.id_akun=kategori_akun.id_akun JOIN pelanggan ON pelanggan.no_pelanggan = pendapatan_sewa.no_pelanggan");
+                $query = mysqli_query($koneksi, "SELECT pendapatan_sewa.*, kategori_akun.nama_akun, pelanggan.nama FROM pendapatan_sewa JOIN kategori_akun ON pendapatan_sewa.id_akun=kategori_akun.id_akun JOIN pelanggan ON pelanggan.id_pelanggan = pendapatan_sewa.id_pelanggan");
                 while ($data = mysqli_fetch_assoc($query)) {
                   $total_pendapatan += $data['jumlah_pendapatan'];
                 ?>
@@ -101,12 +101,12 @@ require 'koneksi.php';
                               </div>
                               <div class="form-group">
                                 <label>Nama Pelanggan</label>
-                                <select name="no_pelanggan" class="form-control">
+                                <select name="id_pelanggan" class="form-control">
                                   <?php
                                   $pelanggan_query = mysqli_query($koneksi, "SELECT * FROM pelanggan");
                                   while ($pelanggan = mysqli_fetch_assoc($pelanggan_query)) {
                                   ?>
-                                    <option value="<?= $pelanggan['no_pelanggan']; ?>" <?= ($row['no_pelanggan'] == $pelanggan['no_pelanggan']) ? 'selected' : ''; ?>><?= $pelanggan['nama']; ?></option>
+                                    <option value="<?= $pelanggan['id_pelanggan']; ?>" <?= ($row['id_pelanggan'] == $pelanggan['id_pelanggan']) ? 'selected' : ''; ?>><?= $pelanggan['nama']; ?></option>
                                   <?php
                                   }
                                   ?>
@@ -173,7 +173,7 @@ require 'koneksi.php';
                 </select>
 
                 Nama Pelanggan :
-                <select name="no_pelanggan" class="form-control mb-4">
+                <select name="id_pelanggan" class="form-control mb-4">
                   <option value="-">pilih nama pelanggan...</option>
                   <?php
 
@@ -181,7 +181,7 @@ require 'koneksi.php';
 
                   while ($pelanggan = mysqli_fetch_assoc($pelanggan_query)) {
                   ?>
-                    <option value="<?= $pelanggan['no_pelanggan']; ?>"><?= $pelanggan['nama']; ?></option>
+                    <option value="<?= $pelanggan['id_pelanggan']; ?>"><?= $pelanggan['nama']; ?></option>
                   <?php
                   }
                   ?>
@@ -198,7 +198,7 @@ require 'koneksi.php';
                   ?>
                     <option value="<?= $sewa['id_sewa']; ?>"><?php $queryNama = mysqli_query($koneksi, 'SELECT * FROM pelanggan');
                                                               while ($namaPelanggan = mysqli_fetch_assoc($queryNama)) {
-                                                                if ($sewa['no_pelanggan'] === $namaPelanggan['no_pelanggan']) {
+                                                                if ($sewa['id_pelanggan'] === $namaPelanggan['id_pelanggan']) {
 
                                                                   echo $sewa['tgl_sewa'];
                                                                   echo "  ";

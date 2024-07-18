@@ -5,10 +5,10 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index-karyawan.php">
-      <div class="sidebar-brand-icon rotate-n-15">
-        <i class="fas fa-chart-pie"></i>
+      <!-- Removed the icon div -->
+      <div class="sidebar-brand-text mx-3">
+        <img src="img/logo.jpg" height="30dvh" alt=""> GC PERSADA
       </div>
-      <div class="sidebar-brand-text mx-3"> <img src="img/logo.jpg" height="30dvh" alt=""> GC PERSADA</div>
     </a>
 
     <!-- Divider -->
@@ -18,7 +18,8 @@
     <li class="nav-item active">
       <a class="nav-link" href="index-karyawan.php">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
+        <span>Dashboard</span>
+      </a>
     </li>
 
     <!-- Divider -->
@@ -38,11 +39,14 @@
       <div id="collapsePendapatan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">Data Master</h6>
+          <a class="collapse-item" href="modal.php">Modal</a>
           <a class="collapse-item" href="kategori.php">Data Kategori Akun</a>
-          <a class="collapse-item" href="merek.php">Data Merek</a>
+          <a class="collapse-item" href="modal.php">Modal</a>
           <a class="collapse-item" href="mobil.php">Data Mobil</a>
+          <a class="collapse-item" href="harga.php">Data Harga</a>
           <a class="collapse-item" href="pelanggan.php">Data Pelanggan</a>
           <a class="collapse-item" href="sewa-kendaraan.php">Data Sewa Kendaraan</a>
+          <a class="collapse-item" href="pembayaran.php">Data Pembayaran</a>
           <a class="collapse-item" href="pendapatan-sewa.php">Pendapatan Sewa</a>
         </div>
       </div>
@@ -56,6 +60,5 @@
       <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
   </ul>
-
 
   <div id="content-wrapper" class="d-flex flex-column">
