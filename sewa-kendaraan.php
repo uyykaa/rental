@@ -7,12 +7,12 @@ $currDate = date('Y-m-d');
 
 function convert_time($time)
 {
-    if ($time <= 24) {
-        echo "$time Jam";
-    } else {
-        $hari = $time / 24;
-        echo "$hari Hari";
-    }
+  if ($time <= 24) {
+    echo "$time Jam";
+  } else {
+    $hari = $time / 24;
+    echo "$hari Hari";
+  }
 }
 
 // Fetch brands for the dropdown menu
@@ -253,13 +253,13 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                               <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['nama_mobil'] . ' | ' . $data['plat_mobil']  ?>">
                             </div>
                           </div>
-                          <div class="form-group"> 
-                            <label>Paket</label> 
-                            <select name="jenis_paket" class="form-control"> 
-                              <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option> 
-                              <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option> 
-                            </select> 
-                          </div> 
+                          <div class="form-group">
+                            <label>Paket</label>
+                            <select name="jenis_paket" class="form-control">
+                              <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
+                              <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
+                            </select>
+                          </div>
                           <div class="form-group row">
                             <label for="nama" class="col-sm-3 col-form-label">Harga: </label>
                             <div class="col-sm-9">
@@ -351,13 +351,13 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <label>Tanggal Sewa:</label>
                   <input type="date" class="form-control" name="tgl_sewa">
                 </div>
-                <div class="form-group"> 
-                  <label>Paket</label> 
-                  <select name="jenis_paket" class="form-control"> 
-                      <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option> 
-                      <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option> 
-                  </select> 
-                </div> 
+                <div class="form-group">
+                  <label>Paket</label>
+                  <select name="jenis_paket" class="form-control">
+                    <option value="Lepas Kunci" <?= ($row['jenis_paket'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
+                    <option value="Paket Komplit" <?= ($row['jenis_paket'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
+                  </select>
+                </div>
                 <div class="form-group">
                   <label>Lama Sewa:</label>
                   <select name="lama_sewa" class="form-control">

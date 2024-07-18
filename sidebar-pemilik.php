@@ -1,16 +1,15 @@
-  <!-- Page Wrapper -->
-  <div id="wrapper">
+<div id="wrapper">
 
-    <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  <!-- Sidebar -->
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-      <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index-pemilik.php">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-chart-pie"></i>
-        </div>
-        <div class="sidebar-brand-text mx-3"> <img src="img/logo.jpg" height="30dvh" alt=""> GC PERSADA</div>
-      </a>
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index-karyawan.php">
+      <!-- Removed the icon div -->
+      <div class="sidebar-brand-text mx-3">
+        <img src="img/logo.jpg" height="30dvh" alt=""> GC PERSADA
+      </div>
+    </a>
 
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
@@ -74,7 +73,15 @@
         </a>
       </li>
 
-      <li class="nav-item">neraca.php">
+      <li class="nav-item">
+        <a class="nav-link" href="laporan-perubahan-modal.php">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Laporan Perubahan Modal</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="neraca.php">
           <i class="fas fa-fw fa-table"></i>
           <span>Neraca</span>
         </a>

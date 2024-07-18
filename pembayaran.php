@@ -33,13 +33,13 @@ if (isset($_POST['btnKonfirmasi'])) {
     $sewaKendaraan = mysqli_query($koneksi, "SELECT * FROM sewa_kendaraan WHERE id_sewa=$id");
     foreach ($sewaKendaraan as $row) {
         $id_akun = '4-01';
-        $no_pelanggan = $row['no_pelanggan'];
+        $id_pelanggan = $row['id_pelanggan'];
         $id_sewa = $row['id_sewa'];
         $nama_pendapatan = 'Pendapatan Sewa';
         $tgl_pendapatan = date('Y-m-d');
         $jumlah_pendapatan = $total_bayar;
         $id_mobil = $row['id_mobil'];
-        mysqli_query($koneksi, "INSERT INTO pendapatan_sewa values('','$id_akun','$no_pelanggan','$id_sewa','$nama_pendapatan','$tgl_pendapatan','$jumlah_pendapatan')");
+        mysqli_query($koneksi, "INSERT INTO pendapatan_sewa values('','$id_akun','$id_pelanggan','$id_sewa','$nama_pendapatan','$tgl_pendapatan','$jumlah_pendapatan')");
         mysqli_query($koneksi, "UPDATE mobil SET status='1' WHERE id_mobil='$id_mobil'");
     }
 } else if (isset($_POST['btnBatalkan'])) {
@@ -122,7 +122,7 @@ if (isset($_POST['btnKonfirmasi'])) {
                                 <?php
                                 $no = 0;
                                 $query = mysqli_query($koneksi, "SELECT pembayaran.*, pelanggan.nama AS nama_pelanggan, mobil.nama AS nama_mobil, sewa_kendaraan.total_harga FROM pembayaran 
-                          JOIN pelanggan ON pembayaran.no_pelanggan = pelanggan.no_pelanggan 
+                          JOIN pelanggan ON pembayaran.id_pelanggan = pelanggan.id_pelanggan 
                           JOIN sewa_kendaraan ON pembayaran.id_sewa = sewa_kendaraan.id_sewa
                           JOIN mobil ON sewa_kendaraan.id_mobil = mobil.id_mobil ORDER BY pembayaran.status ASC");
                                 if ($query) {
@@ -260,10 +260,10 @@ if (isset($_POST['btnKonfirmasi'])) {
                             <form action="tambah-bayar.php" method="POST" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label>Nama Pelanggan:</label>
-                                    <select name="no_pelanggan" class="form-control">
+                                    <select name="id_pelanggan" class="form-control">
                                         <option value="">--- Pilih Pelanggan ---</option>
                                         <?php foreach ($customers as $customer) : ?>
-                                            <option value="<?= $customer['no_pelanggan'] ?>"><?= $customer['nama'] ?></option>
+                                            <option value="<?= $customer['id_pelanggan'] ?>"><?= $customer['nama'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
