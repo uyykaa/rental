@@ -18,17 +18,17 @@ $queryPendapatan_sewa = executeQuery($koneksi, "SELECT * FROM pendapatan_sewa WH
 $totalPendapatan = 0;
 
 // Queries to get expenses for the selected date range from different tables
-$queryBebanGaji = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-$queryBebanService = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-$queryBebanPajak = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-$queryBebanLainLain = executeQuery($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryBebanGaji = executeQuery($koneksi, "SELECT * FROM operasional WHERE nama_operasional = 'Biaya gaji' AND tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryBebanService = executeQuery($koneksi, "SELECT * FROM operasional WHERE nama_operasional = 'Biaya service' AND tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryBebanPajak = executeQuery($koneksi, "SELECT * FROM operasional WHERE nama_operasional = 'Biaya pajak' AND tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
+$queryBebanLainLain = executeQuery($koneksi, "SELECT * FROM operasional WHERE nama_operasional = 'Biaya lain-lain' AND tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
 
 // Array to hold the expense categories
 $expenses = [
-    'Beban gaji' => 0,
-    'Beban pajak' => 0,
-    'Beban service' => 0,
-    'Beban lain-lain' => 0
+    'Biaya gaji' => 0,
+    'Biaya pajak' => 0,
+    'Biaya service' => 0,
+    'Biaya lain-lain' => 0
 ];
 
 // Calculate total pendapatan
@@ -42,28 +42,28 @@ while ($data = mysqli_fetch_assoc($queryBebanGaji)) {
     $harga = isset($data['harga']) ? $data['harga'] : 0;
     $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
     $jumlah = $harga * $kuantitas;
-    $expenses['Beban gaji'] += $jumlah;
+    $expenses['Biaya gaji'] += $jumlah;
 }
 
 while ($data = mysqli_fetch_assoc($queryBebanService)) {
     $harga = isset($data['harga']) ? $data['harga'] : 0;
     $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
     $jumlah = $harga * $kuantitas;
-    $expenses['Beban service'] += $jumlah;
+    $expenses['Biaya service'] += $jumlah;
 }
 
 while ($data = mysqli_fetch_assoc($queryBebanPajak)) {
     $harga = isset($data['harga']) ? $data['harga'] : 0;
     $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
     $jumlah = $harga * $kuantitas;
-    $expenses['Beban pajak'] += $jumlah;
+    $expenses['Biaya pajak'] += $jumlah;
 }
 
 while ($data = mysqli_fetch_assoc($queryBebanLainLain)) {
     $harga = isset($data['harga']) ? $data['harga'] : 0;
     $kuantitas = isset($data['kuantitas']) ? $data['kuantitas'] : 0;
     $jumlah = $harga * $kuantitas;
-    $expenses['Beban lain-lain'] += $jumlah;
+    $expenses['Biaya lain-lain'] += $jumlah;
 }
 
 // Calculate total operasional as sum of categorized expenses
@@ -152,7 +152,7 @@ $LabaRugi = $totalPendapatan - $totalOperasional;
                     </div>
                     <div class="row mt-4">
                         <div class="col-lg-12">
-                            <h5> Beban</h5>
+                            <h5> Biaya</h5>
                             <?php foreach ($expenses as $nama_operasional => $jumlah): ?>
                                 <div class="row mt-2">
                                     <div class="col-lg-12 d-flex justify-content-between">

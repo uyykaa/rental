@@ -86,7 +86,7 @@ require 'koneksi.php';
                     <div class="table-responsive">
                         <?php
                         // Default values
-                        $kas = $utang = $kendaraan = $modal_gc_persada = 0;
+                        $kas = $utang = $kendaraan = $modal = 0;
 
                         // Get the month value
                         $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
@@ -106,16 +106,16 @@ require 'koneksi.php';
                         }
 
                         // Fetch other values
-                        $query = "SELECT kendaraan, modal_gc_persada FROM kategori_akun LIMIT 1";
+                        $query = "SELECT kendaraan, modal FROM kategori_akun LIMIT 1";
                         $result = mysqli_query($koneksi, $query);
                         if ($result && $row = mysqli_fetch_assoc($result)) {
                             $kendaraan = $row['kendaraan'];
-                            $modal_gc_persada = $row['modal_gc_persada'];
+                            $modal = $row['modal'];
                         }
 
                         // Calculate total aktiva and passiva
                         $jumlah_aktiva = $kas - $kendaraan;
-                        $jumlah_passiva = $utang + $modal_gc_persada;
+                        $jumlah_passiva = $utang + $modal;
                         ?>
                         <table class="table table-bordered" width="100%" cellspacing="0">
                             <thead>
@@ -162,7 +162,7 @@ require 'koneksi.php';
                                             </tr>
                                             <tr>
                                                 <td>Modal GC Persada</td>
-                                                <td><?php echo number_format($modal_gc_persada, 2); ?></td>
+                                                <td><?php echo number_format($modal, 2); ?></td>
                                             </tr>
                                             <tr>
                                                 <th>Jumlah Passiva</th>
@@ -171,11 +171,6 @@ require 'koneksi.php';
                                         </table>
                                     </td>
                                 </tr>
-                                <?php if ($jumlah_aktiva !== $jumlah_passiva) : ?>
-                                    <tr>
-                                        <td colspan="2" class="text-danger text-center">Jumlah Aktiva dan Passiva tidak seimbang!</td>
-                                    </tr>
-                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
