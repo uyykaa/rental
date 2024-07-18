@@ -67,6 +67,7 @@ while ($mobil = mysqli_fetch_assoc($mobil_query)) {
                                     <th>Paket</th> 
                                     <th>Lama sewa</th>
                                     <th>Harga</th> 
+                                    <th>Uang Muka</th> 
                                     <th>Status</th> 
                                     <th>Aksi</th> 
                                 </tr> 
@@ -92,7 +93,9 @@ while ($mobil = mysqli_fetch_assoc($mobil_query)) {
                                     <td><?= $data['nama'] ?></td> 
                                     <td><?= $data['jenis_paket'] ?></td> 
                                     <td><?= $data['lama_sewa'] ?></td> 
-                                    <td><?= $data['harga'] ?></td> 
+                                    <td><?= $data['harga'] ?></td>
+                                    <td><?= $data['harga'] / 2 ?></td> <!-- Kolom untuk menampilkan uang muka -->
+
                                     <td> 
                                       <!-- Menampilkan Status yang Diperbarui --> 
                                         <?php 
