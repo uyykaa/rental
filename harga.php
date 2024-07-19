@@ -101,7 +101,7 @@ while ($mobil = mysqli_fetch_assoc($mobil_query)) {
                                         <td>
                                             <!-- Menampilkan Status yang Diperbarui -->
                                             <?php
-                                            if ($data['status'] == 1) {
+                                            if ($data['status_mobil'] == 1) {
                                                 echo '<span class="badge badge-pill badge-success"><i class="fa fa-check"></i> Tersedia</span>';
                                             } else {
                                                 echo '<span class="badge badge-pill badge-warning text-dark"><i class="fa fa-circle-xmark"></i> Tidak Tersedia</span>';

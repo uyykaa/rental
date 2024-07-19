@@ -300,12 +300,11 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                               <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['nama_mobil'] . ' | ' . $data['plat_mobil']  ?>">
                             </div>
                           </div>
-                          <div class="form-group">
-                            <label>Paket</label>
-                            <select name="jenis_sewa" class="form-control">
-                              <option value="Lepas Kunci" <?= (isset($data['jenis_sewa']) && $data['jenis_sewa'] == 'Lepas Kunci') ? 'selected' : ''; ?>>Lepas Kunci</option>
-                              <option value="Paket Komplit" <?= (isset($data['jenis_sewa']) && $data['jenis_sewa'] == 'Paket Komplit') ? 'selected' : ''; ?>>Paket Komplit</option>
-                            </select>
+                          <div class="form-group row">
+                            <label for="jenis_paket" class="col-sm-3 col-form-label">Paket: </label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="jenis_paket" value="<?= $data['jenis_sewa'] ?>">
+                            </div>
                           </div>
                           <div class="form-group row">
                             <label for="nama" class="col-sm-3 col-form-label">Harga: </label>
