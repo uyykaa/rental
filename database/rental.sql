@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2024 at 06:18 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- Waktu pembuatan: 19 Jul 2024 pada 18.51
+-- Versi server: 10.4.28-MariaDB
+-- Versi PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `harga`
+-- Struktur dari tabel `harga`
 --
 
 CREATE TABLE `harga` (
@@ -37,19 +37,20 @@ CREATE TABLE `harga` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `harga`
+-- Dumping data untuk tabel `harga`
 --
 
 INSERT INTO `harga` (`id_harga`, `id_mobil`, `jenis_paket`, `lama_sewa`, `harga`, `status`) VALUES
 (1, '2', 'Lepas Kunci', 12, 250000, 1),
 (2, '1', 'Paket Komplit', 18, 1400000, 1),
 (6, '6', 'Paket Komplit', 18, 700000, 0),
-(7, '4', 'Lepas Kunci', 12, 10000, 0);
+(7, '4', 'Lepas Kunci', 12, 10000, 0),
+(8, '2', 'Paket Komplit', 12, 500000, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kategori_akun`
+-- Struktur dari tabel `kategori_akun`
 --
 
 CREATE TABLE `kategori_akun` (
@@ -58,7 +59,7 @@ CREATE TABLE `kategori_akun` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `kategori_akun`
+-- Dumping data untuk tabel `kategori_akun`
 --
 
 INSERT INTO `kategori_akun` (`id_akun`, `nama_akun`) VALUES
@@ -72,7 +73,7 @@ INSERT INTO `kategori_akun` (`id_akun`, `nama_akun`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `merek`
+-- Struktur dari tabel `merek`
 --
 
 CREATE TABLE `merek` (
@@ -81,7 +82,7 @@ CREATE TABLE `merek` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `merek`
+-- Dumping data untuk tabel `merek`
 --
 
 INSERT INTO `merek` (`id_merek`, `merek`) VALUES
@@ -94,7 +95,7 @@ INSERT INTO `merek` (`id_merek`, `merek`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mobil`
+-- Struktur dari tabel `mobil`
 --
 
 CREATE TABLE `mobil` (
@@ -108,19 +109,19 @@ CREATE TABLE `mobil` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `mobil`
+-- Dumping data untuk tabel `mobil`
 --
 
 INSERT INTO `mobil` (`id_mobil`, `nama`, `warna`, `no_polisi`, `jumlah_set`, `id_merek`, `status`) VALUES
 (1, 'Hiace Premio', 'Silver', 'K 4803 TO', '14', 1, '1'),
-(2, 'Brio', 'Hitam', 'AB 4950 QJ', '5', 1, '0'),
-(4, 'pregio', 'Silver', 'AD 555 DC', '8', 5, '0'),
+(2, 'Brio', 'Hitam', 'AB 4950 QJ', '5', 1, '1'),
+(4, 'pregio', 'Silver', 'AD 555 DC', '8', 5, '1'),
 (6, 'Grand New Xenia', 'Silver', 'B 1829 IM', '5', 4, '1');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `modal`
+-- Struktur dari tabel `modal`
 --
 
 CREATE TABLE `modal` (
@@ -131,7 +132,7 @@ CREATE TABLE `modal` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `modal`
+-- Dumping data untuk tabel `modal`
 --
 
 INSERT INTO `modal` (`id_modal`, `tanggal`, `nama_akun`, `nominal`) VALUES
@@ -140,7 +141,7 @@ INSERT INTO `modal` (`id_modal`, `tanggal`, `nama_akun`, `nominal`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `operasional`
+-- Struktur dari tabel `operasional`
 --
 
 CREATE TABLE `operasional` (
@@ -154,7 +155,7 @@ CREATE TABLE `operasional` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Dumping data for table `operasional`
+-- Dumping data untuk tabel `operasional`
 --
 
 INSERT INTO `operasional` (`id_operasional`, `id_akun`, `nama_operasional`, `tanggal_operasional`, `harga`, `kuantitas`, `total_operasional`) VALUES
@@ -167,7 +168,7 @@ INSERT INTO `operasional` (`id_operasional`, `id_akun`, `nama_operasional`, `tan
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pelanggan`
+-- Struktur dari tabel `pelanggan`
 --
 
 CREATE TABLE `pelanggan` (
@@ -179,7 +180,7 @@ CREATE TABLE `pelanggan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pelanggan`
+-- Dumping data untuk tabel `pelanggan`
 --
 
 INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `alamat`, `no_hp`, `img`) VALUES
@@ -193,7 +194,7 @@ INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `alamat`, `no_hp`, `img`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pembayaran`
+-- Struktur dari tabel `pembayaran`
 --
 
 CREATE TABLE `pembayaran` (
@@ -202,26 +203,25 @@ CREATE TABLE `pembayaran` (
   `uang_muka` int(11) NOT NULL,
   `denda` int(11) NOT NULL,
   `id_sewa` int(11) NOT NULL,
-  `no_pelanggan` varchar(15) NOT NULL,
+  `id_pelanggan` varchar(15) NOT NULL,
   `total_bayar` int(11) NOT NULL,
   `is_sewa_done` tinyint(1) NOT NULL DEFAULT 0,
+  `is_dp_done` tinyint(1) NOT NULL DEFAULT 0,
   `status` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pembayaran`
+-- Dumping data untuk tabel `pembayaran`
 --
 
-INSERT INTO `pembayaran` (`no_bayar`, `tanggal_bayar`, `uang_muka`, `denda`, `id_sewa`, `no_pelanggan`, `total_bayar`, `is_sewa_done`, `status`) VALUES
-(1, '2024-07-15', 200000, 0, 1, '1', 1200000, 1, '1'),
-(2, '2024-07-14', 150000, 150000, 2, '3', 350000, 0, '0'),
-(3, '2024-07-15', 500000, 500000, 3, '4', 3000, 0, '0'),
-(4, '2024-07-16', 100000, 0, 4, '12', 1300000, 1, '1');
+INSERT INTO `pembayaran` (`no_bayar`, `tanggal_bayar`, `uang_muka`, `denda`, `id_sewa`, `id_pelanggan`, `total_bayar`, `is_sewa_done`, `is_dp_done`, `status`) VALUES
+(1, '2024-07-19', 250000, 0, 1, '4', 250000, 1, 1, '1'),
+(2, '2024-07-21', 125000, 0, 2, '5', 125000, 0, 0, '0');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pendapatan_sewa`
+-- Struktur dari tabel `pendapatan_sewa`
 --
 
 CREATE TABLE `pendapatan_sewa` (
@@ -229,23 +229,23 @@ CREATE TABLE `pendapatan_sewa` (
   `id_akun` varchar(15) NOT NULL,
   `id_pelanggan` varchar(4) NOT NULL,
   `id_sewa` int(2) NOT NULL,
+  `id_bayar` varchar(15) NOT NULL,
   `nama_pendapatan` varchar(20) NOT NULL,
   `tgl_pendapatan` date NOT NULL,
   `jumlah_pendapatan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pendapatan_sewa`
+-- Dumping data untuk tabel `pendapatan_sewa`
 --
 
-INSERT INTO `pendapatan_sewa` (`id_pendapatan`, `id_akun`, `id_pelanggan`, `id_sewa`, `nama_pendapatan`, `tgl_pendapatan`, `jumlah_pendapatan`) VALUES
-(6, '4-01', '1', 1, 'Pendapatan Sewa', '2024-07-15', 1200000),
-(8, '4-01', '12', 4, 'Pendapatan Sewa', '2024-07-16', 1300000);
+INSERT INTO `pendapatan_sewa` (`id_pendapatan`, `id_akun`, `id_pelanggan`, `id_sewa`, `id_bayar`, `nama_pendapatan`, `tgl_pendapatan`, `jumlah_pendapatan`) VALUES
+(2, '4-01', '4', 1, '1', 'Pendapatan Sewa', '2024-07-19', 250000);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sewa_kendaraan`
+-- Struktur dari tabel `sewa_kendaraan`
 --
 
 CREATE TABLE `sewa_kendaraan` (
@@ -258,23 +258,22 @@ CREATE TABLE `sewa_kendaraan` (
   `harga` int(11) NOT NULL,
   `total_harga` int(11) NOT NULL,
   `status` tinyint(1) DEFAULT 0,
-  `is_paid` tinyint(1) DEFAULT 0
+  `is_paid` tinyint(1) DEFAULT 0,
+  `is_dp` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `sewa_kendaraan`
+-- Dumping data untuk tabel `sewa_kendaraan`
 --
 
-INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `id_mobil`, `id_pelanggan`, `jenis_sewa`, `lama_sewa`, `harga`, `total_harga`, `status`, `is_paid`) VALUES
-(1, '2024-07-15', '1', '1', '1', '12', 1400000, 1400000, 1, 1),
-(2, '2024-07-14', '2', '3', '1', '12', 350000, 350000, 0, 0),
-(3, '2024-07-15', '4', '4', '2', '72', 1000, 3000, 0, 0),
-(4, '2024-07-16', '1', '12', '2', '12', 1400000, 1400000, 1, 1);
+INSERT INTO `sewa_kendaraan` (`id_sewa`, `tgl_sewa`, `id_mobil`, `id_pelanggan`, `jenis_sewa`, `lama_sewa`, `harga`, `total_harga`, `status`, `is_paid`, `is_dp`) VALUES
+(1, '2024-07-19', '2', '4', 'Paket Komplit', '12', 500000, 500000, 1, 1, 1),
+(2, '2024-07-21', '2', '5', 'Lepas Kunci', '12', 250000, 250000, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -290,7 +289,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
 INSERT INTO `users` (`id`, `nama`, `no_hp`, `alamat`, `jabatan`, `email`, `password`, `role_id`, `status`) VALUES
@@ -304,132 +303,131 @@ INSERT INTO `users` (`id`, `nama`, `no_hp`, `alamat`, `jabatan`, `email`, `passw
 --
 
 --
--- Indexes for table `harga`
+-- Indeks untuk tabel `harga`
 --
 ALTER TABLE `harga`
   ADD PRIMARY KEY (`id_harga`);
 
 --
--- Indexes for table `kategori_akun`
+-- Indeks untuk tabel `kategori_akun`
 --
 ALTER TABLE `kategori_akun`
   ADD PRIMARY KEY (`id_akun`);
 
 --
--- Indexes for table `merek`
+-- Indeks untuk tabel `merek`
 --
 ALTER TABLE `merek`
   ADD PRIMARY KEY (`id_merek`);
 
 --
--- Indexes for table `mobil`
+-- Indeks untuk tabel `mobil`
 --
 ALTER TABLE `mobil`
   ADD PRIMARY KEY (`id_mobil`);
 
 --
--- Indexes for table `modal`
+-- Indeks untuk tabel `modal`
 --
 ALTER TABLE `modal`
   ADD PRIMARY KEY (`id_modal`);
 
 --
--- Indexes for table `operasional`
+-- Indeks untuk tabel `operasional`
 --
 ALTER TABLE `operasional`
   ADD PRIMARY KEY (`id_operasional`);
 
 --
--- Indexes for table `pelanggan`
+-- Indeks untuk tabel `pelanggan`
 --
 ALTER TABLE `pelanggan`
   ADD PRIMARY KEY (`id_pelanggan`);
 
 --
--- Indexes for table `pembayaran`
+-- Indeks untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  ADD PRIMARY KEY (`no_bayar`),
-  ADD UNIQUE KEY `id_sewa` (`id_sewa`);
+  ADD PRIMARY KEY (`no_bayar`);
 
 --
--- Indexes for table `pendapatan_sewa`
+-- Indeks untuk tabel `pendapatan_sewa`
 --
 ALTER TABLE `pendapatan_sewa`
   ADD PRIMARY KEY (`id_pendapatan`);
 
 --
--- Indexes for table `sewa_kendaraan`
+-- Indeks untuk tabel `sewa_kendaraan`
 --
 ALTER TABLE `sewa_kendaraan`
   ADD PRIMARY KEY (`id_sewa`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `harga`
+-- AUTO_INCREMENT untuk tabel `harga`
 --
 ALTER TABLE `harga`
-  MODIFY `id_harga` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_harga` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `merek`
+-- AUTO_INCREMENT untuk tabel `merek`
 --
 ALTER TABLE `merek`
   MODIFY `id_merek` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `mobil`
+-- AUTO_INCREMENT untuk tabel `mobil`
 --
 ALTER TABLE `mobil`
   MODIFY `id_mobil` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT for table `modal`
+-- AUTO_INCREMENT untuk tabel `modal`
 --
 ALTER TABLE `modal`
   MODIFY `id_modal` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=304;
 
 --
--- AUTO_INCREMENT for table `operasional`
+-- AUTO_INCREMENT untuk tabel `operasional`
 --
 ALTER TABLE `operasional`
   MODIFY `id_operasional` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=506;
 
 --
--- AUTO_INCREMENT for table `pelanggan`
+-- AUTO_INCREMENT untuk tabel `pelanggan`
 --
 ALTER TABLE `pelanggan`
   MODIFY `id_pelanggan` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `pembayaran`
+-- AUTO_INCREMENT untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `no_bayar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `no_bayar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `pendapatan_sewa`
+-- AUTO_INCREMENT untuk tabel `pendapatan_sewa`
 --
 ALTER TABLE `pendapatan_sewa`
-  MODIFY `id_pendapatan` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_pendapatan` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `sewa_kendaraan`
+-- AUTO_INCREMENT untuk tabel `sewa_kendaraan`
 --
 ALTER TABLE `sewa_kendaraan`
-  MODIFY `id_sewa` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_sewa` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;

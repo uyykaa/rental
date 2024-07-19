@@ -10,7 +10,7 @@ $id_mobil = $_POST['id_mobil'];
 $uang_muka = 0; // Initialize uang muka
 
 // Fetch harga mobil
-$query_harga = mysqli_query($koneksi, "SELECT harga FROM harga WHERE id_mobil = $id_mobil");
+$query_harga = mysqli_query($koneksi, "SELECT harga FROM harga WHERE id_mobil = '$id_mobil' AND jenis_paket = '$jenis_sewa' AND lama_sewa = '$lama_sewa'");
 if (!$query_harga) {
     die('Query Error: ' . mysqli_error($koneksi));
 }
@@ -33,7 +33,7 @@ $query = "INSERT INTO sewa_kendaraan (id_pelanggan, id_mobil, tgl_sewa, jenis_se
 // Execute query and handle results
 if (mysqli_query($koneksi, $query)) {
     // Update status mobil
-    mysqli_query($koneksi, "UPDATE mobil SET status='0' WHERE id_mobil=$id_mobil");
+    // mysqli_query($koneksi, "UPDATE mobil SET status='0' WHERE id_mobil=$id_mobil");
 
     // Fetch the last inserted id_sewa
     $id_sewa = mysqli_insert_id($koneksi);
@@ -43,7 +43,7 @@ if (mysqli_query($koneksi, $query)) {
     $insert_pembayaran = "INSERT INTO pembayaran (tanggal_bayar, uang_muka, id_sewa, id_pelanggan, total_bayar, status) 
                           VALUES ('$tgl_sewa', '$uang_muka', '$id_sewa', '$id_pelanggan', '$total_bayar', '0')";
     if (mysqli_query($koneksi, $insert_pembayaran)) {
-        header('Location: sewa-kendaraan.php');
+        header('Location: pembayaran.php');
         exit;
     } else {
         echo "Error inserting pembayaran: " . mysqli_error($koneksi);

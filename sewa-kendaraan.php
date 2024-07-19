@@ -2,7 +2,6 @@
 require 'cek-sesi.php';
 require 'koneksi.php';
 
-
 $currDate = date('Y-m-d');
 
 function convert_time($time)
@@ -154,6 +153,8 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
 
                       if ($data['status'] == '1') {
                         echo '<span class="badge badge-pill badge-success">Sewa selesai</span>';
+                      } elseif ($data['is_dp'] == '0' && $data['status'] == '0') {
+                        echo '<span class="badge badge-pill badge-danger">DP belum dibayar</span>';
                       } elseif ($currDate > $endDate) {
                         echo '<span class="badge badge-pill badge-danger">Terlambat</span>';
                       } elseif ($currDate < $endDate) {
@@ -171,10 +172,13 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                         <a href="#" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
                       <?php } ?>
                       <?php
-                      if ($data['status'] == '0' && $currDate >= $endDate) {
+                      if ($data['status'] == '0' && $currDate >= $endDate && $data['is_dp'] == '1') {
                       ?>
                         <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
-                      <?php } ?>
+                      <?php } elseif ($data['is_dp'] == '0') {
+                        echo "<a href='pembayaran.php' class='btn btn-danger btn-sm'><i class='fa fa-external-link'></i> Pembayaran</a>";
+                      }
+                      ?>
                     </td>
                   </tr>
                   <!-- Modal Edit -->
