@@ -107,12 +107,10 @@ require 'koneksi.php';
                             $akhir_bulan = '';
 
                             // Fetch Modal Awal from modal table
-                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal, tanggal FROM modal WHERE tanggal <= '$tanggal_awal'";
+                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal, tanggal FROM modal WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
                             $result_modal_awal = mysqli_query($koneksi, $query_modal_awal);
 
                             foreach ($result_modal_awal as $modal) {
-                                $a_date = $modal['tanggal'];
-                                $akhir_bulan = date("Y-m-t", strtotime($a_date));
                                 $modal_awal = $modal['total_modal_awal'];
                             }
 
@@ -134,37 +132,28 @@ require 'koneksi.php';
 
                             // cari mdal dimana tanggal awal yang diinputkan oleh user itu lebih besar dari tgl modal yang ada di database, kemudian lakukan insert 
                             // comparasi tanggal modal di database dengan tanggal hari ini? apakah tgl hari ini sudah masuk tgl terakhir bulan ini atau belum, jika sudah maka lakukan insert dengan hasil modal akhir, dimana tgl awal dan tanggal akhir dicari dari tgl awal dan tanggal akhir bulan ini
+                            $today = date("Y-m-d");
+                            if ($tanggal_akhir < $today) {
+                                $cek_tanggal_modal = mysqli_query($koneksi, "SELECT * FROM modal WHERE nama_akun = 'Modal Laba'");
+                                if ($cek_tanggal_modal) {
+                                    // $tgl_awal = date("Y-m-01", strtotime($cek_tanggal_modal['tanggal']));
+                                    // $tgl_akhir = date("Y-m-t", strtotime($cek_tanggal_modal['tanggal']));
+                                    // $tgl_modal = strtotime($cek_tanggal_modal['tanggal']);
+                                    // $tambah_bulan = '';
 
+                                    foreach ($cek_tanggal_modal as $row) {
+                                        if ($row['tanggal'] > $tanggal_awal && $row['tanggal'] < $tanggal_akhir) {
+                                            return 0;
+                                        } else {
 
-                            $cek_tanggal_modal = mysqli_query($koneksi, "SELECT * FROM modal order by tanggal DESC limit 1");
-                            $today = date('Y-m-d');
-
-                            foreach ($cek_tanggal_modal as $row) {
-                                $tgl_awal = date("Y-m-01", strtotime($row['tanggal']));
-                                $tgl_akhir = date("Y-m-t", strtotime($row['tanggal']));
-                                $tgl_modal = strtotime($row['tanggal']);
-                                $tambah_bulan = '';
-
-                                $query = mysqli_query($koneksi, "SELECT * FROM modal WHERE tanggal BETWEEN $tgl_awal AND $tgl_akhir");
-                                foreach ($query as $key) {
-                                    if ($key['nama_akun'] != "Modal laba") {
-                                        mysqli_query($koneksi, "INSERT INTO modal values('$today','Modal laba, $modal_akhir)");
+                                            mysqli_query($koneksi, "INSERT INTO modal values('','$today','Modal Laba', $modal_akhir)");
+                                        }
                                     }
+                                } else {
+
+                                    mysqli_query($koneksi, "INSERT INTO modal values('',$today,'Modal Laba', $modal_akhir)");
                                 }
                             }
-
-                            $query_modal_tambahan = mysqli_query($koneksi, "SELECT * FROM modal WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-                            if ($query_modal_tambahan) {
-                                foreach ($query_modal_tambahan as $row) {
-                                    # code...
-
-                                    if ($tanggal_awal > $akhir_bulan) {
-                                        mysqli_query($koneksi, "INSERT INTO ");
-                                    }
-                                }
-                            }
-
-
 
                             ?>
                             <table class="table table-bordered report-table">
