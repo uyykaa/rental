@@ -85,8 +85,12 @@ require 'koneksi.php';
                     </form>
                     <div class="table-responsive">
                         <?php
+                        // Define tanggal_awal and tanggal_akhir
+                        $tanggal_awal = isset($_GET['tanggal_awal']) ? $_GET['tanggal_awal'] : date('Y-m-01');
+                        $tanggal_akhir = isset($_GET['tanggal_akhir']) ? $_GET['tanggal_akhir'] : date('Y-m-d');
+
                         // Default values
-                        $kas = $utang = $kendaraan = $modal = 0;
+                        $kas = $utang = $kendaraan = $modal_awal = $laba = $modal_gc_persada = 0;
 
                         // Get the month value
                         $bulan = isset($_GET['bulan']) ? $_GET['bulan'] : date('Y-m');
@@ -105,17 +109,39 @@ require 'koneksi.php';
                             $utang = $row_utang['total_utang'];
                         }
 
-                        // Fetch other values
-                        $query = "SELECT kendaraan, modal FROM kategori_akun LIMIT 1";
-                        $result = mysqli_query($koneksi, $query);
-                        if ($result && $row = mysqli_fetch_assoc($result)) {
-                            $kendaraan = $row['kendaraan'];
-                            $modal = $row['modal'];
+                        // Fetch kendaraan value from modal
+                        $query_kendaraan = "SELECT SUM(nominal) as total_kendaraan FROM modal WHERE nama_akun = 'Kendaraan' AND tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
+                        $result_kendaraan = mysqli_query($koneksi, $query_kendaraan);
+                        if ($result_kendaraan && $row_kendaraan = mysqli_fetch_assoc($result_kendaraan)) {
+                            $kendaraan = $row_kendaraan['total_kendaraan'];
                         }
 
+                        // Fetch modal_awal
+                        $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal FROM modal WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
+                        $result_modal_awal = mysqli_query($koneksi, $query_modal_awal);
+                        if ($result_modal_awal && $row_modal_awal = mysqli_fetch_assoc($result_modal_awal)) {
+                            $modal_awal = $row_modal_awal['total_modal_awal'];
+                        }
+
+                        // Fetch laba
+                        $query_laba = "SELECT SUM(total_laba) as total_laba FROM laba_rugi WHERE DATE_FORMAT(tanggal_laba, '%Y-%m') = '$bulan'";
+                        $result_laba = mysqli_query($koneksi, $query_laba);
+                        if ($result_laba && $row_laba = mysqli_fetch_assoc($result_laba)) {
+                            $laba = $row_laba['total_laba'];
+                        }
+
+                        // Calculate Laba Rugi
+                        // Assuming $total_pendapatan and $total_pengeluaran are calculated elsewhere or need to be fetched
+                        $total_pendapatan = $kas; // Example
+                        $total_pengeluaran = $utang; // Example
+                        $laba_rugi = $total_pendapatan - $total_pengeluaran;
+
+                        // Calculate Modal GC Persada
+                        $modal_gc_persada = $modal_awal + $laba_rugi;
+
                         // Calculate total aktiva and passiva
-                        $jumlah_aktiva = $kas - $kendaraan;
-                        $jumlah_passiva = $utang + $modal;
+                        $jumlah_aktiva = $kas + $kendaraan; // Sum up both Aktiva Lancar and Aktiva Tetap
+                        $jumlah_passiva = $utang + $modal_gc_persada;
                         ?>
                         <table class="table table-bordered" width="100%" cellspacing="0">
                             <thead>
@@ -140,7 +166,7 @@ require 'koneksi.php';
                                             </tr>
                                             <tr>
                                                 <td>Kendaraan</td>
-                                                <td>(<?php echo number_format($kendaraan, 2); ?>)</td>
+                                                <td><?php echo number_format($kendaraan, 2); ?></td>
                                             </tr>
                                             <tr>
                                                 <th>Jumlah Aktiva</th>
@@ -162,7 +188,7 @@ require 'koneksi.php';
                                             </tr>
                                             <tr>
                                                 <td>Modal GC Persada</td>
-                                                <td><?php echo number_format($modal, 2); ?></td>
+                                                <td><?php echo number_format($modal_gc_persada, 2); ?></td>
                                             </tr>
                                             <tr>
                                                 <th>Jumlah Passiva</th>
