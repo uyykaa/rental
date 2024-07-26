@@ -44,8 +44,20 @@ if ($_SESSION['role_id'] !== "3") {
   while ($masuk = mysqli_fetch_array($pendapatan_sewa)) {
     $arraymasuk[] = $masuk['jumlah_pendapatan'];
   }
-  $total_pendapatan = array_sum($arraymasuk);
+  $total_pendapatan_sewa = array_sum($arraymasuk);
 
+  // Tambahkan query untuk mendapatkan total pendapatan dari tabel modal
+  $arraymodal = [];
+  $modal = mysqli_query($koneksi, "SELECT nominal FROM modal");
+  while ($masuk = mysqli_fetch_array($modal)) {
+    $arraymodal[] = $masuk['nominal'];
+  }
+  $total_modal = array_sum($arraymodal);
+
+  // Total pendapatan sewa + pendapatan dari modal
+  $total_pendapatan = $total_pendapatan_sewa + $total_modal;
+
+  $arraykeluar = [];
   $operasional = mysqli_query($koneksi, "SELECT * FROM operasional");
   while ($keluar = mysqli_fetch_array($operasional)) {
     $arraykeluar[] = $keluar['total_operasional'];
@@ -87,7 +99,7 @@ if ($_SESSION['role_id'] !== "3") {
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
                   <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Pendapatan Sewa</div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800">Rp.<?= number_format($total_pendapatan, 2, ',', '.'); ?></div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">Rp.<?= number_format($total_pendapatan_sewa, 2, ',', '.'); ?></div>
                 </div>
                 <div class="col-auto">
                   <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -103,7 +115,7 @@ if ($_SESSION['role_id'] !== "3") {
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                  <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">operasional</div>
+                  <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Operasional</div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">Rp.<?= number_format($total_operasional, 2, ',', '.'); ?></div>
                 </div>
                 <div class="col-auto">
