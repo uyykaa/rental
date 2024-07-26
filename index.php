@@ -25,26 +25,40 @@ require 'cek-sesi.php';
   require 'sidebar.php';
 
   try {
-
+    // Query pengeluaran hari ini
     $pengeluaranResult = mysqli_query($koneksi, "SELECT SUM(total_operasional) AS total_operasional FROM operasional WHERE tanggal_operasional = CURDATE()");
     if (!$pengeluaranResult) {
       throw new Exception("Query Error: " . mysqli_error($koneksi));
     }
     $pengeluaran_hari_ini = mysqli_fetch_assoc($pengeluaranResult)['total_operasional'];
 
+    // Query pendapatan sewa hari ini
     $pendapatan_sewa = mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS total_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE()");
     if (!$pendapatan_sewa) {
       throw new Exception("Query Error: " . mysqli_error($koneksi));
     }
     $pendapatan_hari_ini = mysqli_fetch_assoc($pendapatan_sewa)['total_pendapatan'];
 
+    // Query total pendapatan dari tabel pendapatan_sewa
     $arraymasuk = [];
     $pendapatan = mysqli_query($koneksi, "SELECT jumlah_pendapatan FROM pendapatan_sewa");
     while ($masuk = mysqli_fetch_assoc($pendapatan)) {
       $arraymasuk[] = $masuk['jumlah_pendapatan'];
     }
-    $pendapatan_sewa = array_sum($arraymasuk);
+    $pendapatan_sewa_total = array_sum($arraymasuk);
 
+    // Query total pendapatan dari tabel modal
+    $arraymodal = [];
+    $modal = mysqli_query($koneksi, "SELECT nominal FROM modal");
+    while ($masuk = mysqli_fetch_assoc($modal)) {
+      $arraymodal[] = $masuk['nominal'];
+    }
+    $total_modal = array_sum($arraymodal);
+
+    // Total pendapatan dari pendapatan_sewa dan modal
+    $total_pendapatan = $pendapatan_sewa_total + $total_modal;
+
+    // Query total pengeluaran dari tabel operasional
     $arraykeluar = [];
     $operasional = mysqli_query($koneksi, "SELECT total_operasional FROM operasional");
     while ($keluar = mysqli_fetch_assoc($operasional)) {
@@ -52,7 +66,8 @@ require 'cek-sesi.php';
     }
     $jumlahkeluar = array_sum($arraykeluar);
 
-    $uang = $pendapatan_sewa - $jumlahkeluar;
+    // Hitung sisa uang
+    $uang = $total_pendapatan - $jumlahkeluar;
 
     // Data for chart
     $sekarang = mysqli_fetch_assoc(mysqli_query($koneksi, "SELECT SUM(jumlah_pendapatan) AS jumlah_pendapatan FROM pendapatan_sewa WHERE tgl_pendapatan = CURDATE()"))['jumlah_pendapatan'];
@@ -106,7 +121,7 @@ require 'cek-sesi.php';
                 </div>
               </div>
             </div> &nbsp Pendapatan Sewa : Rp.
-            <?= number_format($pendapatan_sewa, 2, ',', '.'); ?>
+            <?= number_format($pendapatan_sewa_total, 2, ',', '.'); ?>
           </div>
         </div>
 
