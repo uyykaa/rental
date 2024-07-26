@@ -41,13 +41,24 @@ if ($_SESSION['role_id'] != '2') {
   }
   $jumlahmasuk = array_sum($arraymasuk);
 
+  // Tambahkan query untuk mendapatkan total pendapatan dari tabel modal
+  $arraymodal = [];
+  $modal = mysqli_query($koneksi, "SELECT nominal FROM modal");
+  while ($masuk = mysqli_fetch_array($modal)) {
+    $arraymodal[] = $masuk['nominal'];
+  }
+  $total_modal = array_sum($arraymodal);
+
+  // Total pendapatan sewa + pendapatan dari modal
+  $total_pendapatan = $jumlahmasuk + $total_modal;
+
   $arraykeluar = [];
   $operasional = mysqli_query($koneksi, "SELECT * FROM operasional");
   while ($keluar = mysqli_fetch_array($operasional)) {
     $arraykeluar[] = $keluar['total_operasional'];
   }
   $jumlahkeluar = array_sum($arraykeluar);
-  $tampilKas = $jumlahmasuk - $jumlahkeluar;
+  $tampilKas = $total_pendapatan - $jumlahkeluar;
   ?>
 
   <!-- Main Content -->
