@@ -1,7 +1,6 @@
 <?php
 session_start();
 require 'koneksi.php';
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,25 +103,37 @@ require 'koneksi.php';
                             $laba_rugi = 0;
                             $total_pendapatan = 0;
                             $total_pengeluaran = 0;
-                            $akhir_bulan = '';
 
                             // Fetch Modal Awal from modal table
-                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal, tanggal FROM modal WHERE tanggal BETWEEN '$tanggal_awal' AND '$tanggal_akhir'";
+                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal FROM modal WHERE tanggal < '$tanggal_awal'";
                             $result_modal_awal = mysqli_query($koneksi, $query_modal_awal);
-
-                            foreach ($result_modal_awal as $modal) {
-                                $modal_awal = $modal['total_modal_awal'];
+                            if ($result_modal_awal) {
+                                $modal_awal_row = mysqli_fetch_assoc($result_modal_awal);
+                                if ($modal_awal_row) {
+                                    $modal_awal = $modal_awal_row['total_modal_awal'] ?? 0;
+                                }
+                            } else {
+                                echo "Error: " . mysqli_error($koneksi);
                             }
 
-                            // get total pendapatan from pendaptan sewa
+                            // get total pendapatan from pendapatan sewa
                             $query_pendapatan = mysqli_query($koneksi, "SELECT * FROM pendapatan_sewa WHERE tgl_pendapatan BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-                            foreach ($query_pendapatan as $pendapatan) {
-                                $total_pendapatan += $pendapatan['jumlah_pendapatan'];
+                            if ($query_pendapatan) {
+                                foreach ($query_pendapatan as $pendapatan) {
+                                    $total_pendapatan += $pendapatan['jumlah_pendapatan'];
+                                }
+                            } else {
+                                echo "Error: " . mysqli_error($koneksi);
                             }
+
                             // get total pengeluaran from Operasional
                             $query_operasional = mysqli_query($koneksi, "SELECT * FROM operasional WHERE tanggal_operasional BETWEEN '$tanggal_awal' AND '$tanggal_akhir'");
-                            foreach ($query_operasional as $pengeluaran) {
-                                $total_pengeluaran += $pengeluaran['total_operasional'];
+                            if ($query_operasional) {
+                                foreach ($query_operasional as $pengeluaran) {
+                                    $total_pengeluaran += $pengeluaran['total_operasional'];
+                                }
+                            } else {
+                                echo "Error: " . mysqli_error($koneksi);
                             }
 
                             $laba_rugi = $total_pendapatan - $total_pengeluaran;
@@ -130,31 +141,20 @@ require 'koneksi.php';
                             // Calculate Modal Akhir
                             $modal_akhir = $modal_awal + $laba_rugi;
 
-                            // cari mdal dimana tanggal awal yang diinputkan oleh user itu lebih besar dari tgl modal yang ada di database, kemudian lakukan insert 
-                            // comparasi tanggal modal di database dengan tanggal hari ini? apakah tgl hari ini sudah masuk tgl terakhir bulan ini atau belum, jika sudah maka lakukan insert dengan hasil modal akhir, dimana tgl awal dan tanggal akhir dicari dari tgl awal dan tanggal akhir bulan ini
+                            // Memeriksa apakah hari ini adalah akhir bulan
                             $today = date("Y-m-d");
-                            if ($tanggal_akhir < $today) {
-                                $cek_tanggal_modal = mysqli_query($koneksi, "SELECT * FROM modal WHERE nama_akun = 'Modal Laba'");
-                                if ($cek_tanggal_modal) {
-                                    // $tgl_awal = date("Y-m-01", strtotime($cek_tanggal_modal['tanggal']));
-                                    // $tgl_akhir = date("Y-m-t", strtotime($cek_tanggal_modal['tanggal']));
-                                    // $tgl_modal = strtotime($cek_tanggal_modal['tanggal']);
-                                    // $tambah_bulan = '';
+                            $end_of_month = date("Y-m-t");
 
-                                    foreach ($cek_tanggal_modal as $row) {
-                                        if ($row['tanggal'] > $tanggal_awal && $row['tanggal'] < $tanggal_akhir) {
-                                            return 0;
-                                        } else {
-
-                                            mysqli_query($koneksi, "INSERT INTO modal values('','$today','Modal Laba', $modal_akhir)");
-                                        }
-                                    }
-                                } else {
-
-                                    mysqli_query($koneksi, "INSERT INTO modal values('',$today,'Modal Laba', $modal_akhir)");
+                            if ($today == $end_of_month) {
+                                // Cek apakah sudah ada data modal untuk bulan ini
+                                $cek_tanggal_modal = mysqli_query($koneksi, "SELECT * FROM modal WHERE nama_akun = 'Modal Laba' AND tanggal = '$today'");
+                                if (mysqli_num_rows($cek_tanggal_modal) == 0) {
+                                    // Insert modal akhir sebagai modal awal bulan berikutnya
+                                    $tanggal_bulan_depan = date("Y-m-01", strtotime("+1 month", strtotime($today)));
+                                    $query_insert_modal_awal = "INSERT INTO modal (tanggal, nama_akun, nominal) VALUES ('$tanggal_bulan_depan', 'Modal Awal', '$modal_akhir')";
+                                    mysqli_query($koneksi, $query_insert_modal_awal);
                                 }
                             }
-
                             ?>
                             <table class="table table-bordered report-table">
                                 <tr>
