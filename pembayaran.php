@@ -2,7 +2,6 @@
 require 'cek-sesi.php';
 require 'koneksi.php';
 
-
 // Fetch brands for the dropdown menu
 $brands_query = mysqli_query($koneksi, "SELECT sewa_kendaraan.*, mobil.nama AS nama_mobil, sewa_kendaraan.total_harga FROM sewa_kendaraan JOIN mobil ON sewa_kendaraan.id_mobil = mobil.id_mobil");
 if (!$brands_query) {
@@ -26,6 +25,7 @@ while ($customer = mysqli_fetch_assoc($customers_query)) {
 if (isset($_POST['btnKonfirmasi'])) {
     $id = $_POST['id'];
     $total_bayar = $_POST['total_bayar'];
+    $denda = $_POST['denda'];
     $no_bayar = $_POST['no_bayar'];
 
     mysqli_query($koneksi, "UPDATE pembayaran SET status='1' WHERE id_sewa=$id");
@@ -40,10 +40,10 @@ if (isset($_POST['btnKonfirmasi'])) {
         $tgl_pendapatan = date('Y-m-d');
         $jumlah_pendapatan = $total_bayar;
         $id_mobil = $row['id_mobil'];
-        mysqli_query($koneksi, "INSERT INTO pendapatan_sewa values('','$id_akun','$id_pelanggan','$id_sewa','$no_bayar','$nama_pendapatan','$tgl_pendapatan','$jumlah_pendapatan')");
+        mysqli_query($koneksi, "INSERT INTO pendapatan_sewa VALUES('','$id_akun','$id_pelanggan','$id_sewa','$no_bayar','$nama_pendapatan','$tgl_pendapatan','$jumlah_pendapatan')");
         mysqli_query($koneksi, "UPDATE mobil SET status='1' WHERE id_mobil='$id_mobil'");
     }
-} else if (isset($_POST['btnBatalkan'])) {
+} elseif (isset($_POST['btnBatalkan'])) {
     $id = $_POST['id'];
 
     mysqli_query($koneksi, "UPDATE pembayaran SET is_sewa_done='0', status = '0' WHERE id_sewa = '$id'");
@@ -61,10 +61,12 @@ if (isset($_POST['btnKonfirmasi'])) {
 } elseif (isset($_POST['btnKonfirmasiDP'])) {
     $no_bayar = $_POST['no_bayar'];
     $id_sewa = $_POST['id_sewa'];
+
     mysqli_query($koneksi, "UPDATE pembayaran SET is_dp_done='1' WHERE no_bayar = '$no_bayar'");
     mysqli_query($koneksi, "UPDATE sewa_kendaraan SET is_dp='1' WHERE id_sewa='$id_sewa'");
 
     $que = mysqli_query($koneksi, "SELECT id_mobil FROM sewa_kendaraan WHERE id_sewa='$id_sewa'");
+    mysqli_query($koneksi, "UPDATE pembayaran SET denda=$denda WHERE no_bayar='$no_bayar'");
 
     foreach ($que as $row) {
         $id_mobil = $row['id_mobil'];
@@ -127,40 +129,44 @@ if (isset($_POST['btnKonfirmasi'])) {
                             <tbody>
                                 <?php
                                 $no = 0;
-                                $query = mysqli_query($koneksi, "SELECT pembayaran.*, sewa_kendaraan.total_harga, pelanggan.nama FROM pembayaran JOIN sewa_kendaraan ON pembayaran.id_sewa=sewa_kendaraan.id_sewa JOIN pelanggan ON sewa_kendaraan.id_pelanggan=pelanggan.id_pelanggan ORDER BY pembayaran.status ASC");
-                                if ($query) {
-                                    while ($data = mysqli_fetch_assoc($query)) {
-                                ?>
-                                        <tr>
-                                            <td><?= ++$no; ?></td>
-                                            <td><?= $data['nama'] ?></td>
-                                            <td><?= $data['tanggal_bayar'] ?></td>
-                                            <td>Rp.<?= number_format($data['total_harga'], 0, '', '.'); ?></td>
-                                            <td>Rp.<?= number_format($data['uang_muka'], 0, '', '.'); ?></td>
-                                            <td>Rp.<?= number_format($data['denda'], 0, '', '.'); ?></td>
-                                            <td>Rp.<?= number_format($data['total_bayar'], 0, '', '.'); ?></td>
-                                            <td>
-                                                <?php
-                                                if ($data['status'] === '1') {
-                                                    echo '<span class="badge badge-pill badge-success">Selesai Pembayaran</span>';
-                                                } elseif ($data['status'] == '0' && $data['is_dp_done'] == '0') {
-                                                    echo '<span class="badge badge-pill badge-danger">DP belum dibayar</span>';
-                                                } else {
-                                                    echo '<span class="badge badge-pill badge-warning">Belum Lunas</span>';
-                                                }
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
-                                                <?php if ($data['status'] === '0' && $data['is_sewa_done'] == '0' && $data['is_dp_done'] == '0') {  ?>
-                                                    <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModalKonfirmasiDP<?= $data['no_bayar']; ?>"><i class="fa fa-check"></i> Konfirmasi DP</a>
-                                                <?php } elseif ($data['status'] === '0' && $data['is_sewa_done'] == '1') { ?>
-                                                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
-                                                <?php } elseif ($data['status'] == '1') { ?>
-                                                    <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>"><i class="fa fa-redo"></i> Batalkan</a>
-                                                <?php } ?>
-                                            </td>
-                                        </tr>
+                                $query = mysqli_query($koneksi, "SELECT pembayaran.*, sewa_kendaraan.total_harga, pelanggan.nama, pembayaran.denda 
+                                  FROM pembayaran 
+                                  JOIN sewa_kendaraan ON pembayaran.id_sewa = sewa_kendaraan.id_sewa 
+                                  JOIN pelanggan ON sewa_kendaraan.id_pelanggan = pelanggan.id_pelanggan 
+                                  ORDER BY pembayaran.status ASC");
+                                    if ($query) {
+                                        while ($data = mysqli_fetch_assoc($query)) {
+                                            ?>
+                                            <tr>
+                                                <td><?= ++$no; ?></td>
+                                                <td><?= $data['nama'] ?></td>
+                                                <td><?= $data['tanggal_bayar'] ?></td>
+                                                <td>Rp.<?= number_format($data['total_harga'], 0, '', '.'); ?></td>
+                                                <td>Rp.<?= number_format($data['uang_muka'], 0, '', '.'); ?></td>
+                                                <td>Rp.<?= number_format($data['denda'], 0, '', '.'); ?></td>
+                                                <td>Rp.<?= number_format($data['total_bayar'], 0, '', '.'); ?></td>
+                                                <td>
+                                                    <?php
+                                                    if ($data['status'] === '1') {
+                                                        echo '<span class="badge badge-pill badge-success">Selesai Pembayaran</span>';
+                                                    } elseif ($data['status'] == '0' && $data['is_dp_done'] == '0') {
+                                                        echo '<span class="badge badge-pill badge-danger">DP belum dibayar</span>';
+                                                    } else {
+                                                        echo '<span class="badge badge-pill badge-warning">Belum Lunas</span>';
+                                                    }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal<?= $data['id_sewa']; ?>"><i class="fa fa-edit"></i> Edit</a>
+                                                    <?php if ($data['status'] === '0' && $data['is_sewa_done'] == '0' && $data['is_dp_done'] == '0') { ?>
+                                                        <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModalKonfirmasiDP<?= $data['no_bayar']; ?>"><i class="fa fa-check"></i> Konfirmasi DP</a>
+                                                    <?php } elseif ($data['status'] === '0' && $data['is_sewa_done'] == '1') { ?>
+                                                        <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalKonfirmasi<?= $data['id_sewa']; ?>"><i class="fa fa-check"></i> Konfirmasi</a>
+                                                    <?php } elseif ($data['status'] == '1') { ?>
+                                                        <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#myModalBatalkan<?= $data['id_sewa']; ?>"><i class="fa fa-redo"></i> Batalkan</a>
+                                                    <?php } ?>
+                                                </td>
+                                            </tr>
                                         <div class="modal fade" id="myModal<?= $data['id_sewa']; ?>" role="dialog">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
@@ -233,11 +239,12 @@ if (isset($_POST['btnKonfirmasi'])) {
                                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form role="form" action="" method="POST">
-                                                            <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
-                                                            <input type="hidden" name="no_bayar" value="<?= $data['no_bayar']; ?>">
-                                                            <input type="hidden" name="total_bayar" value="<?= $data['total_bayar']; ?>">
-                                                            <div class="form-group">
+                                                    <form role="form" action="" method="POST">
+                                                    <input type="hidden" name="id" value="<?= $data['id_sewa']; ?>">
+                                                    <input type="hidden" name="no_bayar" value="<?= $data['no_bayar']; ?>">
+                                                    <input type="hidden" name="denda" value="<?= ($data['denda'] > 0) ? $data['denda'] : 0 ?>">
+                                                    <input type="hidden" name="total_bayar" value="<?= $data['total_bayar']; ?>">
+                                                    <div class="form-group">
                                                                 <h5>Apakah anda yakin ingin mengonfirmasi pembayaran ini?</h5>
                                                             </div>
                                                             <div class="modal-footer">
