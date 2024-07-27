@@ -156,7 +156,9 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                       } elseif ($data['is_dp'] == '0' && $data['status'] == '0') {
                         echo '<span class="badge badge-pill badge-danger">DP belum dibayar</span>';
                       } elseif ($currDate > $endDate) {
+                        $denda = $data['harga'] * 0.1;
                         echo '<span class="badge badge-pill badge-danger">Terlambat</span>';
+                        echo '<br><span class="badge badge-pill badge-warning">Denda: Rp ' . number_format($denda, 2, ',', '.') . '</span>';
                       } elseif ($currDate < $endDate) {
                         echo '<span class="badge badge-pill badge-primary">Sewa berlangsung</span>';
                       } elseif ($currDate == $endDate) {
@@ -319,7 +321,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                           <div class="form-group row">
                             <label for="nama" class="col-sm-3 col-form-label">Total Harga: </label>
                             <div class="col-sm-9">
-                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['total_harga'] ?>">
+                              <input type="text" readonly class="form-control-plaintext" id="nama" value="<?= $data['harga'] ?>">
                             </div>
                           </div>
 
