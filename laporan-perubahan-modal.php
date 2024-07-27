@@ -105,7 +105,7 @@ require 'koneksi.php';
                             $total_pengeluaran = 0;
 
                             // Fetch Modal Awal from modal table
-                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal FROM modal WHERE tanggal < '$tanggal_awal'";
+                            $query_modal_awal = "SELECT SUM(nominal) as total_modal_awal FROM modal WHERE tanggal <= '$tanggal_awal'";
                             $result_modal_awal = mysqli_query($koneksi, $query_modal_awal);
                             if ($result_modal_awal) {
                                 $modal_awal_row = mysqli_fetch_assoc($result_modal_awal);
