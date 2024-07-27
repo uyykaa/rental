@@ -102,8 +102,8 @@ require 'koneksi.php';
                             $kas = $row_kas['total_kas'];
                         }
 
-                        // Fetch utang from operasional
-                        $query_utang = "SELECT SUM(total_operasional) as total_utang FROM operasional WHERE DATE_FORMAT(tanggal_operasional, '%Y-%m') = '$bulan'";
+                        // Fetch utang from operasional with id_akun 2-01
+                        $query_utang = "SELECT SUM(total_operasional) as total_utang FROM operasional WHERE id_akun = '2-01' AND DATE_FORMAT(tanggal_operasional, '%Y-%m') = '$bulan'";
                         $result_utang = mysqli_query($koneksi, $query_utang);
                         if ($result_utang && $row_utang = mysqli_fetch_assoc($result_utang)) {
                             $utang = $row_utang['total_utang'];
