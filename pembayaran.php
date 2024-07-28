@@ -38,7 +38,7 @@ if (isset($_POST['btnKonfirmasi'])) {
         $id_sewa = $row['id_sewa'];
         $nama_pendapatan = 'Pendapatan Sewa';
         $tgl_pendapatan = date('Y-m-d');
-        $jumlah_pendapatan = $total_bayar;
+        $jumlah_pendapatan = $total_bayar + $denda;
         $id_mobil = $row['id_mobil'];
         mysqli_query($koneksi, "INSERT INTO pendapatan_sewa VALUES('','$id_akun','$id_pelanggan','$id_sewa','$no_bayar','$nama_pendapatan','$tgl_pendapatan','$jumlah_pendapatan')");
         mysqli_query($koneksi, "UPDATE mobil SET status='1' WHERE id_mobil='$id_mobil'");
@@ -144,7 +144,7 @@ if (isset($_POST['btnKonfirmasi'])) {
                                             <td>Rp.<?= number_format($data['total_harga'], 0, '', '.'); ?></td>
                                             <td>Rp.<?= number_format($data['uang_muka'], 0, '', '.'); ?></td>
                                             <td>Rp.<?= number_format($data['denda'], 0, '', '.'); ?></td>
-                                            <td>Rp.<?= number_format($data['total_bayar'], 0, '', '.'); ?></td>
+                                            <td>Rp.<?= number_format($data['total_bayar'] + $data['denda'], 0, '', '.'); ?></td>
                                             <td>
                                                 <?php
                                                 if ($data['status'] === '1') {
