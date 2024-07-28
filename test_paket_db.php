@@ -31,7 +31,7 @@ echo "
 while ($row = mysqli_fetch_array($result)) {
     echo "
             <option value='$row[lama_sewa]'>";
-    if ($row['lama_sewa'] < 24) {
+    if ($row['lama_sewa'] <= 24) {
         echo " $row[lama_sewa] Jam | Harga Rp. $row[harga] |";
         echo " DP Rp.";
         echo ($row['harga'] / 2);
