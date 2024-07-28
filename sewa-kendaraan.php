@@ -157,6 +157,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                         echo '<span class="badge badge-pill badge-danger">DP belum dibayar</span>';
                       } elseif ($currDate > $endDate) {
                         $denda = $data['harga'] * 0.1;
+                        mysqli_query($koneksi, "UPDATE pembayaran SET denda=$denda WHERE id_sewa=$data[id_sewa]");
                         echo '<span class="badge badge-pill badge-danger">Terlambat</span>';
                         echo '<br><span class="badge badge-pill badge-warning">Denda: Rp ' . number_format($denda, 2, ',', '.') . '</span>';
                       } elseif ($currDate < $endDate) {
@@ -389,7 +390,7 @@ if (array_key_exists('btnKonfirmasi', $_POST)) {
                   <select name="id_mobil" class="form-control" id="id_mobil_daftar" onchange="getMobil(this.value)">
                     <option value="" disabled selected>pilih kendaraan...</option>
                     <?php
-                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek=merek.id_merek ");
+                    $query_mobil = mysqli_query($koneksi, "SELECT mobil.*, merek.merek FROM mobil JOIN merek ON mobil.id_merek=merek.id_merek WHERE status='1' ");
                     while ($brand = mysqli_fetch_array($query_mobil)) { ?>
                       <option value="<?= $brand['id_mobil']; ?>">
                         <?php echo $brand['nama'];
