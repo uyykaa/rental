@@ -29,21 +29,19 @@ echo "
 <select name='lama_sewa' class='form-control'>";
 
 while ($row = mysqli_fetch_array($result)) {
-    echo "
-            <option value='$row[lama_sewa]'>";
+    echo "<option value='$row[lama_sewa]'>";
     if ($row['lama_sewa'] <= 24) {
-        echo " $row[lama_sewa] Jam | Harga Rp. $row[harga] |";
-        echo " DP Rp.";
+        echo " $row[lama_sewa] Jam | Harga Rp. $row[harga] | DP Rp.";
         echo ($row['harga'] / 2);
     } else {
-        echo " $row[lama_sewa] Hari | Harga Rp. $row[harga] | ";
-        echo " DP Rp.";
+        $days = ceil($row['lama_sewa'] / 24); // Convert hours to days, rounding up
+        echo " $days Hari | Harga Rp. $row[harga] | DP Rp.";
         echo ($row['harga'] / 2);
     }
-
     echo "</option>";
 }
 echo "</select>
     </div>";
 
 mysqli_close($con);
+?>
