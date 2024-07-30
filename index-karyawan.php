@@ -78,7 +78,7 @@ if ($_SESSION['role_id'] !== "3") {
       </button>
 
       <!-- Topbar Search -->
-      <h3> Selamat Datang di Web <b>SIA Kas GC Persada </b></h3>
+      <h1>Selamat Datang, <?= $_SESSION['nama'] ?></h1>
 
       <?php require 'user.php'; ?>
     </nav>
